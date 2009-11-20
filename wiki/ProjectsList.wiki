@@ -1,13 +1,13 @@
-1. URL: http://code.google.com/p/hiv-risk-dynamics/
-2. Need to add Jim's Google account on the hosting site
-3. Using subversion system (SVN) for committing changes
-4. Mailing list used KoopmanHIVgroup for notifications on the URL
-5. Checking out instructions: http://code.google.com/p/support/source/checkout
-6. Eclipse plugin: http://www.eclipse.org/subversive/downloads.php
+# URL: http://code.google.com/p/hiv-risk-dynamics/
+# Need to add Jim's Google account on the hosting site
+# Using subversion system (SVN) for committing changes
+# Mailing list used KoopmanHIVgroup for notifications on the URL
+# Checking out instructions: http://code.google.com/p/support/source/checkout
+# Eclipse plugin: http://www.eclipse.org/subversive/downloads.php
 OR Tigris: http://subclipse.tigris.org/servlets/ProjectProcess?pageID=p4wYuA
 OR Subclipse
 See: http://www.ibm.com/developerworks/opensource/library/os-ecl-subversion/
-7. svn checkout https://hiv-risk-dynamics.googlecode.com/svn/trunk/ hiv-risk-dynamics --username <username>
+# svn checkout https://hiv-risk-dynamics.googlecode.com/svn/trunk/ hiv-risk-dynamics --username <username>
 
 Erik: (code for several tasks)
 - simulating SIR epidemics
