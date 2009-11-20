@@ -1,0 +1,71 @@
+1. URL: http://code.google.com/p/hiv-risk-dynamics/
+2. Need to add Jim's Google account on the hosting site
+3. Using subversion system (SVN) for committing changes
+4. Mailing list used KoopmanHIVgroup for notifications on the URL
+5. Checking out instructions: http://code.google.com/p/support/source/checkout
+6. Eclipse plugin: http://www.eclipse.org/subversive/downloads.php
+OR Tigris: http://subclipse.tigris.org/servlets/ProjectProcess?pageID=p4wYuA
+OR Subclipse
+See: http://www.ibm.com/developerworks/opensource/library/os-ecl-subversion/
+7. svn checkout https://hiv-risk-dynamics.googlecode.com/svn/trunk/ hiv-risk-dynamics --username <username>
+
+Erik: (code for several tasks)
+- simulating SIR epidemics
+- simulating HIV epidemics (with PHI transmission)
+- estimation of SIR parameters
+- calculation of cluster sizes
+
+I. UTIL.PY: methods to calculate rmse of Ne vs Prevalence trajectories alculate R0 for smooth skyline plot median residuals for sir and skyline histogram of estimated R0 values and actual R0
+II. Tree generation
+III. ODE_SIR Model (simulates all moments)
+IV. Calculation of cluster sizes
+
+Ethan:
+- basic episodic risk model (IBM, java)
+- basic episodic risk model (IBM, python)
+- basic episodic risk model (DCM, python)
+- 3-site episdoic risk model (IBM, python)
+- 3-site episdoic risk model (DCM, python)
+- SI model (DCM, python)
+- SI model (IBM, python)
+- O/A model (DCM, python)
+
+Jong-Hoon:
+- IBM for variable and concurrent partnerships
+- DCM version of concurrent partnerships (also derives for R0)
+- DCM for insertive/receptive sex acts have under different transmission probabilities and contact durations.
+- IBM for Risk behavior change and partnership durations
+
+Jamal:
+- IBM for directional sex model (Java) [Model]
+- IBM version of simple oral and anal sex model (Java) [Model]
+- Python/R version for binomial regression to simulated data from IBM [Utility]
+- Java versio0n of contact networks based on Riolo et al. [Utility]
+
+
+Project Hierarchy:
+- Models
+    - Episodic Risk
+         - basic episodic risk model (IBM, Java) [ERS]
+         - basic episodic risk model (IBM, Python) [ERS]
+         - basic episodic risk model (DCM, Python) [ERS]
+         - 3-site episdoic risk model (IBM, Python) [ERS]
+         - 3-site episdoic risk model (DCM, Python) [ERS]
+         - Risk behavior change and partnership durations (IBM, Java) [JHK]
+    - Directional Sex
+        - Directional sex model (IBM, Java) [SJA]
+        - Insertive/receptive acts and variable contact duration (DCM) [JHK]
+    - Contact Duration and Concurrency of Partnerships
+         - Variable and concurrent partnerships (IBM, Java) [JHK]
+    - Oral and Anal Sex Model
+        - Simple oral and anal sex model (IBM, Java) [SJA]
+        - O/A model (DCM, Python) [ERS]
+    - SIR Dynamics and Cluster Sizes for the following: (Python) [EV]
+        - simulating SIR epidemics
+        - simulating HIV epidemics (with PHI transmission)
+        - estimation of SIR parameters
+- Utilities and Scripts
+        - methods to calculate rmse of Ne vs Prevalence trajectories alculate R0 for smooth                  skyline plot median residuals for sir and skyline histogram of estimated R0 values and                  actual R0
+        - calculation of cluster sizes
+        - Python/R version for binomial regression to simulated data from IBM [Utility]
+        - Java versio0n of contact networks based on Riolo et al. [Utility]
