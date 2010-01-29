@@ -13,7 +13,9 @@ public class Reader {
 	private  HashMap<Integer, Vector<String>> dataSet = new HashMap<Integer, Vector<String>>();
 	private int lineNo=0;
 
-	public HashMap<Integer, Vector<Double>> read(String path) {		
+//	public HashMap<Integer, Vector<Double>> read(String path) {
+	public HashMap<Integer, Vector<String>> read(String path) {
+		dataSet.clear();
 		File file = new File(path);		
 		try {
 			BufferedReader bufRdr = new BufferedReader(new FileReader(file));			
@@ -33,7 +35,8 @@ public class Reader {
 				}				
 			}
 		} catch (IOException e) {e.printStackTrace();}
-		return parametersSet;
+//		return parametersSet;
+		return dataSet;
 	}
 
 	public static void main(String[] args) {
