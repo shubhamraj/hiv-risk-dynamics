@@ -61,7 +61,6 @@ public class ClusterRecorder implements ParametersInterface {
 											&& individual.isInfected() == true
 											&& engine.outbreakCriteria(new Integer(currentTick), individual) == false))) {				
 						engine.removeTimeRecord(new Integer(currentTick), individual);
-
 					}
 				}
 			}

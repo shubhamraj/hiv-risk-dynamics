@@ -154,7 +154,7 @@ public class AcuteClusterReader implements ParametersInterface {
 				infected.setInfectedMixingSite(mixingSite);
 				infected.setInfectedRiskState(infectedState);
 				infected.setInfectorID(infectorID);
-				infected.setInfectorStatus(infectorStage);
+				infected.setInfectorStageOfInfection(infectorStage);
 				infected.setInfectedTick(time);
 				infected.setAHIClusterID(obID);
 				individuals.put(new Integer(infectedID), infected);
