@@ -44,7 +44,7 @@ public class OutbreakStatsReader extends TreeOutput{
 
 		this.runs = csvFiles.length;
 		if (runs == 0) {
-			for (int i=0; i<Outputs.values().length*Statistics.values().length; i++) {
+			for (int i=0; i<Output.values().length*Statistics.values().length; i++) {
 				output.add(Double.NaN);
 			}
 		}
@@ -61,7 +61,7 @@ public class OutbreakStatsReader extends TreeOutput{
 			initializeOutputMap(this.lineNo);			
 			pumpDataArrays();
 			double[] statisticsArray = new double[Statistics.values().length];
-			for (Outputs output : Outputs.values()) {
+			for (Output output : Output.values()) {
 				statisticsArray = returnDoubleArray(calculateStats(output));
 				for (Statistics statistic : Statistics.values()) {
 					outputData[output.ordinal()][statistic.ordinal()] += statisticsArray[statistic.ordinal()];
@@ -70,7 +70,7 @@ public class OutbreakStatsReader extends TreeOutput{
 		}
 		
 		//now take the average
-		for (Outputs output : Outputs.values()) {
+		for (Output output : Output.values()) {
 			for (Statistics statistic : Statistics.values()) {
 /*				if (output == Outputs.IRatio && statistic.ordinal() > Statistics.Var.ordinal()) {
 					continue;
@@ -86,10 +86,10 @@ public class OutbreakStatsReader extends TreeOutput{
 		for (Integer inputKey : inputMap.keySet()) {
 			ArrayList<String> tokens = (ArrayList<String>) inputMap.get(inputKey);
 			try {
-				outputsMap.get(Outputs.Height)[row] = Double.parseDouble(tokens.get(7));
-				outputsMap.get(Outputs.Size)[row] = Double.parseDouble(tokens.get(9));
-				outputsMap.get(Outputs.Duration)[row] = Double.parseDouble(tokens.get(10));
-				outputsMap.get(Outputs.IRatio)[row] = Double.parseDouble(tokens.get(11));
+				outputsMap.get(Output.Height)[row] = Double.parseDouble(tokens.get(7));
+				outputsMap.get(Output.Size)[row] = Double.parseDouble(tokens.get(9));
+				outputsMap.get(Output.Duration)[row] = Double.parseDouble(tokens.get(10));
+				outputsMap.get(Output.IRatio)[row] = Double.parseDouble(tokens.get(11));
 				row++;
 			} catch (Exception e) {
 				System.err.println("I have an error.");
@@ -98,8 +98,8 @@ public class OutbreakStatsReader extends TreeOutput{
 	}
 
 	protected void initializeOutputData() {
-		outputData = new double[Outputs.values().length][Statistics.values().length];
-		for (Outputs output : Outputs.values()) {
+		outputData = new double[Output.values().length][Statistics.values().length];
+		for (Output output : Output.values()) {
 			for (Statistics stat : Statistics.values()) {
 				outputData[output.ordinal()][stat.ordinal()] = 0;
 			}			

@@ -16,28 +16,28 @@ public class AHIDataStructure implements ParametersInterface {
 	
 	public AHIDataStructure(Integer _rootID) {
 		rootID = _rootID;
-		data = new double[Outputs.values().length];
+		data = new double[Output.values().length];
 	}
 	
 	public String returnOutput() {
 		String str = obID + "," + rootID + "," + linkedOBID + ",";
-		for (Outputs output : Outputs.values()) {
+		for (Output output : Output.values()) {
 			str += data[output.ordinal()] + ",";
 		}		
 		return str;
 	}
 	
-	public void addOutput(Outputs output, double val) {
+	public void addOutput(Output output, double val) {
 		data[output.ordinal()] = val;
 	}
 	
-	public double getOutput(Outputs output) {
+	public double getOutput(Output output) {
 		return data[output.ordinal()]; 
 	}
 	
 	public void print() {
 		String str = obID + "," + rootID + "," + linkedOBID + ",";
-		for (Outputs output : Outputs.values()) {
+		for (Output output : Output.values()) {
 			str += data[output.ordinal()] + ",";
 		}		
 		System.out.println(str);

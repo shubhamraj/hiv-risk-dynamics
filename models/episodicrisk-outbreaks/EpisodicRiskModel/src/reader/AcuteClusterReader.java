@@ -80,12 +80,12 @@ public class AcuteClusterReader implements ParametersInterface {
 			int infectedID = Integer.parseInt(tokens.get(AHIKey.InfectedID.ordinal()).trim());
 
 			String act = tokens.get(AHIKey.ActType.ordinal()).trim();
-			ACT_TYPE actType = ACT_TYPE.None;
+			ActType actType = ActType.None;
 			if (act.equals("AHI")) {
-				actType = ACT_TYPE.Acute_Susceptible;
+				actType = ActType.Acute_Susceptible;
 			}
 			else {
-				actType = ACT_TYPE.Chronic_Susceptible;
+				actType = ActType.Chronic_Susceptible;
 			}
 
 			int timeSinceLastInfection = Integer.parseInt(tokens.get(AHIKey.TimeSinceLastInf.ordinal()).trim());

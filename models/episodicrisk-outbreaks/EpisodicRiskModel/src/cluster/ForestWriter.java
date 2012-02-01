@@ -289,12 +289,12 @@ public class ForestWriter implements ParametersInterface {
 		while (itr.hasNext()) {
 			Person vertex = (Person) itr.next();
 			Iterator itrChld = tree.getChildren(vertex).iterator();
-			if (vertex.getActType().equals(ACT_TYPE.Acute_Susceptible)
+			if (vertex.getActType().equals(ActType.Acute_Susceptible)
 					//&& vertex.getInfectedTick() >= Parameters.startRecordTick
 			) {
 				while (itrChld.hasNext()) {
 					Person child = (Person) itrChld.next();
-					if (child.getActType().equals(ACT_TYPE.Acute_Susceptible)) {
+					if (child.getActType().equals(ActType.Acute_Susceptible)) {
 						data[1]++;
 					}
 				}	

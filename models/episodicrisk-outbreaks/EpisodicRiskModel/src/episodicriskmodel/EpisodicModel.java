@@ -26,7 +26,7 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 	int currentTick;
 	
 	ArrayList<String> output;
-	OUTBREAK_TYPE outbreakType;	
+	OutbreakType outbreakType;	
 	/** Cluster recorder array for one or more recording outbreaks, e.g. early period and transient*/
 	ClusterRecorder clusterRecorder;
 	
@@ -61,7 +61,7 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 	private int countTot, countHigh, countLow, countHL;
 	private int inlow, inhi, inlh;
 	
-	public EpisodicModel(double[] params, int _run, String _prefix, OUTBREAK_TYPE _outbreakType) {	
+	public EpisodicModel(double[] params, int _run, String _prefix, OutbreakType _outbreakType) {	
 		this.durHighRisk = params[2];
 		this.ratioCHL = params[3];
 		this.ahiTransPotential = params[4];
@@ -245,12 +245,12 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 			prob = beta2;
 		}
 		if (Math.random() <= prob) {			
-			ACT_TYPE actType = ACT_TYPE.None;			
+			ActType actType = ActType.None;			
 			if (infectorAHI == true) {
-				actType = ACT_TYPE.Acute_Susceptible;
+				actType = ActType.Acute_Susceptible;
 			}
 			else {
-				actType = ACT_TYPE.Chronic_Susceptible;
+				actType = ActType.Chronic_Susceptible;
 			}
 			susceptible.setStageOfInfection(InfectionStage.Acute);
 			susceptible.setInfectedTick(currentTick);

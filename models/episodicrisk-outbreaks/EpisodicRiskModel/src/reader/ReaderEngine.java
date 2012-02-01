@@ -35,7 +35,7 @@ public class ReaderEngine implements ParametersInterface {
 			}
 		});		
 		//sja: this needs to be checked
-		int numAHICols = Outputs.values().length * Statistics.values().length;
+		int numAHICols = Output.values().length * Statistics.values().length;
 		numAHICols += (SizeRanges.length + 1) + (durationRanges.length + 1);		
 		//now add the chronics (see the number of times, a datum is added to the  chainsOutputs ArrayList in AHICHILink.java
 		int numChronicCols = 14 + (chronicRanges.length+1);

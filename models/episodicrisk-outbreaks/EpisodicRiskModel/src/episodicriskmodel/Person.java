@@ -15,7 +15,7 @@ public class Person implements EpisodicAgentInterface, ParametersInterface {
 	int ID = -1;
 	InfectionStage stageOfInfection = InfectionStage.Susceptible;
 	InfectionStage infectorStatus = InfectionStage.Susceptible;
-	ACT_TYPE actType = ACT_TYPE.None;
+	ActType actType = ActType.None;
 
 	int infectedTick = -1;
 	int infectorID = -1;
@@ -211,12 +211,12 @@ public class Person implements EpisodicAgentInterface, ParametersInterface {
 	}
 
 	@Override
-	public ACT_TYPE getActType() {
+	public ActType getActType() {
 		return actType;
 	}
 
 	@Override
-	public void setActType(ACT_TYPE actType) {
+	public void setActType(ActType actType) {
 		this.actType = actType;
 	}
 

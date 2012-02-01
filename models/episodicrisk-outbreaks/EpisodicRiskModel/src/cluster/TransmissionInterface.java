@@ -1,6 +1,6 @@
 package cluster;
 
-import basemodel.ParametersInterface.ACT_TYPE;
+import basemodel.ParametersInterface.ActType;
 import basemodel.ParametersInterface.InfectionStage;
 
 public interface TransmissionInterface {
@@ -11,8 +11,8 @@ public interface TransmissionInterface {
 	public void setInfectorID(int infectorID);
 	public int getInfectedID();
 	public void setInfectedID(int infectedID);
-	public ACT_TYPE getActType();
-	public void setActType(ACT_TYPE actType);
+	public ActType getActType();
+	public void setActType(ActType actType);
 	public InfectionStage getInfectorStage();
 	public void setInfectorStage(InfectionStage infectorStage);
 	public int getTimeSinceLastInfection();
@@ -25,5 +25,4 @@ public interface TransmissionInterface {
 	public void setBranchTime(int branchTime);
 	public int getObID();
 	public void setObID(int obID);
-	public void print();
 }

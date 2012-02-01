@@ -20,7 +20,7 @@ public class ClusterRecorder implements ParametersInterface {
 	private BaseModelInterface model;
 	private ClusterEngine[] clusterEngine;
 
-	public ClusterRecorder(BaseModelInterface _model, String prefix, OUTBREAK_TYPE outbreakType) {
+	public ClusterRecorder(BaseModelInterface _model, String prefix, OutbreakType outbreakType) {
 		this.model = _model; 
 		int numEngines = OutbreakRecord.values().length;
 		clusterEngine = new ClusterEngine[numEngines];		

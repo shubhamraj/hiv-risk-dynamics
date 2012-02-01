@@ -18,15 +18,15 @@ import episodicriskmodel.Person;
  *
  */
 public class TreeOutput implements ParametersInterface {
-	protected EnumMap<Outputs, double[]> outputsMap;
+	protected EnumMap<Output, double[]> outputsMap;
 
 	public TreeOutput() {
-		outputsMap = new EnumMap<OutbreakStatsReader.Outputs, double[]>(Outputs.class);
+		outputsMap = new EnumMap<OutbreakStatsReader.Output, double[]>(Output.class);
 	}
 	
 	protected void initializeOutputMap(int numData) {
 		outputsMap.clear();
-		for (Outputs output : Outputs.values()) {
+		for (Output output : Output.values()) {
 			double[] data = new double[numData];
 			for (int i=0; i<data.length; i++) {
 				data[i] = 0;
@@ -35,13 +35,13 @@ public class TreeOutput implements ParametersInterface {
 		}
 	}
 
-	protected void setOutputMapDataArray(Outputs output, ArrayList<Double> dataArrayList) {
+	protected void setOutputMapDataArray(Output output, ArrayList<Double> dataArrayList) {
 		outputsMap.remove(output);
 		double[] data = returnDoubleArray(dataArrayList);
 		outputsMap.put(output, data);
 	}
 
-	protected ArrayList<Double> calculateStats(Outputs output) {
+	protected ArrayList<Double> calculateStats(Output output) {
 		double[] data = outputsMap.get(output);
 		ArrayList<Double> statistics = new ArrayList<Double>();
 		
@@ -86,10 +86,10 @@ public class TreeOutput implements ParametersInterface {
 		}
 
 		int[] ranges = null;
-		if (output.equals(Outputs.Size)) {
+		if (output.equals(Output.Size)) {
 			ranges = SizeRanges;			
 		}
-		else if (output.equals(Outputs.Duration)) {
+		else if (output.equals(Output.Duration)) {
 			ranges = durationRanges;
 		}
 		if (ranges != null) {
