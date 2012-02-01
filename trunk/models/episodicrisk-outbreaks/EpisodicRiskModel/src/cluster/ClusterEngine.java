@@ -1,5 +1,6 @@
 package cluster;
 
+
 import java.io.FileWriter;
 
 import java.io.IOException;
@@ -11,7 +12,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import basemodel.AgentInteface;
-import basemodel.Parameters;
+import basemodel.ParametersInterface;
 
 import plfit.Baek;
 import plfit.ExtStats;
@@ -25,8 +26,8 @@ import episodicriskmodel.EpisodicRiskTransmission;
  * @author shah
  *
  */
-public class ClusterEngine extends Parameters {
-	private OUTBREAK_RECORD outbreakRecord;
+public class ClusterEngine implements ParametersInterface {
+	private OutbreakRecord outbreakRecord;
 	private int startRecordTick;
 	private int endObserveTick;	
 	private Map<Integer, ArrayList<Cluster>> outbreakRecMap;
@@ -52,7 +53,7 @@ public class ClusterEngine extends Parameters {
 	private double[][] obIncidence;
 	private double[][] outbreakDist;
 
-	public ClusterEngine(String _prefix, OUTBREAK_TYPE _outbreakType, OUTBREAK_RECORD _outbreakRecord) {
+	public ClusterEngine(String _prefix, OUTBREAK_TYPE _outbreakType, OutbreakRecord _outbreakRecord, int maxIterations) {
 		this.prefix = _prefix;
 		this.outbreakType = _outbreakType;
 		this.outbreakRecord = _outbreakRecord;
@@ -74,7 +75,7 @@ public class ClusterEngine extends Parameters {
 		this.earlyTransmissions = Collections.synchronizedMap(new TreeMap<Integer, ArrayList<EpisodicRiskTransmission>>());
 		this.allTransmissions = Collections.synchronizedMap(new TreeMap<Integer, ArrayList<EpisodicRiskTransmission>>());		
 		this.outbreakRecMap = Collections.synchronizedMap(new HashMap<Integer, ArrayList<Cluster>>());		
-		this.maxRecords = MAX_ITERATIONS + 1;				
+		this.maxRecords = maxIterations + 1;				
 		this.numInfected = new int[maxRecords];
 		this.population = new int[maxRecords];
 		this.newCases = 0;
@@ -115,7 +116,7 @@ public class ClusterEngine extends Parameters {
 			}
 			newAHICases++;
 		}
-		if (recordInfectionTree) {
+		if (RecordInfectionTree) {
 			if (allTransmissions.containsKey(transmission.getTime()) == false) {
 				allTransmissions.put(transmission.getTime(), new ArrayList<EpisodicRiskTransmission>());
 			}
@@ -215,12 +216,12 @@ public class ClusterEngine extends Parameters {
 				flag = true;
 			}
 			break;
-		case SIX_MONTHS: 
+		case Six_Months: 
 			if (time - individual.getInfectedTick() <= 6 * 30) {
 				flag = true;
 			}
 			break;
-		case TWO_YEARS:
+		case Two_Years:
 			if (time - individual.getInfectedTick() <= 2 * 12 * 30) {
 				flag = true;
 			}
@@ -437,7 +438,7 @@ public class ClusterEngine extends Parameters {
 		this.extStats = extStats;
 	}
 	
-	public OUTBREAK_RECORD getOutbreakRecord() {
+	public OutbreakRecord getOutbreakRecord() {
 		return outbreakRecord;
 	}
 

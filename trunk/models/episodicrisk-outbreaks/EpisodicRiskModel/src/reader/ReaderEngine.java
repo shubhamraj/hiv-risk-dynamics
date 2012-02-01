@@ -1,17 +1,18 @@
 package reader;
 
 
+
 import java.io.File;
 import java.io.FilenameFilter;
 
-import basemodel.Parameters;
+import basemodel.ParametersInterface;
 
 /**
  * Main Reader Engine Class
  * @author shah
  *
  */
-public class ReaderEngine extends Parameters {
+public class ReaderEngine implements ParametersInterface {
 	String path = "";
 	String outputString;
 	public static String preFtr = "", obRecordFtr = "", endFtr = "";
@@ -23,7 +24,7 @@ public class ReaderEngine extends Parameters {
 	
 	public void run(int index) {						
 		preFtr = index + "-";
-		obRecordFtr = OUTBREAK_RECORD.ENDEMIC.name();
+		obRecordFtr = OutbreakRecord.Endemic.name();
 		endFtr = "AllTransmissions.csv";
 		
 		File directory = new File(this.path);
@@ -35,7 +36,7 @@ public class ReaderEngine extends Parameters {
 		});		
 		//sja: this needs to be checked
 		int numAHICols = Outputs.values().length * Statistics.values().length;
-		numAHICols += (sizeRanges.length + 1) + (durationRanges.length + 1);		
+		numAHICols += (SizeRanges.length + 1) + (durationRanges.length + 1);		
 		//now add the chronics (see the number of times, a datum is added to the  chainsOutputs ArrayList in AHICHILink.java
 		int numChronicCols = 14 + (chronicRanges.length+1);
 		int numCols = numAHICols + numChronicCols;

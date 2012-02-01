@@ -1,6 +1,7 @@
 package cluster;
 
 
+
 import java.io.BufferedWriter;
 
 import java.io.File;
@@ -17,7 +18,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import basemodel.AgentInteface;
-import basemodel.Parameters;
+import basemodel.ParametersInterface;
 
 
 
@@ -32,7 +33,7 @@ import episodicriskmodel.Person;
  * @author shah
  *
  */
-public class ForestWriter extends Parameters {
+public class ForestWriter implements ParametersInterface {
 	BaseForest forest;
 	int maxDepth;
 	String prefix;		
@@ -42,9 +43,9 @@ public class ForestWriter extends Parameters {
 	private int numHighRiskInternals;
 	private int numLowRiskLeaves;
 	private int numLowRiskInternals;
-	private OUTBREAK_RECORD outbrekRecord;
+	private OutbreakRecord outbrekRecord;
 	
-	public ForestWriter(BaseForest _forest, OUTBREAK_RECORD _outbreakRecord) {
+	public ForestWriter(BaseForest _forest, OutbreakRecord _outbreakRecord) {
 		this.forest = _forest;
 		this.outbrekRecord = _outbreakRecord;
 		prefix = forest.prefix;
@@ -147,7 +148,7 @@ public class ForestWriter extends Parameters {
 					}
 					str += valStr + ",";
 				}
-				for (int i=0; i<Parameters.BalanceStatistics.values().length; i++) {
+				for (int i=0; i<BalanceStatistics.values().length; i++) {
 					str += balanceStatistics[i] + ","; 				
 				}					
 				statsWriter.println(str);
@@ -169,7 +170,7 @@ public class ForestWriter extends Parameters {
 		ArrayList<Person> leaves = new ArrayList<Person>();
 		ArrayList<Person> internals = new ArrayList<Person>();
 		HashMap<Person, ArrayList<Person>> leafMap = new LinkedHashMap<Person, ArrayList<Person>>();
-		double[] stats = new double[Parameters.BalanceStatistics.values().length];
+		double[] stats = new double[BalanceStatistics.values().length];
 		Person root = (Person) tree.getRoot();		
 		Iterator<Person> itr = tree.getVertices().iterator();
 		while (itr.hasNext()) {			
@@ -178,7 +179,7 @@ public class ForestWriter extends Parameters {
 				numLeaves++;
 				leaves.add(vertex);
 				leafMap.put(vertex, (ArrayList<Person>)tree.getPath(vertex));
-				if (vertex.getInfectedRiskState().equals(RISK_STATE.HIGH)) {
+				if (vertex.getInfectedRiskState().equals(RISK_STATE.High)) {
 					numHighRiskLeaves++;
 				}
 				else {
@@ -190,7 +191,7 @@ public class ForestWriter extends Parameters {
 					internals.add(vertex);
 				}
 				numInternals++;
-				if (vertex.getInfectedRiskState().equals(RISK_STATE.HIGH)) {
+				if (vertex.getInfectedRiskState().equals(RISK_STATE.High)) {
 					numHighRiskInternals++;
 				}
 				else {
@@ -215,14 +216,14 @@ public class ForestWriter extends Parameters {
 		}
 
 		nbar /= ((double)leaves.size());		
-		stats[Parameters.BalanceStatistics.MeanBar.ordinal()] = nbar;
-		stats[Parameters.BalanceStatistics.Beta2.ordinal()] = beta2;		
+		stats[BalanceStatistics.MeanBar.ordinal()] = nbar;
+		stats[BalanceStatistics.Beta2.ordinal()] = beta2;		
 		double stdbar = 0;
 		for (i=0; i<ni.length; i++) {
 			stdbar += ((nbar-ni[i])*(nbar-ni[i]));			
 		}
 		stdbar /= ((double)leaves.size());
-		stats[Parameters.BalanceStatistics.StdBar.ordinal()] = stdbar;
+		stats[BalanceStatistics.StdBar.ordinal()] = stdbar;
 
 		double beta1 = 0;
 		//This would be the distance to the most recent common ancestor. use JHK's implementation. 	
@@ -267,7 +268,7 @@ public class ForestWriter extends Parameters {
 			}
 			beta1 += 1/max;
 		}
-		stats[Parameters.BalanceStatistics.Beta1.ordinal()] = beta1;
+		stats[BalanceStatistics.Beta1.ordinal()] = beta1;
 
 		leaves.clear();
 		internals.clear();
@@ -288,12 +289,12 @@ public class ForestWriter extends Parameters {
 		while (itr.hasNext()) {
 			Person vertex = (Person) itr.next();
 			Iterator itrChld = tree.getChildren(vertex).iterator();
-			if (vertex.getActType().equals(ACT_TYPE.AHI)
+			if (vertex.getActType().equals(ACT_TYPE.Acute_Susceptible)
 					//&& vertex.getInfectedTick() >= Parameters.startRecordTick
 			) {
 				while (itrChld.hasNext()) {
 					Person child = (Person) itrChld.next();
-					if (child.getActType().equals(ACT_TYPE.AHI)) {
+					if (child.getActType().equals(ACT_TYPE.Acute_Susceptible)) {
 						data[1]++;
 					}
 				}	

@@ -1,7 +1,7 @@
 package cluster;
 
 import basemodel.ParametersInterface.ACT_TYPE;
-import basemodel.ParametersInterface.STAGE;
+import basemodel.ParametersInterface.InfectionStage;
 
 public interface TransmissionInterface {
 	public String toString();	
@@ -13,8 +13,8 @@ public interface TransmissionInterface {
 	public void setInfectedID(int infectedID);
 	public ACT_TYPE getActType();
 	public void setActType(ACT_TYPE actType);
-	public STAGE getInfectorStage();
-	public void setInfectorStage(STAGE infectorStage);
+	public InfectionStage getInfectorStage();
+	public void setInfectorStage(InfectionStage infectorStage);
 	public int getTimeSinceLastInfection();
 	public void setTimeSinceLastInfection(int timeSinceLastInfection);
 	public void setCurrentClusterTransmissions(int currentClusterSize);

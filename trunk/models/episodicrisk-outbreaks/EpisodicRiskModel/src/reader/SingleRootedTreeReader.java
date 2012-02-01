@@ -1,6 +1,7 @@
 package reader;
 
 
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -14,7 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import basemodel.Parameters;
+import basemodel.ParametersInterface;
 
 
 import cluster.Edge;
@@ -27,7 +28,7 @@ import episodicriskmodel.Person;
  * @author shah
  *
  */
-public class SingleRootedTreeReader extends Parameters {
+public class SingleRootedTreeReader implements ParametersInterface {
 	private String fname;
 	private int lineNo;
 	private LinkedHashMap<Integer, ArrayList<String>> inputMap;
@@ -53,8 +54,8 @@ public class SingleRootedTreeReader extends Parameters {
 		this.deadEnds = new ArrayList<ChainsDataStructure>();
 		this.continuous = new ArrayList<ChainsDataStructure>();
 
-		this.uniqueContinuousEdges = new EnumMap<Parameters.ACT_TYPE, Set<Edge>>(ACT_TYPE.class);
-		this.uniqueDeadEdges = new EnumMap<Parameters.ACT_TYPE, Set<Edge>>(ACT_TYPE.class);
+		this.uniqueContinuousEdges = new EnumMap<ACT_TYPE, Set<Edge>>(ACT_TYPE.class);
+		this.uniqueDeadEdges = new EnumMap<ACT_TYPE, Set<Edge>>(ACT_TYPE.class);
 
 		for (ACT_TYPE actType : ACT_TYPE.values()) {
 			this.uniqueContinuousEdges.put(actType, new HashSet<Edge>()) ;
@@ -74,45 +75,45 @@ public class SingleRootedTreeReader extends Parameters {
 			int infectedID = Integer.parseInt(tokens.get(AHIKey.InfectedID.ordinal()).trim());
 			int infectorTick = Integer.parseInt(tokens.get(AHIKey.InfectorTick.ordinal()).trim());
 			String act = tokens.get(AHIKey.ActType.ordinal()).trim();
-			ACT_TYPE actType = ACT_TYPE.NONE;
+			ACT_TYPE actType = ACT_TYPE.None;
 			if (act.equals("AHI")) {
-				actType = ACT_TYPE.AHI;
+				actType = ACT_TYPE.Acute_Susceptible;
 			}
 			else {
-				actType = ACT_TYPE.CHI;
+				actType = ACT_TYPE.Chronic_Susceptible;
 			}		
 			int timeSinceLastInfection = Integer.parseInt(tokens.get(AHIKey.TimeSinceLastInf.ordinal()).trim());
 			String strInfectorStage = tokens.get(AHIKey.InfectorStg.ordinal()).trim();			
-			STAGE infectorStage;			
+			InfectionStage infectorStage;			
 			if (strInfectorStage.equals("AHI")) {
-				infectorStage = STAGE.ACUTE;
+				infectorStage = InfectionStage.Acute;
 			}
 			else {
-				infectorStage = STAGE.CHRONIC;
+				infectorStage = InfectionStage.Chronic;
 			}			
 			RISK_STATE infectorState, infectedState;
 
 			String strInfectorState = tokens.get(AHIKey.InfectorState.ordinal()).trim();
 			if (strInfectorState.equals("HIGH")) {
-				infectorState = RISK_STATE.HIGH;
+				infectorState = RISK_STATE.High;
 			}
 			else {
-				infectorState = RISK_STATE.LOW;
+				infectorState = RISK_STATE.Low;
 			}
 			String strInfectedState = tokens.get(AHIKey.InfectedState.ordinal()).trim();
 			if (strInfectedState.equals("HIGH")) {
-				infectedState = RISK_STATE.HIGH;
+				infectedState = RISK_STATE.High;
 			}
 			else {
-				infectedState = RISK_STATE.LOW;
+				infectedState = RISK_STATE.Low;
 			}
-			MIXING_SITE mixingSite = MIXING_SITE.NONE;
+			MIXING_SITE mixingSite = MIXING_SITE.None;
 			String site = tokens.get(AHIKey.MixingSite.ordinal()).trim();
 			if (site.equals("HIGH_RISK")) {
-				mixingSite = MIXING_SITE.HIGH_RISK;
+				mixingSite = MIXING_SITE.HighRisk;
 			}
 			else {
-				mixingSite = MIXING_SITE.COMMON;
+				mixingSite = MIXING_SITE.Common;
 			}
 			int branchTime = Integer.parseInt(tokens.get(AHIKey.BranchLength.ordinal()).trim());
 
@@ -183,8 +184,8 @@ public class SingleRootedTreeReader extends Parameters {
 			if (infectionForest.isLeaf(vertex)) {
 				if (vertex.getInfectedTick() <= threshold) {
 					deadEnds.add(returnTreeStat(vertex));
-					if (vertex.getActType().equals(ACT_TYPE.AHI)) deadLeafsAHI++;
-					else if (vertex.getActType().equals(ACT_TYPE.CHI)) deadLeafsCHI++;
+					if (vertex.getActType().equals(ACT_TYPE.Acute_Susceptible)) deadLeafsAHI++;
+					else if (vertex.getActType().equals(ACT_TYPE.Chronic_Susceptible)) deadLeafsCHI++;
 				}
 			}
 			else {
@@ -192,8 +193,8 @@ public class SingleRootedTreeReader extends Parameters {
 					for (Person successor : infectionForest.getSuccessors(vertex)) {
 						if (successor.getInfectedTick() > threshold) {
 							continuous.add(returnTreeStat(vertex));
-							if (vertex.getActType().equals(ACT_TYPE.AHI)) contLeafsAHI++;
-							else if (vertex.getActType().equals(ACT_TYPE.CHI)) contLeafsCHI++;
+							if (vertex.getActType().equals(ACT_TYPE.Acute_Susceptible)) contLeafsAHI++;
+							else if (vertex.getActType().equals(ACT_TYPE.Chronic_Susceptible)) contLeafsCHI++;
 							break;
 						}
 					}
@@ -217,10 +218,10 @@ public class SingleRootedTreeReader extends Parameters {
 		double numChronicDead=0, numAcuteDead=0;
 		double numChronicCont=0, numAcuteCont=0;
 
-		numChronicDead = uniqueDeadEdges.get(ACT_TYPE.CHI).size();
-		numAcuteDead = uniqueDeadEdges.get(ACT_TYPE.AHI).size();
-		numChronicCont = uniqueContinuousEdges.get(ACT_TYPE.CHI).size();
-		numAcuteCont = uniqueContinuousEdges.get(ACT_TYPE.AHI).size();
+		numChronicDead = uniqueDeadEdges.get(ACT_TYPE.Chronic_Susceptible).size();
+		numAcuteDead = uniqueDeadEdges.get(ACT_TYPE.Acute_Susceptible).size();
+		numChronicCont = uniqueContinuousEdges.get(ACT_TYPE.Chronic_Susceptible).size();
+		numAcuteCont = uniqueContinuousEdges.get(ACT_TYPE.Acute_Susceptible).size();
 
 		double deadFrac = numAcuteDead/(numChronicDead+numAcuteDead);
 		double contFrac = numAcuteCont/(numChronicCont+numAcuteCont);

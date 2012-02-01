@@ -44,7 +44,7 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import basemodel.ParametersInterface.ACT_TYPE;
-import basemodel.ParametersInterface.STAGE;
+import basemodel.ParametersInterface.InfectionStage;
 
 import cluster.Edge;
 
@@ -259,7 +259,7 @@ public class ForestDisplay extends JFrame {
 		public Paint transform(Edge edge) {
 			Color color = Color.BLACK;
 			ACT_TYPE actType = edge.getTransmission().getActType();
-			if (actType.equals(ACT_TYPE.AHI)) {
+			if (actType.equals(ACT_TYPE.Acute_Susceptible)) {
 				color = Color.RED;
 			}
 			//			RISK_STATE infectorRiskState = edge.getTransmission().getInfectorRiskState();
@@ -281,10 +281,10 @@ public class ForestDisplay extends JFrame {
 				return color;
 			}
 
-			if (individual.getInfectorStatus().equals(STAGE.ACUTE)) {
+			if (individual.getInfectorStatus().equals(InfectionStage.Acute)) {
 				color = Color.RED;
 			}
-			else if (individual.getInfectorStatus().equals(STAGE.CHRONIC)) {
+			else if (individual.getInfectorStatus().equals(InfectionStage.Chronic)) {
 				color = Color.BLACK;
 			}
 			else {

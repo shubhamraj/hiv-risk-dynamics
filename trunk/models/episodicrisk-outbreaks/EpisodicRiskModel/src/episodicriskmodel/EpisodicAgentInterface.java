@@ -1,7 +1,7 @@
 package episodicriskmodel;
 
+
 import basemodel.AgentInteface;
-import basemodel.ParametersInterface;
 import basemodel.ParametersInterface.MIXING_SITE;
 import basemodel.ParametersInterface.RISK_STATE;
 

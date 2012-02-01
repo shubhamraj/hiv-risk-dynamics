@@ -9,14 +9,14 @@ import cluster.BaseTransmission;
  *
  */
 public class EpisodicRiskTransmission extends BaseTransmission { 
-	private RISK_STATE infectorRiskState = RISK_STATE.NONE;
-	private RISK_STATE infectedRiskState = RISK_STATE.NONE;
-	private MIXING_SITE mixingSite = MIXING_SITE.NONE;
+	private RISK_STATE infectorRiskState = RISK_STATE.None;
+	private RISK_STATE infectedRiskState = RISK_STATE.None;
+	private MIXING_SITE mixingSite = MIXING_SITE.None;
 	
 	public EpisodicRiskTransmission() {
-		infectorRiskState = RISK_STATE.NONE;
-		infectedRiskState = RISK_STATE.NONE;
-		mixingSite = MIXING_SITE.NONE;
+		infectorRiskState = RISK_STATE.None;
+		infectedRiskState = RISK_STATE.None;
+		mixingSite = MIXING_SITE.None;
 	}
 	
 	public EpisodicRiskTransmission(Integer _time, AgentInteface infector, AgentInteface infected) {

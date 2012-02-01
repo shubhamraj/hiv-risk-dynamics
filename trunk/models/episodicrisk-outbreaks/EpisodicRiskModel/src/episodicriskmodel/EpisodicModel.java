@@ -1,5 +1,6 @@
 package episodicriskmodel;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -7,11 +8,6 @@ import java.util.EnumMap;
 import basemodel.AgentInteface;
 import basemodel.BaseModelInterface;
 import basemodel.ParametersInterface;
-import basemodel.ParametersInterface.ACT_TYPE;
-import basemodel.ParametersInterface.MIXING_SITE;
-import basemodel.ParametersInterface.OUTBREAK_TYPE;
-import basemodel.ParametersInterface.RISK_STATE;
-import basemodel.ParametersInterface.STAGE;
 
 import cluster.ClusterRecorder;
 
@@ -87,17 +83,16 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 		}
 		individuals = new ArrayList<EpisodicAgentInterface>();
 		
-		this.maxIterations = MAX_ITERATIONS;		
+		this.maxIterations = MaxIterations;
+		
 		if (output != null) {
 			output.clear();
 			output = null;
 		}
 		output = new ArrayList<String>();
-		if (clusterRecorder != null) {
-			clusterRecorder = null;
-		}		
-		/** Cluster Recorder*/
-		clusterRecorder = new ClusterRecorder(this, this.prefix, this.outbreakType);
+		
+		/* Cluster Recorder */
+		createClusterRecorder(); 
 		
 		if (riskStates != null) {
 			riskStates = null;
@@ -111,7 +106,7 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 		for (RISK_STATE riskState : RISK_STATE.values()) {
 			riskStates.put(riskState, new ArrayList<EpisodicAgentInterface>());
 		}
-		for (int i=0; i<initialPopulation; i++) {
+		for (int i=0; i<InitialPopulation; i++) {
 			createIndividual();
 		}
 		initializeInfection();		
@@ -136,15 +131,15 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 	}
 
 	private void mixing() {
-		int numHighRisk = riskStates.get(RISK_STATE.HIGH).size();
-		int numLowRisk = riskStates.get(RISK_STATE.LOW).size();
+		int numHighRisk = riskStates.get(RISK_STATE.High).size();
+		int numLowRisk = riskStates.get(RISK_STATE.Low).size();
 
 		ArrayList<EpisodicAgentInterface> hToh = new ArrayList<EpisodicAgentInterface>();
 		ArrayList<EpisodicAgentInterface> hTol = new ArrayList<EpisodicAgentInterface>();
 		ArrayList<EpisodicAgentInterface> lowRisks = new ArrayList<EpisodicAgentInterface>();
 		double p1 = fracHtoH;
 
-		for (EpisodicAgentInterface individual : riskStates.get(RISK_STATE.HIGH)) {
+		for (EpisodicAgentInterface individual : riskStates.get(RISK_STATE.High)) {
 			if (Uniform.staticNextDouble() <= probHH) {
 				if (Uniform.staticNextDouble() <= p1) {
 					hToh.add(individual);
@@ -155,7 +150,7 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 			}
 		}
 
-		for(EpisodicAgentInterface individual : riskStates.get(RISK_STATE.LOW)) {
+		for(EpisodicAgentInterface individual : riskStates.get(RISK_STATE.Low)) {
 			if (Uniform.staticNextDouble() <= probLL) {
 				lowRisks.add(individual);
 			}
@@ -167,7 +162,7 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 		EpisodicAgentInterface low2;
 		for (EpisodicAgentInterface low1 : lowRisks) {
 			if (Uniform.staticNextDouble() <= (p2)) {
-				low2 = (EpisodicAgentInterface) riskStates.get(RISK_STATE.HIGH).get(Uniform.staticNextIntFromTo(0, numHighRisk-1));
+				low2 = (EpisodicAgentInterface) riskStates.get(RISK_STATE.High).get(Uniform.staticNextIntFromTo(0, numHighRisk-1));
 			}
 			else {
 				do {
@@ -176,7 +171,7 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 				} while(low1.equals(low2));
 			}
 			countLow++;
-			if (sexualTransmission(low1, low2, MIXING_SITE.COMMON) && currentTick >= 29990) {
+			if (sexualTransmission(low1, low2, MIXING_SITE.Common) && currentTick >= 29990) {
 				inlow++;
 			}
 			countTot++;
@@ -196,7 +191,7 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 						ind2 = (EpisodicAgentInterface) lowRisks.get(Uniform.staticNextIntFromTo(0, lowRisks.size()-1));
 					}
 					countHL++;
-					if (sexualTransmission(ind1, ind2, MIXING_SITE.COMMON) && currentTick >= 29990) {		
+					if (sexualTransmission(ind1, ind2, MIXING_SITE.Common) && currentTick >= 29990) {		
 						inlh++;
 					};
 					countTot++;
@@ -206,11 +201,11 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 
 		for (EpisodicAgentInterface ind1 : hToh) {
 			do {
-				ind2 = (EpisodicAgentInterface) riskStates.get(RISK_STATE.HIGH).get(Uniform.staticNextIntFromTo(0, numHighRisk-1));
+				ind2 = (EpisodicAgentInterface) riskStates.get(RISK_STATE.High).get(Uniform.staticNextIntFromTo(0, numHighRisk-1));
 				//ind2 = (Individual) hToh.get(Uniform.staticNextIntFromTo(0, hToh.size()-1));
 			} while (ind1.equals(ind2));
 			countHigh++;
-			if(sexualTransmission(ind1, ind2, MIXING_SITE.HIGH_RISK) && currentTick >= 29990) {
+			if(sexualTransmission(ind1, ind2, MIXING_SITE.HighRisk) && currentTick >= 29990) {
 				inhi++;
 			}
 			countTot++;
@@ -250,14 +245,14 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 			prob = beta2;
 		}
 		if (Math.random() <= prob) {			
-			ACT_TYPE actType = ACT_TYPE.NONE;			
+			ACT_TYPE actType = ACT_TYPE.None;			
 			if (infectorAHI == true) {
-				actType = ACT_TYPE.AHI;
+				actType = ACT_TYPE.Acute_Susceptible;
 			}
 			else {
-				actType = ACT_TYPE.CHI;
+				actType = ACT_TYPE.Chronic_Susceptible;
 			}
-			susceptible.setStageOfInfection(STAGE.ACUTE);
+			susceptible.setStageOfInfection(InfectionStage.Acute);
 			susceptible.setInfectedTick(currentTick);
 			susceptible.setInfectorID(infector.getID());
 			susceptible.setInfectorStatus(infector.getStageOfInfection());						
@@ -281,14 +276,14 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 			curState = individual.getRiskState();
 			newState = curState;
 			rand = Uniform.staticNextDouble();
-			if (curState.equals(RISK_STATE.HIGH)) {				
+			if (curState.equals(RISK_STATE.High)) {				
 				if (rand <= probHighToLow) {
-					newState = RISK_STATE.LOW;
+					newState = RISK_STATE.Low;
 				}
 			}
-			else if (curState.equals(RISK_STATE.LOW)) {
+			else if (curState.equals(RISK_STATE.Low)) {
 				if (rand <= probLowToHigh) {
-					newState = RISK_STATE.HIGH;
+					newState = RISK_STATE.High;
 				}
 			}
 			else {
@@ -314,17 +309,17 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 			riskStates.get(individual.getRiskState()).remove(individual);
 			individuals.remove(individual);			
 		}
-		for (int i=0; i<initialPopulation; i++) {
-			if (Math.random() <= ((double)1/(durationLife))) {
+		for (int i=0; i<InitialPopulation; i++) {
+			if (Math.random() <= ((double)1/(DurationLife))) {
 				createIndividual();
 			}
 		}
 	}
 
 	private void initializeProbabilities() {
-		double df1 = 1/((1/durationAHI)+(1/durationLife));
-		double df2 = 1/((1/durationCHI)+(1/durationLife));
-		beta2 = (1-ahiTransPotential)*(df1+df2)*baseTransProb / df2;
+		double df1 = 1/((1/DurationAHI)+(1/DurationLife));
+		double df2 = 1/((1/DurationCHI)+(1/DurationLife));
+		beta2 = (1-ahiTransPotential)*(df1+df2)*BaseTransProb / df2;
 		beta1 = ahiTransPotential*df2*beta2/((1-ahiTransPotential)*df1);
 		//		print("beta1: " + beta1);
 		//		print("beta2: " + beta2);
@@ -350,9 +345,9 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 		EpisodicAgentInterface individual = (EpisodicAgentInterface) new Person();
 		individual.setEntryTick(currentTick);
 		double rand = Uniform.staticNextDouble();
-		RISK_STATE riskState = RISK_STATE.LOW;
+		RISK_STATE riskState = RISK_STATE.Low;
 		if (rand <= fracHighRisk) {
-			riskState = RISK_STATE.HIGH;
+			riskState = RISK_STATE.High;
 		}
 		individual.setRiskState(riskState);
 		riskStates.get(riskState).add(individual);
@@ -360,11 +355,11 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 	}
 
 	private void initializeInfection() {
-		int numInitInfection = (int) (individuals.size() * initialInfection);
+		int numInitInfection = (int) (individuals.size() * InitialInfection);
 		Collections.shuffle(individuals);
 		for (int i=0; i<numInitInfection; i++) {
 			EpisodicAgentInterface individual = individuals.get(i);
-			individual.setStageOfInfection(STAGE.ACUTE);
+			individual.setStageOfInfection(InfectionStage.Acute);
 			individual.setInfectedTick(0);
 		}
 	}
@@ -383,13 +378,13 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 		for (EpisodicAgentInterface individual : individuals) {			
 			if (individual.isInfected()) {
 				hiv++;
-				if (individual.getRiskState().equals(RISK_STATE.HIGH)) {
+				if (individual.getRiskState().equals(RISK_STATE.High)) {
 					highHIV++;
 				}
 				else {
 					lowHIV++;
 				}
-				if (individual.getInfectorStatus().equals(STAGE.ACUTE)) {
+				if (individual.getInfectorStatus().equals(InfectionStage.Acute)) {
 					phi++;
 				}
 			}
@@ -398,8 +393,8 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 
 		this.numHIV = (int)hiv;
 
-		double popHigh = riskStates.get(RISK_STATE.HIGH).size();
-		double popLow = riskStates.get(RISK_STATE.LOW).size();
+		double popHigh = riskStates.get(RISK_STATE.High).size();
+		double popLow = riskStates.get(RISK_STATE.Low).size();
 		//		print("population: " + count + " hiv: " + hiv + " prev: " + (hiv/count) + " highprev: " + highHIV/countHigh + " lowprev: " + lowHIV/countLow
 		//				+ " fracphi: " + phi/hiv + " inhi: " + inhi + " inlow: " + inlow +   " inhl: " + inlh + " ratio: " + ((double) inhi/inlow));
 		//print(run + "," + popSize + "," + hiv + "," + (hiv/popSize) + "," + highHIV/popHigh + "," + lowHIV/popLow + "," + phi/hiv);
@@ -456,5 +451,18 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 	@Override
 	public void addTransmissionToClusterRecord(AgentInteface infector, AgentInteface susceptible) {
 		clusterRecorder.recordTransmission(infector, susceptible);
+	}
+
+	@Override
+	public void createClusterRecorder() {
+		if (clusterRecorder != null) {
+			clusterRecorder = null;
+		}		
+		clusterRecorder = new ClusterRecorder(this, this.prefix, this.outbreakType);		
+	}
+
+	@Override
+	public int getMaximumIterations() {
+		return this.maxIterations;
 	}
 }

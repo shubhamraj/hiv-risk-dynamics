@@ -1,13 +1,14 @@
 package reader;
 
-import basemodel.Parameters;
+import basemodel.ParametersInterface;
+
 
 /**
  * 
  * @author shah
  *
  */
-public class AHIDataStructure extends Parameters {
+public class AHIDataStructure implements ParametersInterface {
 	private Integer rootID = -1;
 	private Integer obID = -1; 
 	private Integer linkedOBID = -1;

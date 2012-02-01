@@ -1,6 +1,5 @@
 package reader;
 
-
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -8,7 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import basemodel.Parameters;
+import basemodel.ParametersInterface;
 
 
 import cluster.Edge;
@@ -20,12 +19,12 @@ import episodicriskmodel.Person;
  * @author shah
  *
  */
-public class AHICHILink extends Parameters {
+public class AHICHILink implements ParametersInterface {
 	public static final int threshold = 100000;
 	
 	private int index;
 	private String fname;
-	private OUTBREAK_RECORD outbreakRecord = OUTBREAK_RECORD.ENDEMIC;
+	private OutbreakRecord outbreakRecord = OutbreakRecord.Endemic;
 	//
 	private HashMap<Integer, AHIDataStructure> continuousClusterMap, deadClusterMap;
 	//
@@ -45,12 +44,12 @@ public class AHICHILink extends Parameters {
 		this.index = _index;
 		this.fname = _fname;
 		
-		this.outputsMap = new EnumMap<Parameters.Outputs, ArrayList<Double>>(Outputs.class);
+		this.outputsMap = new EnumMap<Outputs, ArrayList<Double>>(Outputs.class);
 		
 		this.deadEnds = new HashMap<Integer, Person>();
 		this.continuousLeafs = new HashMap<Integer, Person>();
-		this.uniqueContinuousEdges = new EnumMap<Parameters.ACT_TYPE, Set<Edge>>(ACT_TYPE.class);
-		this.uniqueDeadEdges = new EnumMap<Parameters.ACT_TYPE, Set<Edge>>(ACT_TYPE.class);
+		this.uniqueContinuousEdges = new EnumMap<ACT_TYPE, Set<Edge>>(ACT_TYPE.class);
+		this.uniqueDeadEdges = new EnumMap<ACT_TYPE, Set<Edge>>(ACT_TYPE.class);
 
 		this.continuousAHIRoots = new HashSet<Integer>();
 		this.deadAHIRoots = new HashSet<Integer>();		
@@ -66,7 +65,7 @@ public class AHICHILink extends Parameters {
 		this.continuousClusterMap = new HashMap<Integer, AHIDataStructure>();
 		this.deadClusterMap = new HashMap<Integer, AHIDataStructure>();
 		
-		for (OUTBREAK_RECORD obr : OUTBREAK_RECORD.values()) {
+		for (OutbreakRecord obr : OutbreakRecord.values()) {
 			if (this.fname.contains(obr.name())) {
 				this.outbreakRecord = obr;
 			}
@@ -123,21 +122,21 @@ public class AHICHILink extends Parameters {
 			if (infectionForestReader.isLeaf(vertex)) {
 				if (vertex.getInfectedTick() <= threshold) {
 					deadEnds.put(new Integer(vertex.getID()), vertex);
-					if (vertex.getActType().equals(ACT_TYPE.AHI))
+					if (vertex.getActType().equals(ACT_TYPE.Acute_Susceptible))
 						deadLeafsAHI++;
-					else if (vertex.getActType().equals(ACT_TYPE.CHI))
+					else if (vertex.getActType().equals(ACT_TYPE.Chronic_Susceptible))
 						deadLeafsCHI++;
 				}
 			} else {
 				if (vertex.getInfectedTick() <= threshold
-						&& vertex.getActType() != ACT_TYPE.NONE) {
+						&& vertex.getActType() != ACT_TYPE.None) {
 					for (Person successor : infectionForestReader.getSuccessors(vertex)) {
 						if (successor.getInfectedTick() > threshold) {
 							continuousLeafs.put(new Integer(vertex.getID()),
 									vertex);
-							if (vertex.getActType().equals(ACT_TYPE.AHI))
+							if (vertex.getActType().equals(ACT_TYPE.Acute_Susceptible))
 								contLeafsAHI++;
-							else if (vertex.getActType().equals(ACT_TYPE.CHI))
+							else if (vertex.getActType().equals(ACT_TYPE.Chronic_Susceptible))
 								contLeafsCHI++;
 							break;
 						}
@@ -159,10 +158,10 @@ public class AHICHILink extends Parameters {
 		double numChronicDead = 0, numAcuteDead = 0;
 		double numChronicContinuous = 0, numAcuteContinuous = 0;
 
-		numChronicDead = uniqueDeadEdges.get(ACT_TYPE.CHI).size();
-		numAcuteDead = uniqueDeadEdges.get(ACT_TYPE.AHI).size();
-		numChronicContinuous = uniqueContinuousEdges.get(ACT_TYPE.CHI).size();
-		numAcuteContinuous = uniqueContinuousEdges.get(ACT_TYPE.AHI).size();
+		numChronicDead = uniqueDeadEdges.get(ACT_TYPE.Chronic_Susceptible).size();
+		numAcuteDead = uniqueDeadEdges.get(ACT_TYPE.Acute_Susceptible).size();
+		numChronicContinuous = uniqueContinuousEdges.get(ACT_TYPE.Chronic_Susceptible).size();
+		numAcuteContinuous = uniqueContinuousEdges.get(ACT_TYPE.Acute_Susceptible).size();
 
 		// double deadFrac = numAcuteDead/(numChronicDead+numAcuteDead);
 		// double contFrac = numAcuteCont/(numChronicCont+numAcuteCont);
@@ -295,7 +294,7 @@ public class AHICHILink extends Parameters {
 				Edge edge = infectionForestReader.getParentEdge(vertex);
 				Person parent = infectionForestReader.getSource(edge);
 				if (edge != null
-						&& edge.getTransmission().getActType().equals(ACT_TYPE.AHI)) {
+						&& edge.getTransmission().getActType().equals(ACT_TYPE.Acute_Susceptible)) {
 					break;
 				}
 				countChronics++;
@@ -413,6 +412,10 @@ public class AHICHILink extends Parameters {
 		for (Outputs output : Outputs.values()) {
 			outputsMap.get(output).add(struc.getOutput(output));
 		}
+	}
+	
+	private void printStr(String str) {
+		System.out.println(str);
 	}
 
 	private int returnOBID(Integer vertexID) {

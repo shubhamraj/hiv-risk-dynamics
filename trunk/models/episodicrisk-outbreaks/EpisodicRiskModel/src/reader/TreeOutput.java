@@ -1,10 +1,11 @@
 package reader;
 
 
+
 import java.util.ArrayList;
 import java.util.EnumMap;
 
-import basemodel.Parameters;
+import basemodel.ParametersInterface;
 
 import cluster.Edge;
 
@@ -16,7 +17,7 @@ import episodicriskmodel.Person;
  * @author shah
  *
  */
-public class TreeOutput extends Parameters {
+public class TreeOutput implements ParametersInterface {
 	protected EnumMap<Outputs, double[]> outputsMap;
 
 	public TreeOutput() {
@@ -86,7 +87,7 @@ public class TreeOutput extends Parameters {
 
 		int[] ranges = null;
 		if (output.equals(Outputs.Size)) {
-			ranges = sizeRanges;			
+			ranges = SizeRanges;			
 		}
 		else if (output.equals(Outputs.Duration)) {
 			ranges = durationRanges;

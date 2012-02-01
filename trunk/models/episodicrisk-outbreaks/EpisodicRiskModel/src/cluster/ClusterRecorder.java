@@ -1,11 +1,12 @@
 package cluster;
 
 
+
 import java.io.PrintWriter;
 
 import basemodel.AgentInteface;
 import basemodel.BaseModelInterface;
-import basemodel.Parameters;
+import basemodel.ParametersInterface;
 
 import episodicriskmodel.EpisodicAgentInterface;
 
@@ -15,17 +16,17 @@ import episodicriskmodel.EpisodicAgentInterface;
  * @author shah
  *
  */
-public class ClusterRecorder extends Parameters {
+public class ClusterRecorder implements ParametersInterface {
 	private BaseModelInterface model;
 	private ClusterEngine[] clusterEngine;
 
 	public ClusterRecorder(BaseModelInterface _model, String prefix, OUTBREAK_TYPE outbreakType) {
 		this.model = _model; 
-		int numEngines = OUTBREAK_RECORD.values().length;
+		int numEngines = OutbreakRecord.values().length;
 		clusterEngine = new ClusterEngine[numEngines];		
-		clusterEngine = new ClusterEngine[OUTBREAK_RECORD.values().length];		
-		for (OUTBREAK_RECORD outbreakRecord : OUTBREAK_RECORD.values()) {
-			clusterEngine[outbreakRecord.ordinal()] = new ClusterEngine(prefix, outbreakType, outbreakRecord);
+		clusterEngine = new ClusterEngine[OutbreakRecord.values().length];		
+		for (OutbreakRecord outbreakRecord : OutbreakRecord.values()) {
+			clusterEngine[outbreakRecord.ordinal()] = new ClusterEngine(prefix, outbreakType, outbreakRecord, model.getMaximumIterations());
 		}			
 	}
 
@@ -39,7 +40,7 @@ public class ClusterRecorder extends Parameters {
 	public void recordOutput(int run, PrintWriter[] incidenceWriter, PrintWriter[] outbreakWriter, PrintWriter[] plfitWriter) {
 		if (RecordOutbreak) {
 			try {
-				for (OUTBREAK_RECORD obRecord : OUTBREAK_RECORD.values()) {
+				for (OutbreakRecord obRecord : OutbreakRecord.values()) {
 					clusterEngine[obRecord.ordinal()].writeJointDistSummary(run, incidenceWriter, outbreakWriter);
 					clusterEngine[obRecord.ordinal()].saveExtStats(plfitWriter);
 				}					
@@ -53,7 +54,7 @@ public class ClusterRecorder extends Parameters {
 	public void updateEpisodicEpisodicAgentClusterRecord(EpisodicAgentInterface individual) {
 		if (RecordOutbreak) {
 			int currentTick = model.getCurrentTick();
-			for (OUTBREAK_RECORD outbreakRecord : OUTBREAK_RECORD.values()) {
+			for (OutbreakRecord outbreakRecord : OutbreakRecord.values()) {
 				ClusterEngine engine = clusterEngine[outbreakRecord.ordinal()];
 				if (engine.isStopped() == false) {
 					if (individual.isRemovedAHICluster() == false
@@ -72,7 +73,7 @@ public class ClusterRecorder extends Parameters {
 	public void recordTransmission(AgentInteface infector, AgentInteface susceptible) {
 		if (RecordOutbreak) {
 			int currentTick = model.getCurrentTick();
-			for (OUTBREAK_RECORD outbreakRecord : OUTBREAK_RECORD.values()) {
+			for (OutbreakRecord outbreakRecord : OutbreakRecord.values()) {
 				ClusterEngine engine = clusterEngine[outbreakRecord.ordinal()];
 				if (engine.shouldRecordTransmission(currentTick)) {
 					engine.addTransmission(currentTick, infector, susceptible);
@@ -84,7 +85,7 @@ public class ClusterRecorder extends Parameters {
 
 	private void startClusterEngine() {
 		if (RecordOutbreak) {
-			for (OUTBREAK_RECORD outbreakRecord : OUTBREAK_RECORD.values()) {
+			for (OutbreakRecord outbreakRecord : OutbreakRecord.values()) {
 				ClusterEngine engine = clusterEngine[outbreakRecord.ordinal()];
 				if (engine.isStopped() == false) {
 					engine.shouldBeginRecording(model.getCurrentTick());
@@ -95,7 +96,7 @@ public class ClusterRecorder extends Parameters {
 
 	private void checkClusterEngine() {
 		if (RecordOutbreak) {
-			for (OUTBREAK_RECORD outbreakRecord : OUTBREAK_RECORD.values()) {
+			for (OutbreakRecord outbreakRecord : OutbreakRecord.values()) {
 				ClusterEngine engine = clusterEngine[outbreakRecord.ordinal()];
 				if (engine.isStopped() == false) {
 					engine.step(new Integer(model.getCurrentTick()));
@@ -111,7 +112,7 @@ public class ClusterRecorder extends Parameters {
 
 	private void recordPopulationVariables() {
 		if (RecordOutbreak) {
-			for (OUTBREAK_RECORD outbreakRecord : OUTBREAK_RECORD.values()) {
+			for (OutbreakRecord outbreakRecord : OutbreakRecord.values()) {
 				ClusterEngine recorder = clusterEngine[outbreakRecord.ordinal()];
 				if (recorder.isStopped() == false) {
 					recorder.setPopulationStats(model.getCurrentTick(), (int)model.getNumHIV(), model.returnPopulationSize());
