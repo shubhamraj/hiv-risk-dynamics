@@ -1,9 +1,7 @@
 package episodicriskmodel;
 
-
 import interfaces.AgentInteface;
 import interfaces.BaseModelInterface;
-import interfaces.ParametersInterface;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +17,7 @@ import cern.jet.random.Uniform;
  * @author shah
  *
  */
-public class EpisodicModel implements BaseModelInterface, ParametersInterface {
+public class EpisodicModel implements BaseModelInterface {
 	/** AHI transmission potential */
 	double ahiTransPotential;
 	double beta1; 

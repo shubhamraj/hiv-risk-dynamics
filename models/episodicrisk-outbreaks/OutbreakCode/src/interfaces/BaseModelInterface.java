@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import cluster.ClusterRecorder;
 
-public interface BaseModelInterface {
+public interface BaseModelInterface extends ParametersInterface {
 	public void createClusterRecorder();
 	public void run();
 	public void addTransmissionToClusterRecord(AgentInteface infector, AgentInteface susceptible);
