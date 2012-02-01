@@ -1,7 +1,7 @@
 package basemodel;
 
 import basemodel.ParametersInterface.ACT_TYPE;
-import basemodel.ParametersInterface.STAGE;
+import basemodel.ParametersInterface.InfectionStage;
 
 public interface AgentInteface {
 	public void step(int currentTick);
@@ -15,11 +15,11 @@ public interface AgentInteface {
 	public boolean infectedByAHI();
 	public boolean isDead();
 	public void setDead(boolean dead);
-	public STAGE getInfectorStatus();
-	public void setInfectorStatus(STAGE infectorStatus);
+	public InfectionStage getInfectorStatus();
+	public void setInfectorStatus(InfectionStage infectorStatus);
 	public Integer getAHIClusterID();
 	public void setAHIClusterID(Integer ahiCluster);
-	public void setStageOfInfection(STAGE infectionStatus);
+	public void setStageOfInfection(InfectionStage infectionStatus);
 	public boolean isRemovedAHICluster();
 	public void setRemovedAHICluster(boolean removedAHICluster);	
 	public int getOutbreakStartTime();
@@ -35,7 +35,7 @@ public interface AgentInteface {
 	public void setCHITick(int cHITick);
 	public boolean isRoot();
 	public void setRoot(boolean root);
-	public STAGE getStageOfInfection();
+	public InfectionStage getStageOfInfection();
 	public ACT_TYPE getActType();
 	public void setActType(ACT_TYPE actType);
 //	public String toString();

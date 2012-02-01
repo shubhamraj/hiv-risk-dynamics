@@ -1,6 +1,8 @@
 package reader;
 
-import basemodel.Parameters;
+
+
+import basemodel.ParametersInterface;
 import cern.jet.random.Normal;
 
 /**
@@ -8,7 +10,7 @@ import cern.jet.random.Normal;
  * Uses MathCommons, Colt and Flanagan libraries.
  *
  */
-public class Stats extends Parameters {	
+public class Stats implements ParametersInterface {	
 	public static double returnMean(double[] data) {
 		if (data != null) {
 			return flanagan.analysis.Stat.mean(data);

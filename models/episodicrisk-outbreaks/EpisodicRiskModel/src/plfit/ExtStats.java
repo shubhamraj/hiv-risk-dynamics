@@ -1,22 +1,20 @@
 package plfit;
 
+
 import java.util.ArrayList;
 
-import basemodel.Parameters;
-
-
-public class ExtStats extends Parameters {	
-	/*	M: total number of elements
-		N: total number of groups
-		kmax: the number of elements in the largest group
-		k0: the number of elements in the smallest group in your data set
-	 */
+/**	M: total number of elements
+	N: total number of groups
+	kmax: the number of elements in the largest group
+	k0: the number of elements in the smallest group in your data set
+ */
+public class ExtStats {	
 	private double M; 
 	private double N;
 	private double kmax;
 	private double kmin;
 	private ArrayList<Double> outbreakSizes;
-	
+
 	public ExtStats() {
 		M = 0d;
 		N = 0d;
@@ -24,7 +22,7 @@ public class ExtStats extends Parameters {
 		kmin = 0d;
 		outbreakSizes = new ArrayList<Double>();
 	}
-	
+
 	public double getM() {
 		return M;
 	}

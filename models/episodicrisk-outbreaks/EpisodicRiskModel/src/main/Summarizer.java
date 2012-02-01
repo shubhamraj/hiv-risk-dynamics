@@ -1,12 +1,13 @@
 package main;
 
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import basemodel.Parameters;
+import basemodel.ParametersInterface;
 
 import reader.OutbreakStatsReader;
 import reader.ReaderEngine;
@@ -20,12 +21,12 @@ import reader.ReaderPopulation;
  * @author shah
  *
  */
-public class Summarizer extends Parameters {	
-	public static OUTBREAK_RECORD outbreakRecord = OUTBREAK_RECORD.ENDEMIC;
+public class Summarizer implements ParametersInterface {	
+	public static OutbreakRecord outbreakRecord = OutbreakRecord.Endemic;
 	private String prefix = "";
 	private int paramSize = 1;
 	
-	public void setOutbreakRecord(OUTBREAK_RECORD _outbreakRecord, int _paramSize) {
+	public void setOutbreakRecord(OutbreakRecord _outbreakRecord, int _paramSize) {
 		outbreakRecord = _outbreakRecord;
 		this.prefix = outputPath + outbreakRecord.name() + "-";
 		this.paramSize = _paramSize;
@@ -163,11 +164,15 @@ public class Summarizer extends Parameters {
 		fname.substring(0, start);
 		return Integer.parseInt(fname.substring(0, start));		
 	}
+	
+	private void printStr(String str) {
+		System.out.println(str);
+	}
 
 	public static void main(String[] args) {
 		Summarizer summarizer = new Summarizer();
 		int paramSize = 3;
-		for (OUTBREAK_RECORD outbreakRecord : OUTBREAK_RECORD.values()) {
+		for (OutbreakRecord outbreakRecord : OutbreakRecord.values()) {
 			summarizer.setOutbreakRecord(outbreakRecord, paramSize);
 			summarizer.readerPopulation();
 //			summarizer.readerIncidence();

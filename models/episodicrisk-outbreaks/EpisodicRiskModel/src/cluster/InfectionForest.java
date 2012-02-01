@@ -1,7 +1,5 @@
 package cluster;
 
-
-import basemodel.Parameters;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import episodicriskmodel.EpisodicRiskTransmission;
 import episodicriskmodel.Person;
@@ -29,8 +27,7 @@ public class InfectionForest extends BaseForest {
 	}
 
 	public void addNode(Integer time, EpisodicRiskTransmission transRec, Person infector, Person infected) {
-		//Currently, the threshold is 300 years - so the following If block will not be effect
-		if (transRec.getTimeSinceLastInfection() >= Parameters.OUTBREAK_RECORD.TRANS_THRESHOLD) {
+		if (transRec.getTimeSinceLastInfection() >= OutbreakRecord.NewChainThreshold) {
 			addRoot(infected);
 			newRoots++;
 			return;

@@ -1,5 +1,6 @@
 package reader;
 
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
-import basemodel.Parameters;
+import basemodel.ParametersInterface;
 
 import cluster.Edge;
 import edu.uci.ics.jung.graph.DelegateTree;
@@ -21,7 +22,7 @@ import episodicriskmodel.Person;
  * @author shah
  *
  */
-public class InfectionForestReader extends Parameters {
+public class InfectionForestReader implements ParametersInterface {
 	private String fname = "";
 	private int lineNo;
 	private LinkedHashMap<Integer, ArrayList<String>> inputMap;
@@ -76,41 +77,41 @@ public class InfectionForestReader extends Parameters {
 			int infectorTick = Integer.parseInt(tokens.get(AHIKey.InfectorTick.ordinal()).trim());
 
 			String act = tokens.get(AHIKey.ActType.ordinal()).trim();
-			ACT_TYPE actType = ACT_TYPE.NONE;
+			ACT_TYPE actType = ACT_TYPE.None;
 			if (act.equals("AHI")) {
-				actType = ACT_TYPE.AHI;
+				actType = ACT_TYPE.Acute_Susceptible;
 			} else {
-				actType = ACT_TYPE.CHI;
+				actType = ACT_TYPE.Chronic_Susceptible;
 			}
 			int timeSinceLastInfection = Integer.parseInt(tokens.get(AHIKey.TimeSinceLastInf.ordinal()).trim());
 			String strInfectorStage = tokens.get(AHIKey.InfectorStg.ordinal()).trim();
-			STAGE infectorStage;
+			InfectionStage infectorStage;
 			if (strInfectorStage.equals("AHI")) {
-				infectorStage = STAGE.ACUTE;
+				infectorStage = InfectionStage.Acute;
 			} else {
-				infectorStage = STAGE.CHRONIC;
+				infectorStage = InfectionStage.Chronic;
 			}
 			RISK_STATE infectorState, infectedState;
 
 			String strInfectorState = tokens.get(AHIKey.InfectorState.ordinal()).trim();
 			if (strInfectorState.equals("HIGH")) {
-				infectorState = RISK_STATE.HIGH;
+				infectorState = RISK_STATE.High;
 			} else {
-				infectorState = RISK_STATE.LOW;
+				infectorState = RISK_STATE.Low;
 			}
 			String strInfectedState = tokens.get(AHIKey.InfectedState.ordinal()).trim();
 			if (strInfectedState.equals("HIGH")) {
-				infectedState = RISK_STATE.HIGH;
+				infectedState = RISK_STATE.High;
 			} else {
-				infectedState = RISK_STATE.LOW;
+				infectedState = RISK_STATE.Low;
 			}
 
-			MIXING_SITE mixingSite = MIXING_SITE.NONE;
+			MIXING_SITE mixingSite = MIXING_SITE.None;
 			String site = tokens.get(AHIKey.MixingSite.ordinal()).trim();
 			if (site.equals("HIGH_RISK")) {
-				mixingSite = MIXING_SITE.HIGH_RISK;
+				mixingSite = MIXING_SITE.HighRisk;
 			} else {
-				mixingSite = MIXING_SITE.COMMON;
+				mixingSite = MIXING_SITE.Common;
 			}
 			int branchTime = Integer.parseInt(tokens.get(AHIKey.BranchLength.ordinal()).trim());
 			transmission.setTime(time);

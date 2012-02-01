@@ -1,6 +1,7 @@
 package main;
 
 
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -9,7 +10,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import basemodel.Parameters;
+import basemodel.ParametersInterface;
 
 import episodicriskmodel.EpisodicModel;
 
@@ -19,10 +20,8 @@ import episodicriskmodel.EpisodicModel;
  * @author shah
  *
  */
-public class Controller extends Parameters {
+public class Controller implements ParametersInterface {
 	public static void main(String[] args) throws IOException {
-		String aggregatePath = Parameters.aggregatePath;
-		String allRunsPath = Parameters.allRunsPath;
 		OUTBREAK_TYPE outbreakType = OUTBREAK_TYPE.AHI;
 		int maxRuns = 3;		
 		int startParam = 2;
@@ -32,7 +31,7 @@ public class Controller extends Parameters {
 			int lineNo = 1;
 			ArrayList<String> tokens = new ArrayList<String>();
 			try {			
-				BufferedReader bufRdr = new BufferedReader(new FileReader(Parameters.inputPath+Parameters.inputFile));
+				BufferedReader bufRdr = new BufferedReader(new FileReader(inputPath + inputFile));
 				String line = null;					
 				while ((line = bufRdr.readLine()) != null) {
 					if (lineNo == index) {
@@ -54,10 +53,10 @@ public class Controller extends Parameters {
 			}
 
 			PrintWriter populationWriter;			
-			PrintWriter[] incidenceWriter = new PrintWriter[OUTBREAK_RECORD.values().length];
-			PrintWriter[] outbreakWriter = new PrintWriter[OUTBREAK_RECORD.values().length];
-			PrintWriter[] plfitWriter = new PrintWriter[OUTBREAK_RECORD.values().length];			
-			for (OUTBREAK_RECORD obRecord : OUTBREAK_RECORD.values()) {
+			PrintWriter[] incidenceWriter = new PrintWriter[OutbreakRecord.values().length];
+			PrintWriter[] outbreakWriter = new PrintWriter[OutbreakRecord.values().length];
+			PrintWriter[] plfitWriter = new PrintWriter[OutbreakRecord.values().length];			
+			for (OutbreakRecord obRecord : OutbreakRecord.values()) {
 				incidenceWriter[obRecord.ordinal()] = new PrintWriter(new File(aggregatePath + index+"-Incidence-"+obRecord.name()+".csv"));
 				outbreakWriter[obRecord.ordinal()] = new PrintWriter(new File(aggregatePath + index+"-Outbreak-"+obRecord.name()+".csv"));
 				plfitWriter[obRecord.ordinal()] = new PrintWriter(new File(aggregatePath + index+"-Plfit-"+obRecord.name()+".csv"));
@@ -76,7 +75,7 @@ public class Controller extends Parameters {
 				model.getClusterRecorder().recordOutput(run, incidenceWriter, outbreakWriter, plfitWriter);
 				model = null;
 			}
-			for (OUTBREAK_RECORD obRecord : OUTBREAK_RECORD.values()) {
+			for (OutbreakRecord obRecord : OutbreakRecord.values()) {
 				incidenceWriter[obRecord.ordinal()].flush(); incidenceWriter[obRecord.ordinal()].close(); 
 				outbreakWriter[obRecord.ordinal()].flush(); outbreakWriter[obRecord.ordinal()].close();
 				plfitWriter[obRecord.ordinal()].flush(); plfitWriter[obRecord.ordinal()].close();

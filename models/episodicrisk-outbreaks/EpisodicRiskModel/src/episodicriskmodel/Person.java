@@ -1,12 +1,8 @@
 package episodicriskmodel;
 
+
 import basemodel.AgentInteface;
-import basemodel.Parameters;
 import basemodel.ParametersInterface;
-import basemodel.ParametersInterface.ACT_TYPE;
-import basemodel.ParametersInterface.MIXING_SITE;
-import basemodel.ParametersInterface.RISK_STATE;
-import basemodel.ParametersInterface.STAGE;
 import cern.jet.random.Uniform;
 
 /**
@@ -17,9 +13,9 @@ import cern.jet.random.Uniform;
 public class Person implements EpisodicAgentInterface, ParametersInterface {
 	static int lastID = -1;
 	int ID = -1;
-	STAGE stageOfInfection = STAGE.SUSCEPTIBLE;
-	STAGE infectorStatus = STAGE.SUSCEPTIBLE;
-	ACT_TYPE actType = ACT_TYPE.NONE;
+	InfectionStage stageOfInfection = InfectionStage.Susceptible;
+	InfectionStage infectorStatus = InfectionStage.Susceptible;
+	ACT_TYPE actType = ACT_TYPE.None;
 
 	int infectedTick = -1;
 	int infectorID = -1;
@@ -38,9 +34,9 @@ public class Person implements EpisodicAgentInterface, ParametersInterface {
 	private int entryTick = -1;
 	private int exitTick = -1;
 	
-	private RISK_STATE riskState = RISK_STATE.NONE;		
-	private RISK_STATE infectedRiskState = RISK_STATE.NONE;
-	private MIXING_SITE infectedMixingSite = MIXING_SITE.NONE;
+	private RISK_STATE riskState = RISK_STATE.None;		
+	private RISK_STATE infectedRiskState = RISK_STATE.None;
+	private MIXING_SITE infectedMixingSite = MIXING_SITE.None;
 
 	public Person() {		
 		this.ID = ++lastID;
@@ -51,25 +47,25 @@ public class Person implements EpisodicAgentInterface, ParametersInterface {
 	}
 
 	public void step(int currentTick) {
-		if (Uniform.staticNextDouble() <= ((double)1/Parameters.durationLife)) {
+		if (Uniform.staticNextDouble() <= ((double)1/DurationLife)) {
 			dead = true;
 			return;
 		}
-		if (stageOfInfection != STAGE.SUSCEPTIBLE) {
+		if (stageOfInfection != InfectionStage.Susceptible) {
 			updateInfectionStatus(currentTick);
 		}
 	}
 
 	public void updateInfectionStatus(int currentTick) {
 		double rand = Uniform.staticNextDouble();
-		if (stageOfInfection.equals(STAGE.ACUTE)
-				&& rand <= ((double)1/Parameters.durationAHI)) {
-			stageOfInfection = STAGE.CHRONIC;
+		if (stageOfInfection.equals(InfectionStage.Acute)
+				&& rand <= ((double)1/DurationAHI)) {
+			stageOfInfection = InfectionStage.Chronic;
 			this.CHITick = currentTick;
 		}
 
-		else if (stageOfInfection.equals(STAGE.CHRONIC) 
-				&& rand <= ((double)1/Parameters.durationCHI)) {
+		else if (stageOfInfection.equals(InfectionStage.Chronic) 
+				&& rand <= ((double)1/DurationCHI)) {
 			dead = true;		
 		} 	
 	}
@@ -81,15 +77,15 @@ public class Person implements EpisodicAgentInterface, ParametersInterface {
 	}
 
 	public boolean isAHI() {
-		return stageOfInfection.equals(STAGE.ACUTE);
+		return stageOfInfection.equals(InfectionStage.Acute);
 	}
 
 	public boolean isInfected() {
-		return stageOfInfection.equals(STAGE.ACUTE) || stageOfInfection.equals(STAGE.CHRONIC);
+		return stageOfInfection.equals(InfectionStage.Acute) || stageOfInfection.equals(InfectionStage.Chronic);
 	}
 
 	public boolean isSusceptible() {
-		return stageOfInfection.equals(STAGE.SUSCEPTIBLE);
+		return stageOfInfection.equals(InfectionStage.Susceptible);
 	}
 
 	public void setInfectionTimes(int currentTime) {
@@ -109,7 +105,7 @@ public class Person implements EpisodicAgentInterface, ParametersInterface {
 	}
 
 	public boolean infectedByAHI() {
-		return infectorStatus.equals(STAGE.ACUTE) ? true : false;
+		return infectorStatus.equals(InfectionStage.Acute) ? true : false;
 	}
 
 	public boolean isDead() {
@@ -120,11 +116,11 @@ public class Person implements EpisodicAgentInterface, ParametersInterface {
 		this.dead = exit;
 	}
 
-	public STAGE getInfectorStatus() {
+	public InfectionStage getInfectorStatus() {
 		return infectorStatus;
 	}
 
-	public void setInfectorStatus(STAGE infectorStatus) {
+	public void setInfectorStatus(InfectionStage infectorStatus) {
 		this.infectorStatus = infectorStatus;
 	}
 
@@ -137,7 +133,7 @@ public class Person implements EpisodicAgentInterface, ParametersInterface {
 	}
 
 
-	public void setStageOfInfection(STAGE infectionStatus) {
+	public void setStageOfInfection(InfectionStage infectionStatus) {
 		this.stageOfInfection = infectionStatus;
 	}
 
@@ -205,7 +201,7 @@ public class Person implements EpisodicAgentInterface, ParametersInterface {
 		this.root = root;
 	}
 
-	public STAGE getStageOfInfection() {
+	public InfectionStage getStageOfInfection() {
 		return stageOfInfection;
 	}
 

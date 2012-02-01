@@ -1,5 +1,6 @@
 package plfit;
 
+
 import java.io.BufferedReader;
 
 import java.io.File;
@@ -10,11 +11,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import basemodel.ParametersInterface;
 
-import basemodel.Parameters;
-
-
-public class PowerLawFit extends Parameters {
+public class PowerLawFit implements ParametersInterface {
 	private ArrayList<String> command;
 	private String fname = "./src/ext/cfg/temp.txt";
 	private InputStream stdout;

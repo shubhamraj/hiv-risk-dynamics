@@ -1,14 +1,13 @@
 package cluster;
 
 
+
+
 import java.io.IOException;
 import java.util.ArrayList;
 
 import basemodel.AgentInteface;
-import basemodel.Parameters;
-import basemodel.ParametersInterface.OUTBREAK_RECORD;
-
-
+import basemodel.ParametersInterface;
 
 import edu.uci.ics.jung.graph.DelegateForest;
 import episodicriskmodel.EpisodicRiskTransmission;
@@ -19,7 +18,7 @@ import episodicriskmodel.Person;
  * @author shah
  *
  */
-public class BaseForest extends DelegateForest<AgentInteface, Edge> {
+public class BaseForest extends DelegateForest<AgentInteface, Edge> implements ParametersInterface {
 	protected static final long serialVersionUID = 1L;
 	protected static Person root;
 	protected ArrayList<Person> sortedRoots;
@@ -33,7 +32,7 @@ public class BaseForest extends DelegateForest<AgentInteface, Edge> {
 		prefix = "";
 		maxDepth = 0;
 		sortedRoots = new ArrayList<Person>();
-		if (Parameters.singleTreeMode) {
+		if (SingleTreeMode) {
 			setRoot(root);
 		}
 	}
@@ -45,12 +44,12 @@ public class BaseForest extends DelegateForest<AgentInteface, Edge> {
 		prefix = "";
 		maxDepth = 0;
 		sortedRoots = new ArrayList<Person>();
-		if (Parameters.singleTreeMode) {
+		if (SingleTreeMode) {
 			setRoot(root);
 		}
 	}
 
-	public void save(OUTBREAK_RECORD outbreakRecord) throws IOException {
+	public void save(OutbreakRecord outbreakRecord) throws IOException {
 		ForestWriter forestWriter = new ForestWriter(this, outbreakRecord);
 		forestWriter.save();
 	}
