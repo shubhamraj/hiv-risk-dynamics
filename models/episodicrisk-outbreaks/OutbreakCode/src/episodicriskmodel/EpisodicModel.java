@@ -20,8 +20,8 @@ import cern.jet.random.Uniform;
 public class EpisodicModel implements BaseModelInterface {
 	/** AHI transmission potential */
 	double ahiTransPotential;
-	double beta1; 
-	double beta2;
+	double betaAHI; 
+	double betaCHI;
 	int currentTick;
 	
 	ArrayList<String> output;
@@ -116,8 +116,8 @@ public class EpisodicModel implements BaseModelInterface {
 			currentTick = iter;
 			refreshVariables();
 			
-			/* Cluster Recorder */
-			clusterRecorder.step();
+			/* Cluster Recorder step */
+			callClusterRecorderStep();
 			
 			updateIndividuals();
 			mixing();
@@ -238,10 +238,10 @@ public class EpisodicModel implements BaseModelInterface {
 		double prob = 0;
 		boolean infectorAHI = infector.isAHI();
 		if (infectorAHI == true) {
-			prob = beta1;
+			prob = betaAHI;
 		}
 		else {
-			prob = beta2;
+			prob = betaCHI;
 		}
 		if (Math.random() <= prob) {			
 			ActType actType = ActType.None;			
@@ -260,6 +260,7 @@ public class EpisodicModel implements BaseModelInterface {
 			susceptible.setInfectedRiskState(susceptible.getRiskState());
 			infector.setInfectionTimes(currentTick);
 
+			/** Add transmission to the cluser recorder*/
 			addTransmissionToClusterRecord(infector, susceptible);
 		}
 	}
@@ -318,8 +319,8 @@ public class EpisodicModel implements BaseModelInterface {
 	private void initializeProbabilities() {
 		double df1 = 1/((1/DurationAHI)+(1/DurationLife));
 		double df2 = 1/((1/DurationCHI)+(1/DurationLife));
-		beta2 = (1-ahiTransPotential)*(df1+df2)*BaseTransProb / df2;
-		beta1 = ahiTransPotential*df2*beta2/((1-ahiTransPotential)*df1);
+		betaCHI = (1-ahiTransPotential)*(df1+df2)*BaseTransProb / df2;
+		betaAHI = ahiTransPotential*df2*betaCHI/((1-ahiTransPotential)*df1);
 		//		print("beta1: " + beta1);
 		//		print("beta2: " + beta2);
 		//		print("CH: " + highCR);
@@ -397,7 +398,7 @@ public class EpisodicModel implements BaseModelInterface {
 		//		print("population: " + count + " hiv: " + hiv + " prev: " + (hiv/count) + " highprev: " + highHIV/countHigh + " lowprev: " + lowHIV/countLow
 		//				+ " fracphi: " + phi/hiv + " inhi: " + inhi + " inlow: " + inlow +   " inhl: " + inlh + " ratio: " + ((double) inhi/inlow));
 		//print(run + "," + popSize + "," + hiv + "," + (hiv/popSize) + "," + highHIV/popHigh + "," + lowHIV/popLow + "," + phi/hiv);
-		output.add(new String(run + "," + popSize + "," + hiv + "," + (hiv/popSize) + "," + highHIV/popHigh + "," + lowHIV/popLow + "," + phi/hiv));
+		addToOutput(new String(run + "," + popSize + "," + hiv + "," + (hiv/popSize) + "," + highHIV/popHigh + "," + lowHIV/popLow + "," + phi/hiv));
 	}
 	
 	public int returnPopulationSize() {
@@ -463,5 +464,15 @@ public class EpisodicModel implements BaseModelInterface {
 	@Override
 	public int getMaximumIterations() {
 		return this.maxIterations;
+	}
+
+	@Override
+	public void callClusterRecorderStep() {
+		this.clusterRecorder.step();
+	}
+
+	@Override
+	public void addToOutput(String strOutput) {
+		this.output.add(strOutput);
 	}
 }
