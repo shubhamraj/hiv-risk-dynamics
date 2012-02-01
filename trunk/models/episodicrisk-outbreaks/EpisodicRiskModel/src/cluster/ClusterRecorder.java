@@ -1,7 +1,5 @@
 package cluster;
 
-
-
 import java.io.PrintWriter;
 
 import basemodel.AgentInteface;
