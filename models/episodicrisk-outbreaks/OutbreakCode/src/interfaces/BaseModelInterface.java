@@ -23,6 +23,8 @@ public interface BaseModelInterface extends ParametersInterface {
 	 * clusterRecorder.recordTransmission(infector, susceptible), passing 
 	 * the infector and susceptible agents as arguments */
 	public void addTransmissionToClusterRecord(AgentInteface infector, AgentInteface susceptible);
+	/** Updates agents early infection outbreak record, when the agent is dead. */
+	public void updateClusterRecord(AgentInteface agent);
 	/** This function must return the current size of agent's population. */
 	public int returnPopulationSize();
 	/** This body of this function must iterate over all agents

@@ -301,7 +301,8 @@ public class EpisodicModel implements BaseModelInterface {
 			if (individual.isDead()) {
 				deads.add(individual);
 			}
-			clusterRecorder.updateEpisodicEpisodicAgentClusterRecord(individual);			
+			/* Cluster Recorder update Episodic Agent record of outbreak clusters */
+						
 		}
 		
 		for (Person individual : deads) {
@@ -474,5 +475,10 @@ public class EpisodicModel implements BaseModelInterface {
 	@Override
 	public void addToOutput(String strOutput) {
 		this.output.add(strOutput);
+	}
+
+	@Override
+	public void updateClusterRecord(AgentInteface agent) {
+		clusterRecorder.updateEpisodicEpisodicAgentClusterRecord(agent);
 	}
 }
