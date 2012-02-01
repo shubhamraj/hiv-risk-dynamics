@@ -31,12 +31,12 @@ public class AHICHILink implements ParametersInterface {
 	private Set<Integer> continuousAHIRoots, deadAHIRoots;
 	private HashMap<Integer, Person> deadEnds;
 	private HashMap<Integer, Person> continuousLeafs;
-	private EnumMap<ACT_TYPE, Set<Edge>> uniqueContinuousEdges, uniqueDeadEdges;
+	private EnumMap<ActType, Set<Edge>> uniqueContinuousEdges, uniqueDeadEdges;
 	private ArrayList<Double> dataCountChronics, ahiOutput, chainsOutput;
 
 	private InfectionForestReader infectionForestReader;
 	private AcuteClusterReader ahiClusterReader;
-	private EnumMap<Outputs, ArrayList<Double>> outputsMap;	
+	private EnumMap<Output, ArrayList<Double>> outputsMap;	
 
 	private ChainsType chainsType = ChainsType.All;
 
@@ -44,18 +44,18 @@ public class AHICHILink implements ParametersInterface {
 		this.index = _index;
 		this.fname = _fname;
 		
-		this.outputsMap = new EnumMap<Outputs, ArrayList<Double>>(Outputs.class);
+		this.outputsMap = new EnumMap<Output, ArrayList<Double>>(Output.class);
 		
 		this.deadEnds = new HashMap<Integer, Person>();
 		this.continuousLeafs = new HashMap<Integer, Person>();
-		this.uniqueContinuousEdges = new EnumMap<ACT_TYPE, Set<Edge>>(ACT_TYPE.class);
-		this.uniqueDeadEdges = new EnumMap<ACT_TYPE, Set<Edge>>(ACT_TYPE.class);
+		this.uniqueContinuousEdges = new EnumMap<ActType, Set<Edge>>(ActType.class);
+		this.uniqueDeadEdges = new EnumMap<ActType, Set<Edge>>(ActType.class);
 
 		this.continuousAHIRoots = new HashSet<Integer>();
 		this.deadAHIRoots = new HashSet<Integer>();		
 		this.dataCountChronics = new ArrayList<Double>();
 
-		for (ACT_TYPE actType : ACT_TYPE.values()) {
+		for (ActType actType : ActType.values()) {
 			this.uniqueContinuousEdges.put(actType, new HashSet<Edge>());
 			this.uniqueDeadEdges.put(actType, new HashSet<Edge>());
 		}
@@ -122,21 +122,21 @@ public class AHICHILink implements ParametersInterface {
 			if (infectionForestReader.isLeaf(vertex)) {
 				if (vertex.getInfectedTick() <= threshold) {
 					deadEnds.put(new Integer(vertex.getID()), vertex);
-					if (vertex.getActType().equals(ACT_TYPE.Acute_Susceptible))
+					if (vertex.getActType().equals(ActType.Acute_Susceptible))
 						deadLeafsAHI++;
-					else if (vertex.getActType().equals(ACT_TYPE.Chronic_Susceptible))
+					else if (vertex.getActType().equals(ActType.Chronic_Susceptible))
 						deadLeafsCHI++;
 				}
 			} else {
 				if (vertex.getInfectedTick() <= threshold
-						&& vertex.getActType() != ACT_TYPE.None) {
+						&& vertex.getActType() != ActType.None) {
 					for (Person successor : infectionForestReader.getSuccessors(vertex)) {
 						if (successor.getInfectedTick() > threshold) {
 							continuousLeafs.put(new Integer(vertex.getID()),
 									vertex);
-							if (vertex.getActType().equals(ACT_TYPE.Acute_Susceptible))
+							if (vertex.getActType().equals(ActType.Acute_Susceptible))
 								contLeafsAHI++;
-							else if (vertex.getActType().equals(ACT_TYPE.Chronic_Susceptible))
+							else if (vertex.getActType().equals(ActType.Chronic_Susceptible))
 								contLeafsCHI++;
 							break;
 						}
@@ -158,10 +158,10 @@ public class AHICHILink implements ParametersInterface {
 		double numChronicDead = 0, numAcuteDead = 0;
 		double numChronicContinuous = 0, numAcuteContinuous = 0;
 
-		numChronicDead = uniqueDeadEdges.get(ACT_TYPE.Chronic_Susceptible).size();
-		numAcuteDead = uniqueDeadEdges.get(ACT_TYPE.Acute_Susceptible).size();
-		numChronicContinuous = uniqueContinuousEdges.get(ACT_TYPE.Chronic_Susceptible).size();
-		numAcuteContinuous = uniqueContinuousEdges.get(ACT_TYPE.Acute_Susceptible).size();
+		numChronicDead = uniqueDeadEdges.get(ActType.Chronic_Susceptible).size();
+		numAcuteDead = uniqueDeadEdges.get(ActType.Acute_Susceptible).size();
+		numChronicContinuous = uniqueContinuousEdges.get(ActType.Chronic_Susceptible).size();
+		numAcuteContinuous = uniqueContinuousEdges.get(ActType.Acute_Susceptible).size();
 
 		// double deadFrac = numAcuteDead/(numChronicDead+numAcuteDead);
 		// double contFrac = numAcuteCont/(numChronicCont+numAcuteCont);
@@ -180,7 +180,7 @@ public class AHICHILink implements ParametersInterface {
 		chainsOutput.add(numChronicContinuous);
 	}
 
-	private void pumpUniqueEdges(Person leaf, EnumMap<ACT_TYPE, Set<Edge>> map, boolean continuous) {		
+	private void pumpUniqueEdges(Person leaf, EnumMap<ActType, Set<Edge>> map, boolean continuous) {		
 		boolean rootFound = false;
 		Person vertex = leaf;
 		while (rootFound == false) {
@@ -205,7 +205,7 @@ public class AHICHILink implements ParametersInterface {
 
 	private void calculateAHIStatistics() {
 		TreeOutput treeOutput = new TreeOutput();
-		for (Outputs output : Outputs.values()) {
+		for (Output output : Output.values()) {
 			treeOutput.setOutputMapDataArray(output, outputsMap.get(output));
 			ArrayList<Double> statistics = treeOutput.calculateStats(output);
 			addToOutputArray(statistics);
@@ -294,7 +294,7 @@ public class AHICHILink implements ParametersInterface {
 				Edge edge = infectionForestReader.getParentEdge(vertex);
 				Person parent = infectionForestReader.getSource(edge);
 				if (edge != null
-						&& edge.getTransmission().getActType().equals(ACT_TYPE.Acute_Susceptible)) {
+						&& edge.getTransmission().getActType().equals(ActType.Acute_Susceptible)) {
 					break;
 				}
 				countChronics++;
@@ -309,12 +309,12 @@ public class AHICHILink implements ParametersInterface {
 			}
 			if (continuous == true) {
 				if (continuousClusterMap.containsKey(vertexID)) {
-					continuousClusterMap.get(vertexID).addOutput(Outputs.Chronics, countChronics);
+					continuousClusterMap.get(vertexID).addOutput(Output.Chronics, countChronics);
 					continuousClusterMap.get(vertexID).setLinkedOBID(returnOBID(vertex.getID()));
 				}
 			} else {
 				if (deadClusterMap.containsKey(vertexID)) {
-					deadClusterMap.get(vertexID).addOutput(Outputs.Chronics, countChronics);
+					deadClusterMap.get(vertexID).addOutput(Output.Chronics, countChronics);
 					deadClusterMap.get(vertexID).setLinkedOBID(returnOBID(vertex.getID()));
 				}
 			}
@@ -359,13 +359,13 @@ public class AHICHILink implements ParametersInterface {
 			numInternals++;
 			double iratio = numLeaves > 0 ? numInternals / numLeaves : 0;
 			double delta = nary > 0 ? height / nary : 0;
-			ahiStruc.addOutput(Outputs.Size, size);
-			ahiStruc.addOutput(Outputs.Duration, duration);
-			ahiStruc.addOutput(Outputs.Height, height);
-			ahiStruc.addOutput(Outputs.Children, children);
-			ahiStruc.addOutput(Outputs.Nary, nary);
-			ahiStruc.addOutput(Outputs.IRatio, iratio);
-			ahiStruc.addOutput(Outputs.Delta, delta);
+			ahiStruc.addOutput(Output.Size, size);
+			ahiStruc.addOutput(Output.Duration, duration);
+			ahiStruc.addOutput(Output.Height, height);
+			ahiStruc.addOutput(Output.Children, children);
+			ahiStruc.addOutput(Output.Nary, nary);
+			ahiStruc.addOutput(Output.IRatio, iratio);
+			ahiStruc.addOutput(Output.Delta, delta);
 			
 		} catch (Exception e) {
 			System.err.println("ahiRoot: " + ahiRootID + " continuous: " + continuous);
@@ -402,14 +402,14 @@ public class AHICHILink implements ParametersInterface {
 	}
 
 	private void initializeOutputsMap(int size) {
-		for (Outputs output : Outputs.values()) {
+		for (Output output : Output.values()) {
 			ArrayList<Double> dataArrayList = new ArrayList<Double>();
 			outputsMap.put(output, dataArrayList);
 		}
 	}
 
 	private void assignDataToOutputsMap(AHIDataStructure struc) {
-		for (Outputs output : Outputs.values()) {
+		for (Output output : Output.values()) {
 			outputsMap.get(output).add(struc.getOutput(output));
 		}
 	}

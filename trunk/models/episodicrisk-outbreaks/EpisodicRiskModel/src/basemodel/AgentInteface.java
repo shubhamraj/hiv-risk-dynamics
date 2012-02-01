@@ -1,6 +1,6 @@
 package basemodel;
 
-import basemodel.ParametersInterface.ACT_TYPE;
+import basemodel.ParametersInterface.ActType;
 import basemodel.ParametersInterface.InfectionStage;
 
 public interface AgentInteface {
@@ -36,8 +36,7 @@ public interface AgentInteface {
 	public boolean isRoot();
 	public void setRoot(boolean root);
 	public InfectionStage getStageOfInfection();
-	public ACT_TYPE getActType();
-	public void setActType(ACT_TYPE actType);
-//	public String toString();
+	public ActType getActType();
+	public void setActType(ActType actType);
 	public void print();
 }

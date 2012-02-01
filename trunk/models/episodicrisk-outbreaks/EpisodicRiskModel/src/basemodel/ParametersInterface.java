@@ -38,9 +38,9 @@ public interface ParametersInterface {
 	 * One may also have other definitions for an early infection outbreak such as Six-months or Two-years.
 	 * Used by the ClusterRecorder (constructor) and ClusterEngine (constructor and outbreakCriteria method) .  
 	 * */
-	public static enum OUTBREAK_TYPE {AHI, Six_Months, Two_Years}
+	public static enum OutbreakType {AHI, Six_Months, Two_Years}
 	/** Types of sex acts. May be extended depending upon the implemented transmission model. */
-	public static enum ACT_TYPE {None, Acute_Susceptible, Chronic_Susceptible}	
+	public static enum ActType {None, Acute_Susceptible, Chronic_Susceptible}	
 	/** Types of early infection outbreaks that are to be recorded. Currently, we have the Transient and the 
 	 * Endemic periods defined by the time in simulation ticks (1 tick == 1 day) in their respective constructors.
 	 * This can be extended by adding further in the enum class, e.g. Middle_Period (initTick, # of years) etc. 
@@ -75,7 +75,7 @@ public interface ParametersInterface {
 	 * Continuous chains (ongoing transmission chains), dead-ends (dead */
 	public static enum ChainsType {Continuous, DeadEnds, All}
 	/** */
-	public enum Outputs {Size, Duration, Height, IRatio, Nary, Children, Delta, Chronics};
+	public enum Output {Size, Duration, Height, IRatio, Nary, Children, Delta, Chronics};
 	/** */
 	public enum Statistics {Avg, Max, Var, IQR, p25, p50, p75, p90, p99}	
 	/** */
@@ -97,6 +97,7 @@ public interface ParametersInterface {
 	};
 	/** */
 	public static int[] sizeCategories = {1, 2, 5, 10, Integer.MAX_VALUE};
+	/** */
 	public static int[] durationCategories = {30, 60, 150, 300, Integer.MAX_VALUE};	
 	/** */
 	public static final boolean SingleTreeMode = false;
@@ -105,19 +106,36 @@ public interface ParametersInterface {
 	/** */
 	public static double FracLargestTrees = 0.1;
 	
+	/*********** File Paths *********************/
+	/** Path for the input parameters file. */
 	public static final String inputPath = "./input/";
+	/** Path for the output directory. */
 	public static final String outputPath = "./output/";
+	/** Name of the parameters input file. Must be located in the input path. */
 	public static final String inputFile = "Prevalence45-1000.csv";	
+	/** Path to save the aggregate data files for the corresponding parameter set' index for multiple runs. */
 	public static final String aggregatePath = "./data/aggregates/";
-	public static final String allRunsPath = "./data/allruns/";	
+	/** Path to save the individual data files for the corresponding parameter set' index for multiple runs. 
+	 * These contain all transmissions, early infection transmissions and basic outbreak trees' statistics 
+	 * for all the Outbreak types (Transient and Endemic).*/
+	public static final String allRunsPath = "./data/allruns/";
+	/** Name of the output file containing endemic prevalence, fraction of AHI transmissions etc for all runs of a parameter set. 
+	 * Must be located in the aggregatePath. */
 	public static final String populationFilename = "Population.csv";
+	/** Name of the output file containing joint distribution of size and duration of the early infection 
+	 * outbreaks for all runs of a parameter set. Must be located in the aggregatePath. */
 	public static final String incidenceFilename = "Incidence.csv";
+	/** Name of the output file containing estimates from the Baek et al. method for all runs of a parameter set. 
+	 * Must be located in the aggregatePath. */
 	public static final String plfitFilename = "Plfit.csv";
-	public static final String treeStatsFilename = ".AllAcuteAHIData.csv";	
-	public static final String outbreakDataFilename = "OutbreakData.csv";		
+	/** Name of the output file containing all tree statistics summaries for all runs of a parameter set. 
+	 * Saved in the outputPath directory. */
+	public static final String treeStatsFilename = "EarlyInfectionOutbreaksSummary.csv";	
+	public static final String outbreakDataFilename = "OutbreakData.csv";
+	/** Directory containing the plfit.exe (C binary) for the Powerlaw fit method from Abramnson et al.*/
 	public static final String plfitExecutablePath = "./src/ext/cfg/plfit.exe";
 	
-	/** Related to the Episodic Risk Model implementation **/
+	/**************** Related to the Episodic Risk Model implementation ***************/
 	/** Episodic risk model's mixing sites */
 	public static enum MIXING_SITE {None, Common, HighRisk};
 	/** Episodic risk model's states */

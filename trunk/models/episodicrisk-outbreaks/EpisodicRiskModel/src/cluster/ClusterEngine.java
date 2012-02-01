@@ -43,7 +43,7 @@ public class ClusterEngine implements ParametersInterface {
 	private int newAHICases;
 	private int newOutbreakAHICases;
 
-	private OUTBREAK_TYPE outbreakType;
+	private OutbreakType outbreakType;
 	private boolean started;
 	private boolean stopped;
 	private String prefix;
@@ -53,7 +53,7 @@ public class ClusterEngine implements ParametersInterface {
 	private double[][] obIncidence;
 	private double[][] outbreakDist;
 
-	public ClusterEngine(String _prefix, OUTBREAK_TYPE _outbreakType, OutbreakRecord _outbreakRecord, int maxIterations) {
+	public ClusterEngine(String _prefix, OutbreakType _outbreakType, OutbreakRecord _outbreakRecord, int maxIterations) {
 		this.prefix = _prefix;
 		this.outbreakType = _outbreakType;
 		this.outbreakRecord = _outbreakRecord;
@@ -109,8 +109,8 @@ public class ClusterEngine implements ParametersInterface {
 			if (addToOutbreak(transmission, infector, infected)) {
 				int clusterTransmissions = transmission.returnCurrentClusterTransmissions(); 
 				int clusterAge = transmission.returnCurrentClusterAge();				
-				int row = returnCumulativeCategoriesIndex(Outputs.Size, clusterTransmissions);
-				int col = returnCumulativeCategoriesIndex(Outputs.Duration, clusterAge);
+				int row = returnCumulativeCategoriesIndex(Output.Size, clusterTransmissions);
+				int col = returnCumulativeCategoriesIndex(Output.Duration, clusterAge);
 				obIncidence[row][col]++;						
 				newOutbreakAHICases++;
 			}
@@ -329,8 +329,8 @@ public class ClusterEngine implements ParametersInterface {
 					}
 				}			
 				//pump outbreak distributions array here
-				int row = returnCumulativeCategoriesIndex(Outputs.Size,	totalTrans);
-				int col = returnCumulativeCategoriesIndex(Outputs.Duration, duration);
+				int row = returnCumulativeCategoriesIndex(Output.Size,	totalTrans);
+				int col = returnCumulativeCategoriesIndex(Output.Duration, duration);
 				outbreakDist[row][col]++;
 			}			
 			
@@ -398,7 +398,7 @@ public class ClusterEngine implements ParametersInterface {
 		population[time] = popsize;
 	}
 
-	private int returnCumulativeCategoriesIndex(Outputs output, int cumulativeTransmissions) {
+	private int returnCumulativeCategoriesIndex(Output output, int cumulativeTransmissions) {
 		int[] categories;
 		switch(output) {
 		case Size:

@@ -43,7 +43,7 @@ import javax.swing.JToggleButton;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
-import basemodel.ParametersInterface.ACT_TYPE;
+import basemodel.ParametersInterface.ActType;
 import basemodel.ParametersInterface.InfectionStage;
 
 import cluster.Edge;
@@ -258,8 +258,8 @@ public class ForestDisplay extends JFrame {
 	Transformer<Edge, Paint> edgePaint = new Transformer<Edge, Paint>() {
 		public Paint transform(Edge edge) {
 			Color color = Color.BLACK;
-			ACT_TYPE actType = edge.getTransmission().getActType();
-			if (actType.equals(ACT_TYPE.Acute_Susceptible)) {
+			ActType actType = edge.getTransmission().getActType();
+			if (actType.equals(ActType.Acute_Susceptible)) {
 				color = Color.RED;
 			}
 			//			RISK_STATE infectorRiskState = edge.getTransmission().getInfectorRiskState();

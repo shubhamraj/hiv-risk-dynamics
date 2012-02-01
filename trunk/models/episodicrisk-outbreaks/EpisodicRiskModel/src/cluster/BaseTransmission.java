@@ -17,7 +17,7 @@ public class BaseTransmission implements TransmissionInterface, ParametersInterf
 	int infectedID;
 	/** For the infector */
 	int timeSinceLastInfection;
-	ACT_TYPE actType = ACT_TYPE.None;
+	ActType actType = ActType.None;
 	InfectionStage infectorStage = InfectionStage.Susceptible;	
 	int currentClusterTransmissions;
 	int branchTime;
@@ -29,7 +29,7 @@ public class BaseTransmission implements TransmissionInterface, ParametersInterf
 		infectorID = -1;
 		infectedID = -1;		
 		timeSinceLastInfection = -1;
-		actType = ACT_TYPE.None;
+		actType = ActType.None;
 		infectorStage = InfectionStage.Susceptible;
 		currentClusterTransmissions = 0;
 		branchTime = 0;
@@ -55,10 +55,6 @@ public class BaseTransmission implements TransmissionInterface, ParametersInterf
 		return str;		
 	}
 	
-	public void print() {
-		System.out.println(toString());
-	}
-
 	public int getTime() {
 		return time;
 	}
@@ -83,11 +79,11 @@ public class BaseTransmission implements TransmissionInterface, ParametersInterf
 		this.infectedID = infectedID;
 	}
 
-	public ACT_TYPE getActType() {
+	public ActType getActType() {
 		return actType;
 	}
 
-	public void setActType(ACT_TYPE actType) {
+	public void setActType(ActType actType) {
 		this.actType = actType;
 	}
 

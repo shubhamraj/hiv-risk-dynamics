@@ -41,7 +41,7 @@ public class SingleRootedTreeReader implements ParametersInterface {
 	
 	ArrayList<ChainsDataStructure> deadEnds;
 	ArrayList<ChainsDataStructure> continuous;
-	EnumMap<ACT_TYPE, Set<Edge>> uniqueContinuousEdges, uniqueDeadEdges;
+	EnumMap<ActType, Set<Edge>> uniqueContinuousEdges, uniqueDeadEdges;
 
 	public SingleRootedTreeReader(String _fname) {
 		this.fname = _fname;
@@ -54,10 +54,10 @@ public class SingleRootedTreeReader implements ParametersInterface {
 		this.deadEnds = new ArrayList<ChainsDataStructure>();
 		this.continuous = new ArrayList<ChainsDataStructure>();
 
-		this.uniqueContinuousEdges = new EnumMap<ACT_TYPE, Set<Edge>>(ACT_TYPE.class);
-		this.uniqueDeadEdges = new EnumMap<ACT_TYPE, Set<Edge>>(ACT_TYPE.class);
+		this.uniqueContinuousEdges = new EnumMap<ActType, Set<Edge>>(ActType.class);
+		this.uniqueDeadEdges = new EnumMap<ActType, Set<Edge>>(ActType.class);
 
-		for (ACT_TYPE actType : ACT_TYPE.values()) {
+		for (ActType actType : ActType.values()) {
 			this.uniqueContinuousEdges.put(actType, new HashSet<Edge>()) ;
 			this.uniqueDeadEdges.put(actType, new HashSet<Edge>()) ;
 		}
@@ -75,12 +75,12 @@ public class SingleRootedTreeReader implements ParametersInterface {
 			int infectedID = Integer.parseInt(tokens.get(AHIKey.InfectedID.ordinal()).trim());
 			int infectorTick = Integer.parseInt(tokens.get(AHIKey.InfectorTick.ordinal()).trim());
 			String act = tokens.get(AHIKey.ActType.ordinal()).trim();
-			ACT_TYPE actType = ACT_TYPE.None;
+			ActType actType = ActType.None;
 			if (act.equals("AHI")) {
-				actType = ACT_TYPE.Acute_Susceptible;
+				actType = ActType.Acute_Susceptible;
 			}
 			else {
-				actType = ACT_TYPE.Chronic_Susceptible;
+				actType = ActType.Chronic_Susceptible;
 			}		
 			int timeSinceLastInfection = Integer.parseInt(tokens.get(AHIKey.TimeSinceLastInf.ordinal()).trim());
 			String strInfectorStage = tokens.get(AHIKey.InfectorStg.ordinal()).trim();			
@@ -184,8 +184,8 @@ public class SingleRootedTreeReader implements ParametersInterface {
 			if (infectionForest.isLeaf(vertex)) {
 				if (vertex.getInfectedTick() <= threshold) {
 					deadEnds.add(returnTreeStat(vertex));
-					if (vertex.getActType().equals(ACT_TYPE.Acute_Susceptible)) deadLeafsAHI++;
-					else if (vertex.getActType().equals(ACT_TYPE.Chronic_Susceptible)) deadLeafsCHI++;
+					if (vertex.getActType().equals(ActType.Acute_Susceptible)) deadLeafsAHI++;
+					else if (vertex.getActType().equals(ActType.Chronic_Susceptible)) deadLeafsCHI++;
 				}
 			}
 			else {
@@ -193,8 +193,8 @@ public class SingleRootedTreeReader implements ParametersInterface {
 					for (Person successor : infectionForest.getSuccessors(vertex)) {
 						if (successor.getInfectedTick() > threshold) {
 							continuous.add(returnTreeStat(vertex));
-							if (vertex.getActType().equals(ACT_TYPE.Acute_Susceptible)) contLeafsAHI++;
-							else if (vertex.getActType().equals(ACT_TYPE.Chronic_Susceptible)) contLeafsCHI++;
+							if (vertex.getActType().equals(ActType.Acute_Susceptible)) contLeafsAHI++;
+							else if (vertex.getActType().equals(ActType.Chronic_Susceptible)) contLeafsCHI++;
 							break;
 						}
 					}
@@ -218,10 +218,10 @@ public class SingleRootedTreeReader implements ParametersInterface {
 		double numChronicDead=0, numAcuteDead=0;
 		double numChronicCont=0, numAcuteCont=0;
 
-		numChronicDead = uniqueDeadEdges.get(ACT_TYPE.Chronic_Susceptible).size();
-		numAcuteDead = uniqueDeadEdges.get(ACT_TYPE.Acute_Susceptible).size();
-		numChronicCont = uniqueContinuousEdges.get(ACT_TYPE.Chronic_Susceptible).size();
-		numAcuteCont = uniqueContinuousEdges.get(ACT_TYPE.Acute_Susceptible).size();
+		numChronicDead = uniqueDeadEdges.get(ActType.Chronic_Susceptible).size();
+		numAcuteDead = uniqueDeadEdges.get(ActType.Acute_Susceptible).size();
+		numChronicCont = uniqueContinuousEdges.get(ActType.Chronic_Susceptible).size();
+		numAcuteCont = uniqueContinuousEdges.get(ActType.Acute_Susceptible).size();
 
 		double deadFrac = numAcuteDead/(numChronicDead+numAcuteDead);
 		double contFrac = numAcuteCont/(numChronicCont+numAcuteCont);
@@ -230,7 +230,7 @@ public class SingleRootedTreeReader implements ParametersInterface {
 				+ " " + numChronicCont + " " + numAcuteCont + " " + contFrac);		
 	}
 
-	private void pumpUniqueEdges(Person leaf, EnumMap<ACT_TYPE, Set<Edge>> map) {
+	private void pumpUniqueEdges(Person leaf, EnumMap<ActType, Set<Edge>> map) {
 		boolean rootFound = false;
 		Person vertex = leaf;
 		while (rootFound == false) {
