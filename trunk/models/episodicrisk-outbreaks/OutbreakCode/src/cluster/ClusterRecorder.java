@@ -1,14 +1,11 @@
 package cluster;
 
+
 import interfaces.AgentInteface;
 import interfaces.BaseModelInterface;
 import interfaces.ParametersInterface;
 
 import java.io.PrintWriter;
-
-
-import episodicriskmodel.EpisodicAgentInterface;
-
 
 /**
  * 
@@ -50,18 +47,18 @@ public class ClusterRecorder implements ParametersInterface {
 		}
 	}
 
-	public void updateEpisodicEpisodicAgentClusterRecord(EpisodicAgentInterface individual) {
+	public void updateEpisodicEpisodicAgentClusterRecord(AgentInteface agent) {
 		if (RecordOutbreak) {
 			int currentTick = model.getCurrentTick();
 			for (OutbreakRecord outbreakRecord : OutbreakRecord.values()) {
 				ClusterEngine engine = clusterEngine[outbreakRecord.ordinal()];
 				if (engine.isStopped() == false) {
-					if (individual.isRemovedAHICluster() == false
-							&& (individual.isDead()
-									|| (individual.getAHIClusterID() != -1
-											&& individual.isInfected() == true
-											&& engine.outbreakCriteria(new Integer(currentTick), individual) == false))) {				
-						engine.removeTimeRecord(new Integer(currentTick), individual);
+					if (agent.isRemovedAHICluster() == false
+							&& (agent.isDead()
+									|| (agent.getAHIClusterID() != -1
+											&& agent.isInfected() == true
+											&& engine.outbreakCriteria(new Integer(currentTick), agent) == false))) {				
+						engine.removeTimeRecord(new Integer(currentTick), agent);
 					}
 				}
 			}
