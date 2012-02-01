@@ -1,14 +1,14 @@
-package forest;
+package cluster;
 
 import java.util.LinkedHashMap;
 
-import cluster.Edge;
-import cluster.Outbreak;
-import cluster.Transmission;
+import basemodel.AgentInteface;
 
-import model.Individual;
+
+
 
 import edu.uci.ics.jung.graph.util.EdgeType;
+import episodicriskmodel.EpisodicRiskTransmission;
 
 /**
  * 
@@ -34,13 +34,13 @@ public class OutbreakForest extends BaseForest {
 		}
 	}
 
-	public void addRoot(Individual subtreeRoot) {
+	public void addRoot(AgentInteface subtreeRoot) {
 		Outbreak tree = new Outbreak(subtreeRoot.getAHIClusterID());
 		tree.addVertex(subtreeRoot);
 		addTree(tree);
 	}
 
-	public void addNode(Integer time, Transmission transRec, Individual infector, Individual infected) {
+	public void addNode(Integer time, EpisodicRiskTransmission transRec, AgentInteface infector, AgentInteface infected) {
 		addEdge(new Edge(transRec), infector, infected, EdgeType.DIRECTED);	
 	}
 

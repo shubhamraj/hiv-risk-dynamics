@@ -6,26 +6,29 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import basemodel.Parameters;
+
 import reader.OutbreakStatsReader;
 import reader.ReaderEngine;
 import reader.ReaderIncidence;
 import reader.ReaderPlfit;
 import reader.ReaderPopulation;
 
-import model.Parameters;
-import model.Parameters.OUTBREAK_RECORD;
 
 /**
  * 
  * @author shah
  *
  */
-public class Summarizer extends Parameters {
-	public static final int paramSize = 3;	
+public class Summarizer extends Parameters {	
 	public static OUTBREAK_RECORD outbreakRecord = OUTBREAK_RECORD.ENDEMIC;
+	private String prefix = "";
+	private int paramSize = 1;
 	
-	public Summarizer(OUTBREAK_RECORD _outbreakRecord) {
+	public void setOutbreakRecord(OUTBREAK_RECORD _outbreakRecord, int _paramSize) {
 		outbreakRecord = _outbreakRecord;
+		this.prefix = outputPath + outbreakRecord.name() + "-";
+		this.paramSize = _paramSize;
 	}
 
 	public void readerPopulation() {
@@ -44,7 +47,7 @@ public class Summarizer extends Parameters {
 			output.put(index, reader.processGeneral(csvFiles[i]));				
 		}
 		try {
-			PrintWriter writer = new PrintWriter(new File(populationFilename));
+			PrintWriter writer = new PrintWriter(new File(prefix + populationFilename));
 			for (Integer key : output.keySet()) {
 				writer.println(key + "," + output.get(key));
 			}
@@ -71,7 +74,7 @@ public class Summarizer extends Parameters {
 			output.put(index, str);				
 		}
 		try {
-			PrintWriter writer = new PrintWriter(incidenceFilename);
+			PrintWriter writer = new PrintWriter(prefix + incidenceFilename);
 			for (Integer key : output.keySet()) {
 				writer.println(key + "," + output.get(key));
 			}
@@ -97,7 +100,7 @@ public class Summarizer extends Parameters {
 			output.put(index, plfitReader.processGeneral(csvFiles[i]));
 		}
 		try {
-			PrintWriter writer = new PrintWriter(new File(plfitFilename));
+			PrintWriter writer = new PrintWriter(new File(prefix + plfitFilename));
 			for (Integer key : output.keySet()) {
 				writer.println(key + "," + output.get(key));
 			}
@@ -116,7 +119,7 @@ public class Summarizer extends Parameters {
 			aggregate.put(new Integer(index), obReader.getOutput());
 		}
 		try {
-			PrintWriter writer = new PrintWriter(new File(outbreakDataFilename));
+			PrintWriter writer = new PrintWriter(new File(prefix + outbreakDataFilename));
 			for (Integer key : aggregate.keySet()) {
 				String str = "";
 				for (Double dbl : aggregate.get(key)) {
@@ -143,7 +146,7 @@ public class Summarizer extends Parameters {
 			engine.clear();
 		}		
 		try {
-			PrintWriter writer = new PrintWriter(new File(treeStatsFilename));
+			PrintWriter writer = new PrintWriter(new File(prefix + treeStatsFilename));
 			for (Integer key : aggregate.keySet()) {
 				String str = aggregate.get(key);
 				/*System.out.println(key + "," + str);*/
@@ -162,10 +165,14 @@ public class Summarizer extends Parameters {
 	}
 
 	public static void main(String[] args) {
-		Summarizer summarizer = new Summarizer(OUTBREAK_RECORD.ENDEMIC);
-		summarizer.readerPopulation();
-		summarizer.readerIncidence();
-		summarizer.readerPlfit();
-		summarizer.readTreeStatistics();
+		Summarizer summarizer = new Summarizer();
+		int paramSize = 3;
+		for (OUTBREAK_RECORD outbreakRecord : OUTBREAK_RECORD.values()) {
+			summarizer.setOutbreakRecord(outbreakRecord, paramSize);
+			summarizer.readerPopulation();
+//			summarizer.readerIncidence();
+			summarizer.readerPlfit();
+			summarizer.readTreeStatistics();
+		}
 	}
 }

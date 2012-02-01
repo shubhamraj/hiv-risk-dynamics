@@ -1,10 +1,14 @@
 package cluster;
 
+
 import java.io.PrintWriter;
 
-import model.Individual;
-import model.Model;
-import model.Parameters;
+import basemodel.AgentInteface;
+import basemodel.BaseModelInterface;
+import basemodel.Parameters;
+
+import episodicriskmodel.EpisodicAgentInterface;
+
 
 /**
  * 
@@ -12,10 +16,10 @@ import model.Parameters;
  *
  */
 public class ClusterRecorder extends Parameters {
-	private Model model;
+	private BaseModelInterface model;
 	private ClusterEngine[] clusterEngine;
 
-	public ClusterRecorder(Model _model, String prefix, OUTBREAK_TYPE outbreakType) {
+	public ClusterRecorder(BaseModelInterface _model, String prefix, OUTBREAK_TYPE outbreakType) {
 		this.model = _model; 
 		int numEngines = OUTBREAK_RECORD.values().length;
 		clusterEngine = new ClusterEngine[numEngines];		
@@ -33,7 +37,7 @@ public class ClusterRecorder extends Parameters {
 	}
 
 	public void recordOutput(int run, PrintWriter[] incidenceWriter, PrintWriter[] outbreakWriter, PrintWriter[] plfitWriter) {
-		if (Parameters.RecordOutbreak) {
+		if (RecordOutbreak) {
 			try {
 				for (OUTBREAK_RECORD obRecord : OUTBREAK_RECORD.values()) {
 					clusterEngine[obRecord.ordinal()].writeJointDistSummary(run, incidenceWriter, outbreakWriter);
@@ -46,7 +50,7 @@ public class ClusterRecorder extends Parameters {
 		}
 	}
 
-	public void updateIndividualClusterRecord(Individual individual) {
+	public void updateEpisodicEpisodicAgentClusterRecord(EpisodicAgentInterface individual) {
 		if (RecordOutbreak) {
 			int currentTick = model.getCurrentTick();
 			for (OUTBREAK_RECORD outbreakRecord : OUTBREAK_RECORD.values()) {
@@ -65,7 +69,7 @@ public class ClusterRecorder extends Parameters {
 		}	
 	}
 
-	public void recordTransmission(Individual infector, Individual susceptible) {
+	public void recordTransmission(AgentInteface infector, AgentInteface susceptible) {
 		if (RecordOutbreak) {
 			int currentTick = model.getCurrentTick();
 			for (OUTBREAK_RECORD outbreakRecord : OUTBREAK_RECORD.values()) {
@@ -97,10 +101,8 @@ public class ClusterRecorder extends Parameters {
 					engine.step(new Integer(model.getCurrentTick()));
 					if (engine.isStopped()) {
 						//Output all and early infection transmissions
-						engine.outputRecord();						
-						for (Individual individual : model.getIndividuals()) {
-							individual.resetOutbreakRecord();
-						}
+						engine.outputRecord();
+						model.resetIndividualsOutbreakRecord();
 					}
 				}
 			}
@@ -112,7 +114,7 @@ public class ClusterRecorder extends Parameters {
 			for (OUTBREAK_RECORD outbreakRecord : OUTBREAK_RECORD.values()) {
 				ClusterEngine recorder = clusterEngine[outbreakRecord.ordinal()];
 				if (recorder.isStopped() == false) {
-					recorder.setPopulationStats(model.getCurrentTick(), (int)model.getNumHIV(), model.getIndividuals().size());
+					recorder.setPopulationStats(model.getCurrentTick(), (int)model.getNumHIV(), model.returnPopulationSize());
 				}
 			}
 		}

@@ -1,8 +1,6 @@
 package reader;
 
-
-import model.Parameters;
-
+import basemodel.Parameters;
 import cern.jet.random.Normal;
 
 /**
@@ -139,6 +137,25 @@ public class Stats extends Parameters {
 			}
 		}		
 		return rangeOK;
+	}	
+	
+	/** Returns the probability given the rate*/
+	public static double returnProbability(double rate) {
+		double dt = 0.028571428571;
+		double d =(1-Math.exp(-rate*dt)); 
+		return d;
+	}
+	/** */
+	public static double returnAHIDuration() {
+		return psr.nextErlang(2, 4); 
+	}
+	/** */
+	public static double returnCHIDuration() {
+		//KURT: 0.503767378
+		//SKEW: 0.561183659
+		//		return psr.nextErlang(1, 7); 
+		//		return psr.nextErlang(3, 25); cappa
+		return psr.nextErlang(3, 24);
 	}
 	
 	public static void main(String[] args) {

@@ -1,37 +1,38 @@
-package forest;
+package cluster;
 
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-import cluster.Edge;
-import cluster.Transmission;
+import basemodel.AgentInteface;
+import basemodel.Parameters;
+import basemodel.ParametersInterface.OUTBREAK_RECORD;
 
-import model.Individual;
-import model.Parameters;
-import model.Parameters.OUTBREAK_RECORD;
+
 
 import edu.uci.ics.jung.graph.DelegateForest;
+import episodicriskmodel.EpisodicRiskTransmission;
+import episodicriskmodel.Person;
 
 /**
  * This is the forest/tree of the entire infections recorded during the observed period.
  * @author shah
  *
  */
-public class BaseForest extends DelegateForest<Individual, Edge>{
+public class BaseForest extends DelegateForest<AgentInteface, Edge> {
 	protected static final long serialVersionUID = 1L;
-	protected static Individual root;
-	protected ArrayList<Individual> sortedRoots;
+	protected static Person root;
+	protected ArrayList<Person> sortedRoots;
 	protected int newRoots;
 	protected String prefix;
 	protected int maxDepth;
 
 	public BaseForest() {
-		root = new Individual(-1);
+		root = new Person(-1);
 		newRoots = 0;
 		prefix = "";
 		maxDepth = 0;
-		sortedRoots = new ArrayList<Individual>();
+		sortedRoots = new ArrayList<Person>();
 		if (Parameters.singleTreeMode) {
 			setRoot(root);
 		}
@@ -39,11 +40,11 @@ public class BaseForest extends DelegateForest<Individual, Edge>{
 
 	public BaseForest(String prefix){
 		this.prefix = prefix;
-		root = new Individual(-1);
+		root = new Person(-1);
 		newRoots = 0;
 		prefix = "";
 		maxDepth = 0;
-		sortedRoots = new ArrayList<Individual>();
+		sortedRoots = new ArrayList<Person>();
 		if (Parameters.singleTreeMode) {
 			setRoot(root);
 		}
@@ -58,18 +59,18 @@ public class BaseForest extends DelegateForest<Individual, Edge>{
 		return getTrees().size();
 	}
 
-	public ArrayList<Individual> getSortedRoots() {
+	public ArrayList<Person> getSortedRoots() {
 		return sortedRoots;
 	}
 
-	public void setSortedRoots(ArrayList<Individual> sortedRoots) {
+	public void setSortedRoots(ArrayList<Person> sortedRoots) {
 		this.sortedRoots = sortedRoots;
 	}
 	
-	public void addRoot(Individual subtreeRoot) {		
+	public void addRoot(Person subtreeRoot) {		
 	}
 
-	public void addNode(Integer time, Transmission transmission,
-			Individual infector, Individual infected) {	
+	public void addNode(Integer time, EpisodicRiskTransmission transmission,
+			Person infector, Person infected) {	
 	}
 }

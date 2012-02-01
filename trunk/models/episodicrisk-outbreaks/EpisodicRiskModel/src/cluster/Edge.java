@@ -7,7 +7,10 @@ package cluster;
 
 import java.awt.Color;
 
-import model.Individual;
+import basemodel.AgentInteface;
+
+import episodicriskmodel.EpisodicRiskTransmission;
+
 
 /**
  * 
@@ -18,23 +21,23 @@ public class Edge  {
 	public static int nextID = 0;
 	public Color  color;
 	private int ID;
-	private Transmission transmission;
+	private EpisodicRiskTransmission transmission;
 
 	public Edge() {
 		this.ID = nextID++;
 	}
 	
-	public Edge(Transmission _transmission) {
+	public Edge(EpisodicRiskTransmission _transmission) {
 		this.ID = nextID++;
 		this.transmission = _transmission;
 	}
 
-	public Edge( Individual from, Individual to, double risk, Color color ) {
+	public Edge( AgentInteface from, AgentInteface to, double risk, Color color ) {
 		this.ID = nextID++;
 		this.color = color;		
 	}
 	
-	public Edge( Individual from, Individual to ) {
+	public Edge( AgentInteface from, AgentInteface to ) {
 		this.ID = nextID++;
 	}
 
@@ -58,10 +61,10 @@ public class Edge  {
 		ID = i;
 	}
 	
-	public Transmission getTransmission() {
+	public EpisodicRiskTransmission getTransmission() {
 		return transmission;
 	}
-	public void setTransmission(Transmission transmission) {
+	public void setTransmission(EpisodicRiskTransmission transmission) {
 		this.transmission = transmission;
 	}
 	public Color getColor() {

@@ -1,5 +1,6 @@
 package main;
 
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -8,22 +9,22 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import model.EpisodicModel;
-import model.Parameters;
-import model.Parameters.OUTBREAK_RECORD;
-import model.Parameters.OUTBREAK_TYPE;
+import basemodel.Parameters;
+
+import episodicriskmodel.EpisodicModel;
+
 
 /**
  * 
  * @author shah
  *
  */
-public class Controller {
+public class Controller extends Parameters {
 	public static void main(String[] args) throws IOException {
 		String aggregatePath = Parameters.aggregatePath;
 		String allRunsPath = Parameters.allRunsPath;
 		OUTBREAK_TYPE outbreakType = OUTBREAK_TYPE.AHI;
-		int maxRuns = 1;		
+		int maxRuns = 3;		
 		int startParam = 2;
 		int endParam = 3;
 		

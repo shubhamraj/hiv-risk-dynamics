@@ -1,28 +1,30 @@
-package cluster;
+package episodicriskmodel;
 
-import model.Individual;
+import basemodel.AgentInteface;
+import cluster.BaseTransmission;
 
 /**
  * 
  * @author shah
  *
  */
-public class Transmission extends BaseTransmission { 
+public class EpisodicRiskTransmission extends BaseTransmission { 
 	private RISK_STATE infectorRiskState = RISK_STATE.NONE;
 	private RISK_STATE infectedRiskState = RISK_STATE.NONE;
 	private MIXING_SITE mixingSite = MIXING_SITE.NONE;
 	
-	public Transmission() {
+	public EpisodicRiskTransmission() {
 		infectorRiskState = RISK_STATE.NONE;
 		infectedRiskState = RISK_STATE.NONE;
 		mixingSite = MIXING_SITE.NONE;
 	}
 	
-	public Transmission(Integer _time, Individual infector, Individual infected) {
+	public EpisodicRiskTransmission(Integer _time, AgentInteface infector, AgentInteface infected) {
 		super(_time, infector, infected);
-		infectorRiskState = infector.getRiskState();
-		infectedRiskState = infected.getRiskState();
-		mixingSite = infected.getInfectedMixingSite();
+		/** Here typecastnig to allow more features to be recorded in the transmissions output. */
+		infectorRiskState = ((Person) infector).getRiskState();
+		infectedRiskState = ((Person) infected).getRiskState();
+		mixingSite = ((Person) infected).getInfectedMixingSite();
 	}
 	
 	/** add further data to be written. */

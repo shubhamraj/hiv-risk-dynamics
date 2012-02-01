@@ -1,15 +1,16 @@
 package cluster;
 
 
-import model.Individual;
-import model.Parameters;
+
+import basemodel.AgentInteface;
+import basemodel.ParametersInterface;
 
 /**
  * 
  * @author shah
  *
  */
-public class BaseTransmission extends Parameters {
+public class BaseTransmission implements TransmissionInterface, ParametersInterface {
 	int obID; 
 	int time;
 	int infectorID;
@@ -35,7 +36,7 @@ public class BaseTransmission extends Parameters {
 		currentClusterAge = 0;		
 	}
 	
-	public BaseTransmission(Integer _time, Individual infector, Individual infected) {
+	public BaseTransmission(Integer _time, AgentInteface infector, AgentInteface infected) {
 		obID = -1;
 		time = _time;
 		infectorID = infector.getID();
@@ -52,6 +53,10 @@ public class BaseTransmission extends Parameters {
 			+ "," + getInfectedID() + "," + getActType() + "," + getTimeSinceLastInfection()
 			+ "," + getInfectorStage() + ", " + getBranchTime();
 		return str;		
+	}
+	
+	public void print() {
+		System.out.println(toString());
 	}
 
 	public int getTime() {

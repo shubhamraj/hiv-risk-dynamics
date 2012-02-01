@@ -4,11 +4,12 @@ package reader;
 import java.util.ArrayList;
 import java.util.EnumMap;
 
-import model.Individual;
-import model.Parameters;
+import basemodel.Parameters;
+
 import cluster.Edge;
 
 import edu.uci.ics.jung.graph.DelegateTree;
+import episodicriskmodel.Person;
 
 /**
  * 
@@ -99,7 +100,7 @@ public class TreeOutput extends Parameters {
 		return statistics;
 	}
 
-	public static double returnDuration(DelegateTree<Individual, Edge> tree) {
+	public static double returnDuration(DelegateTree<Person, Edge> tree) {
 		double min = Double.MAX_VALUE;
 		double max = 0;
 		for (Edge edge : tree.getEdges()) {

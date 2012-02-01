@@ -1,4 +1,5 @@
-package forest;
+package cluster;
+
 
 import java.io.BufferedWriter;
 
@@ -15,15 +16,16 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-import cluster.Edge;
+import basemodel.AgentInteface;
+import basemodel.Parameters;
 
-import model.Individual;
-import model.Parameters;
+
 
 import edu.uci.ics.jung.graph.DelegateForest;
 import edu.uci.ics.jung.graph.DelegateTree;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Tree;
+import episodicriskmodel.Person;
 
 /**
  * 
@@ -92,7 +94,7 @@ public class ForestWriter extends Parameters {
 		double duration = 0;
 		
 		for (Tree tree : forest.getTrees()) {
-			obID = ((Individual)tree.getRoot()).getAHIClusterID();
+			obID = ((Person)tree.getRoot()).getAHIClusterID();
 			double[] balanceStatistics = returnNodesStats((DelegateTree)tree);
 			String str = "";
 			if (forest instanceof OutbreakForest) {				
@@ -164,18 +166,18 @@ public class ForestWriter extends Parameters {
 		numLowRiskLeaves=0;
 		numLowRiskInternals=0;
 
-		ArrayList<Individual> leaves = new ArrayList<Individual>();
-		ArrayList<Individual> internals = new ArrayList<Individual>();
-		HashMap<Individual, ArrayList<Individual>> leafMap = new LinkedHashMap<Individual, ArrayList<Individual>>();
+		ArrayList<Person> leaves = new ArrayList<Person>();
+		ArrayList<Person> internals = new ArrayList<Person>();
+		HashMap<Person, ArrayList<Person>> leafMap = new LinkedHashMap<Person, ArrayList<Person>>();
 		double[] stats = new double[Parameters.BalanceStatistics.values().length];
-		Individual root = (Individual) tree.getRoot();		
-		Iterator<Individual> itr = tree.getVertices().iterator();
+		Person root = (Person) tree.getRoot();		
+		Iterator<Person> itr = tree.getVertices().iterator();
 		while (itr.hasNext()) {			
-			Individual vertex = (Individual) itr.next();
+			Person vertex = (Person) itr.next();
 			if (forest.isLeaf(vertex)) {
 				numLeaves++;
 				leaves.add(vertex);
-				leafMap.put(vertex, (ArrayList<Individual>)tree.getPath(vertex));
+				leafMap.put(vertex, (ArrayList<Person>)tree.getPath(vertex));
 				if (vertex.getInfectedRiskState().equals(RISK_STATE.HIGH)) {
 					numHighRiskLeaves++;
 				}
@@ -200,7 +202,7 @@ public class ForestWriter extends Parameters {
 		int i=0;
 		double nbar = 0;
 		double beta2 = 0;
-		for (Individual leaf : leaves) {
+		for (Person leaf : leaves) {
 			if (tree.getVertexCount() == 2) {
 				ni[i] = 0;
 			}
@@ -229,27 +231,27 @@ public class ForestWriter extends Parameters {
 		double d2 = 0;
 		int ipsize = 0;
 
-		//System.out.println("Root: " + ((Individual)tree.getRoot()).getID());
-		for (Individual internal : internals) {
-			ArrayList<Individual> internalPath = (ArrayList<Individual>)tree.getPath(internal);
+		//System.out.println("Root: " + ((Person)tree.getRoot()).getID());
+		for (Person internal : internals) {
+			ArrayList<Person> internalPath = (ArrayList<Person>)tree.getPath(internal);
 			//System.out.println("Internal node: " + internal.getID());
 			/*printList(internalPath);*/
 			ipsize = internalPath.size();
 			max = 0; 
 			dist = 0;
-			for (Individual leaf : leaves) {
+			for (Person leaf : leaves) {
 				//System.out.println("Leaf node: " + leaf.getID());
 				//lfsize = leafMap.get(leaf).size();
 				/*printList(leafMap.get(leaf));*/
 				d2 = 0;
-				Individual parent = (Individual) tree.getParent(leaf);
+				Person parent = (Person) tree.getParent(leaf);
 				if (parent.getID() == internal.getID()) {
 					//System.out.println("InternalID:" + internal.getID() + " parentID: " + parent.getID());
 					dist = 1;
 				}
 				else {						
 					for (int index=0; index<ipsize; index++) {
-						Individual p1 = internalPath.get(index);
+						Person p1 = internalPath.get(index);
 						if (leafMap.get(leaf).contains(p1)) {					
 							d2 = leafMap.get(leaf).indexOf(p1);
 							dist = d2 + index;
@@ -284,13 +286,13 @@ public class ForestWriter extends Parameters {
 		data[0] = tree.getVertexCount();
 		Iterator itr = tree.getVertices().iterator();		
 		while (itr.hasNext()) {
-			Individual vertex = (Individual) itr.next();
+			Person vertex = (Person) itr.next();
 			Iterator itrChld = tree.getChildren(vertex).iterator();
 			if (vertex.getActType().equals(ACT_TYPE.AHI)
 					//&& vertex.getInfectedTick() >= Parameters.startRecordTick
 			) {
 				while (itrChld.hasNext()) {
-					Individual child = (Individual) itrChld.next();
+					Person child = (Person) itrChld.next();
 					if (child.getActType().equals(ACT_TYPE.AHI)) {
 						data[1]++;
 					}
@@ -300,9 +302,9 @@ public class ForestWriter extends Parameters {
 		return data;
 	}
 
-	protected void printList(ArrayList<Individual> list) {
+	protected void printList(ArrayList<Person> list) {
 		String str = "";
-		for (Individual individual : list) {
+		for (Person individual : list) {
 			str += individual.getID() + "-> ";
 		}
 		System.out.println(str);
@@ -318,15 +320,15 @@ public class ForestWriter extends Parameters {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void onlyLargestTrees(int rank) {		
-		ArrayList<Tree<Individual, Edge>> trees = new ArrayList<Tree<Individual,Edge>>(forest.getTrees().size()+10);
+		ArrayList<Tree<Person, Edge>> trees = new ArrayList<Tree<Person,Edge>>(forest.getTrees().size()+10);
 		Iterator itr = forest.getTrees().iterator();
 		while (itr.hasNext()) {
-			Tree<Individual, Edge> tree = (Tree<Individual, Edge>) itr.next();
+			Tree<Person, Edge> tree = (Tree<Person, Edge>) itr.next();
 			trees.add(tree);
 		}
 		//sort in descending order
-		Collections.sort(trees, new Comparator<Tree<Individual, Edge>>() {
-			public int compare(Tree<Individual, Edge> t1, Tree<Individual, Edge> t2) {
+		Collections.sort(trees, new Comparator<Tree<Person, Edge>>() {
+			public int compare(Tree<Person, Edge> t1, Tree<Person, Edge> t2) {
 				return t1.getVertexCount() < t2.getVertexCount() ? +1 
 						: (t1.getVertexCount() == t2.getVertexCount()) ? 0 : -1;
 			}
@@ -337,31 +339,32 @@ public class ForestWriter extends Parameters {
 				//System.out.println("i: " + index + " tree size: " + trees.get(index).getVertexCount());
 			}
 			else {
-				forest.removeVertex((Individual)trees.get(index).getRoot(), true);				
+				forest.removeVertex((Person)trees.get(index).getRoot(), true);				
 			}
 		}			
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void removeSubTrees(int minSize) {
-		ArrayList<Tree<Individual, Edge>> trees = new ArrayList<Tree<Individual,Edge>>();				
-		for (Tree<Individual, Edge> tree : forest.getTrees()) {
+		ArrayList<Tree<Person, Edge>> trees = new ArrayList<Tree<Person,Edge>>();				
+		for (Tree tree : forest.getTrees()) {
 //			System.out.println("Tree root: " + tree.getRoot().getID() + " and depth "+ tree.getHeight());
 			if (tree.getHeight() <= minSize) {
 				trees.add(tree);
 			}			
 		}
-		for (Tree<Individual, Edge> tree : trees) {
-			forest.removeVertex((Individual)tree.getRoot(), true);
+		for (Tree<Person, Edge> tree : trees) {
+			forest.removeVertex((Person)tree.getRoot(), true);
 		}	
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void savePajekTrans() throws IOException {
 		String fname = prefix+"-pajek.net";
 		int singletons = 0;
-		ArrayList<Tree<Individual, Edge>> trees = new ArrayList<Tree<Individual, Edge>>();		
+		ArrayList<Tree<Person, Edge>> trees = new ArrayList<Tree<Person, Edge>>();		
 		maxDepth = 0;
-		for (Tree<Individual, Edge> tree : forest.getTrees()) {
+		for (Tree tree : forest.getTrees()) {
 			if (tree.getVertexCount() <= 1) {
 				trees.add(tree);
 				singletons++;
@@ -381,7 +384,7 @@ public class ForestWriter extends Parameters {
 		}
 
 		for (Tree tree : trees) {
-			forest.removeVertex((Individual)tree.getRoot(), true);
+			forest.removeVertex((Person)tree.getRoot(), true);
 		}
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(fname)));		
@@ -392,7 +395,7 @@ public class ForestWriter extends Parameters {
 		//		System.out.println("singletons: " + singletons);
 		//		System.out.println("new roots: " + newRoots);
 
-		for (Individual individual : forest.getVertices()) {
+		for (AgentInteface individual : forest.getVertices()) {
 			if ( true
 					//(!(forest.isRoot(individual) && forest.isLeaf(individual)))
 					//forest.getChildCount(individual) >= 1
@@ -452,9 +455,9 @@ public class ForestWriter extends Parameters {
 		writer.close();		
 	}
 
-	public void saveSingleTree(DelegateForest<Individual,Edge> graph, String fname) throws IOException {
-		ArrayList<Individual> singletons = new ArrayList<Individual>();	
-		for (Individual vertex : graph.getVertices()) {
+	public void saveSingleTree(DelegateForest<Person,Edge> graph, String fname) throws IOException {
+		ArrayList<Person> singletons = new ArrayList<Person>();	
+		for (Person vertex : graph.getVertices()) {
 			if (graph.isRoot(graph.getParent(vertex)) &&
 					(graph.getChildCount(vertex) == 0 || graph.getSuccessorCount(vertex) == 0
 							|| graph.getOutEdges(vertex).isEmpty())) {
@@ -462,17 +465,17 @@ public class ForestWriter extends Parameters {
 			}
 		}
 
-		for (Individual vertex : singletons) {
+		for (Person vertex : singletons) {
 			graph.removeVertex(vertex);			
 		}
-		/*		for (Tree<Individual, Edge> tree : graph.getTrees()) {
+		/*		for (Tree<Person, Edge> tree : graph.getTrees()) {
 			if (tree.getVertexCount() <= 1) {
 				trees.add(tree);
 				singletons++;
 			}
 		}
 		for (Tree tree : trees) {
-			graph.removeVertex((Individual)tree.getRoot(), true);
+			graph.removeVertex((Person)tree.getRoot(), true);
 		}
 		 */
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(fname)));		
@@ -483,7 +486,7 @@ public class ForestWriter extends Parameters {
 		//		System.out.println("singletons: " + singletons);
 		//		System.out.println("new roots: " + newRoots);
 
-		for (Individual individual : graph.getVertices()) {
+		for (Person individual : graph.getVertices()) {
 			if ( true
 					//(!(forest.isRoot(individual) && forest.isLeaf(individual)))
 					//forest.getChildCount(individual) >= 1

@@ -11,7 +11,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import model.Parameters;
+import basemodel.Parameters;
+
 
 public class PowerLawFit extends Parameters {
 	private ArrayList<String> command;

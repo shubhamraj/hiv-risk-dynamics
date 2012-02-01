@@ -1,11 +1,10 @@
-package forest;
+package cluster;
 
-import cluster.Edge;
-import cluster.Outbreak;
-import cluster.Transmission;
-import model.Individual;
-import model.Parameters;
+
+import basemodel.Parameters;
 import edu.uci.ics.jung.graph.util.EdgeType;
+import episodicriskmodel.EpisodicRiskTransmission;
+import episodicriskmodel.Person;
 
 /**
  * 
@@ -23,13 +22,13 @@ public class InfectionForest extends BaseForest {
 		super(prefix);
 	}
 	
-	public void addRoot(Individual subtreeRoot) {
+	public void addRoot(Person subtreeRoot) {
 		Outbreak tree = new Outbreak();
 		tree.addVertex(subtreeRoot);
 		addTree(tree);
 	}
 
-	public void addNode(Integer time, Transmission transRec, Individual infector, Individual infected) {
+	public void addNode(Integer time, EpisodicRiskTransmission transRec, Person infector, Person infected) {
 		//Currently, the threshold is 300 years - so the following If block will not be effect
 		if (transRec.getTimeSinceLastInfection() >= Parameters.OUTBREAK_RECORD.TRANS_THRESHOLD) {
 			addRoot(infected);

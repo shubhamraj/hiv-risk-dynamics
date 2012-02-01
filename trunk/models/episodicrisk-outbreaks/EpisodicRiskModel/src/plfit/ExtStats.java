@@ -2,7 +2,8 @@ package plfit;
 
 import java.util.ArrayList;
 
-import model.Parameters;
+import basemodel.Parameters;
+
 
 public class ExtStats extends Parameters {	
 	/*	M: total number of elements
