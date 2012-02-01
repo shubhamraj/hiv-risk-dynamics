@@ -3,7 +3,8 @@ package reader;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import model.Parameters;
+
+import basemodel.Parameters;
 
 /**
  * Main Reader Engine Class

@@ -39,18 +39,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
-import model.Individual;
-import model.Parameters.ACT_TYPE;
-import model.Parameters.STAGE;
 
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
+import basemodel.ParametersInterface.ACT_TYPE;
+import basemodel.ParametersInterface.STAGE;
+
 import cluster.Edge;
-
-//import com.sun.image.codec.jpeg.JPEGCodec;
-//import com.sun.image.codec.jpeg.JPEGImageEncoder;
-
 
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.PolarPoint;
@@ -68,6 +64,7 @@ import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.subLayout.TreeCollapser;
+import episodicriskmodel.Person;
 
 /**
  * Modified version of Jung Library's class file "TreeCollapseDemo"
@@ -78,26 +75,26 @@ import edu.uci.ics.jung.visualization.subLayout.TreeCollapser;
 @SuppressWarnings("serial")
 public class ForestDisplay extends JFrame {	
 	/** The graph */
-	Forest<Individual,Edge> graph;
+	Forest<Person,Edge> graph;
 	/** The visual component and renderer for the graph */
 	MyViewer vv;
 	VisualizationServer.Paintable rings;
 	String root;
 
-	TreeLayoutExt<Individual, Edge> layout;
+	TreeLayoutExt<Person, Edge> layout;
 	@SuppressWarnings("rawtypes")
 	FRLayout frLayout;
 	TreeCollapser collapser;
-	RadialTreeLayout<Individual, Edge> radialLayout;
+	RadialTreeLayout<Person, Edge> radialLayout;
 
 	@SuppressWarnings({ "unchecked", "rawtypes"})
-	public ForestDisplay(Forest<Individual, Edge> forest, ArrayList<Individual> sortedRoots) {
+	public ForestDisplay(Forest<Person, Edge> forest, ArrayList<Person> sortedRoots) {
 		graph = forest;
-		layout = new TreeLayoutExt<Individual, Edge>(graph, sortedRoots);
+		layout = new TreeLayoutExt<Person, Edge>(graph, sortedRoots);
 		collapser = new TreeCollapser();
-		radialLayout = new RadialTreeLayout<Individual, Edge>(graph);
+		radialLayout = new RadialTreeLayout<Person, Edge>(graph);
 		radialLayout.setSize(new Dimension(600,600));
-		frLayout = new FRLayout<Individual, Edge>(graph);
+		frLayout = new FRLayout<Person, Edge>(graph);
 
 		// set default layout for display
 		//vv = new MyViewer(layout, new Dimension(1200,4800));
@@ -276,8 +273,8 @@ public class ForestDisplay extends JFrame {
 		}
 	};
 
-	Transformer<Individual,Paint> vertexPaint = new Transformer<Individual,Paint>() {
-		public Paint transform(Individual individual) {
+	Transformer<Person,Paint> vertexPaint = new Transformer<Person,Paint>() {
+		public Paint transform(Person individual) {
 			Color color;
 			if (individual.getID() == -1) {
 				color = Color.YELLOW;
@@ -318,8 +315,8 @@ public class ForestDisplay extends JFrame {
 
 		private Collection<Double> getDepths() {
 			Set<Double> depths = new HashSet<Double>();
-			Map<Individual, PolarPoint> polarLocations = radialLayout.getPolarLocations();
-			for(Individual v : graph.getVertices()) {
+			Map<Person, PolarPoint> polarLocations = radialLayout.getPolarLocations();
+			for(Person v : graph.getVertices()) {
 				PolarPoint pp = polarLocations.get(v);
 				depths.add(pp.getRadius());
 			}

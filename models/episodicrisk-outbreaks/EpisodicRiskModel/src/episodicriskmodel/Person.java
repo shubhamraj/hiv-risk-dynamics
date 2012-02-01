@@ -1,5 +1,12 @@
-package model;
+package episodicriskmodel;
 
+import basemodel.AgentInteface;
+import basemodel.Parameters;
+import basemodel.ParametersInterface;
+import basemodel.ParametersInterface.ACT_TYPE;
+import basemodel.ParametersInterface.MIXING_SITE;
+import basemodel.ParametersInterface.RISK_STATE;
+import basemodel.ParametersInterface.STAGE;
 import cern.jet.random.Uniform;
 
 /**
@@ -7,7 +14,7 @@ import cern.jet.random.Uniform;
  * @author shah
  *
  */
-public class Person extends Parameters {
+public class Person implements EpisodicAgentInterface, ParametersInterface {
 	static int lastID = -1;
 	int ID = -1;
 	STAGE stageOfInfection = STAGE.SUSCEPTIBLE;
@@ -28,17 +35,22 @@ public class Person extends Parameters {
 	boolean dead = false;	
 	boolean root = false;
 
-	/*	private double phiDur = 0;
-		private double postPHIDur = 0;*/
-
+	private int entryTick = -1;
+	private int exitTick = -1;
+	
+	private RISK_STATE riskState = RISK_STATE.NONE;		
+	private RISK_STATE infectedRiskState = RISK_STATE.NONE;
+	private MIXING_SITE infectedMixingSite = MIXING_SITE.NONE;
 
 	public Person() {		
 		this.ID = ++lastID;
-		/*		this.phiDur = Parameters.returnPHIDuration() * 30;
-		this.postPHIDur = Parameters.returnPostPHIDuration() * 12 * 30;*/
 	}
 
-	protected void step(int currentTick) {
+	public Person(int id) {
+		this.ID = id;
+	}
+
+	public void step(int currentTick) {
 		if (Uniform.staticNextDouble() <= ((double)1/Parameters.durationLife)) {
 			dead = true;
 			return;
@@ -48,16 +60,7 @@ public class Person extends Parameters {
 		}
 	}
 
-	protected void updateInfectionStatus(int currentTick) {
-		/*		if (stageOfInfection.equals(STAGE.PHI)
-				&& currentTick - this.infectedTick >= this.phiDur) {
-				stageOfInfection = STAGE.POST_PHI;
-				this.CHITick = currentTick;
-			}
-		else if (stageOfInfection.equals(STAGE.POST_PHI) 
-			&& currentTick - this.CHITick >= this.postPHIDur) {
-			dead = true;
-		}*/
+	public void updateInfectionStatus(int currentTick) {
 		double rand = Uniform.staticNextDouble();
 		if (stageOfInfection.equals(STAGE.ACUTE)
 				&& rand <= ((double)1/Parameters.durationAHI)) {
@@ -204,5 +207,65 @@ public class Person extends Parameters {
 
 	public STAGE getStageOfInfection() {
 		return stageOfInfection;
+	}
+
+	@Override
+	public boolean equals(AgentInteface agent) {
+		return this.ID == agent.getID() ? true : false;
+	}
+
+	@Override
+	public ACT_TYPE getActType() {
+		return actType;
+	}
+
+	@Override
+	public void setActType(ACT_TYPE actType) {
+		this.actType = actType;
+	}
+
+	public RISK_STATE getRiskState() {
+		return riskState;
+	}
+
+	public void setRiskState(RISK_STATE riskState) {
+		this.riskState = riskState;
+	}
+	
+	public RISK_STATE getInfectedRiskState() {
+		return infectedRiskState;
+	}
+
+	public void setInfectedRiskState(RISK_STATE infectedRiskState) {
+		this.infectedRiskState = infectedRiskState;
+	}
+
+	public MIXING_SITE getInfectedMixingSite() {
+		return infectedMixingSite;
+	}
+
+	public void setInfectedMixingSite(MIXING_SITE infectedMixingSite) {
+		this.infectedMixingSite = infectedMixingSite;
+	}
+
+	public int getExitTick() {
+		return exitTick;
+	}
+
+	public void setExitTick(int exitTick) {
+		this.exitTick = exitTick;
+	}
+	
+	public int getEntryTick() {
+		return entryTick;
+	}
+
+	public void setEntryTick(int entryTick) {
+		this.entryTick = entryTick;
+	}
+
+	@Override
+	public void print() {
+		System.out.println("Person-" + this.ID);
 	}	
 }

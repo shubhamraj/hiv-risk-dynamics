@@ -1,7 +1,7 @@
 package reader;
 
 import cluster.Edge;
-import model.Individual;
+import episodicriskmodel.Person;
 
 /**
  * 
@@ -9,14 +9,14 @@ import model.Individual;
  *
  */
 public class ChainsDataStructure {
-	private Individual leaf; 
+	private Person leaf; 
 	private Edge transEdge;
 	private double numAcutesOnPath;
 	private double numChronicsOnPath;
 	//time of infection of leaf - time of infection of root
 	private double branchLength;	
 	
-	public ChainsDataStructure(Individual _leaf, Edge _transEdge) {
+	public ChainsDataStructure(Person _leaf, Edge _transEdge) {
 		this.leaf = _leaf;
 		this.transEdge = _transEdge;
 		numAcutesOnPath = 0;
@@ -48,7 +48,7 @@ public class ChainsDataStructure {
 		this.branchLength = branchLength;
 	}
 
-	public Individual getLeaf() {
+	public Person getLeaf() {
 		return leaf;
 	}
 

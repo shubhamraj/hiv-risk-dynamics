@@ -8,11 +8,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import model.Individual;
-import model.Parameters;
+import basemodel.Parameters;
+
 
 import cluster.Edge;
 import edu.uci.ics.jung.graph.DelegateTree;
+import episodicriskmodel.Person;
 
 /**
  * 
@@ -29,8 +30,8 @@ public class AHICHILink extends Parameters {
 	private HashMap<Integer, AHIDataStructure> continuousClusterMap, deadClusterMap;
 	//
 	private Set<Integer> continuousAHIRoots, deadAHIRoots;
-	private HashMap<Integer, Individual> deadEnds;
-	private HashMap<Integer, Individual> continuousLeafs;
+	private HashMap<Integer, Person> deadEnds;
+	private HashMap<Integer, Person> continuousLeafs;
 	private EnumMap<ACT_TYPE, Set<Edge>> uniqueContinuousEdges, uniqueDeadEdges;
 	private ArrayList<Double> dataCountChronics, ahiOutput, chainsOutput;
 
@@ -46,8 +47,8 @@ public class AHICHILink extends Parameters {
 		
 		this.outputsMap = new EnumMap<Parameters.Outputs, ArrayList<Double>>(Outputs.class);
 		
-		this.deadEnds = new HashMap<Integer, Individual>();
-		this.continuousLeafs = new HashMap<Integer, Individual>();
+		this.deadEnds = new HashMap<Integer, Person>();
+		this.continuousLeafs = new HashMap<Integer, Person>();
 		this.uniqueContinuousEdges = new EnumMap<Parameters.ACT_TYPE, Set<Edge>>(ACT_TYPE.class);
 		this.uniqueDeadEdges = new EnumMap<Parameters.ACT_TYPE, Set<Edge>>(ACT_TYPE.class);
 
@@ -118,7 +119,7 @@ public class AHICHILink extends Parameters {
 		double deadLeafsAHI = 0, deadLeafsCHI = 0;
 		double contLeafsAHI = 0, contLeafsCHI = 0;
 		
-		for (Individual vertex : infectionForestReader.getVertices()) {
+		for (Person vertex : infectionForestReader.getVertices()) {
 			if (infectionForestReader.isLeaf(vertex)) {
 				if (vertex.getInfectedTick() <= threshold) {
 					deadEnds.put(new Integer(vertex.getID()), vertex);
@@ -130,7 +131,7 @@ public class AHICHILink extends Parameters {
 			} else {
 				if (vertex.getInfectedTick() <= threshold
 						&& vertex.getActType() != ACT_TYPE.NONE) {
-					for (Individual successor : infectionForestReader.getSuccessors(vertex)) {
+					for (Person successor : infectionForestReader.getSuccessors(vertex)) {
 						if (successor.getInfectedTick() > threshold) {
 							continuousLeafs.put(new Integer(vertex.getID()),
 									vertex);
@@ -146,12 +147,12 @@ public class AHICHILink extends Parameters {
 		}
 
 		for (Integer ID : continuousLeafs.keySet()) {
-			Individual leaf = continuousLeafs.get(ID);
+			Person leaf = continuousLeafs.get(ID);
 			pumpUniqueEdges(leaf, uniqueContinuousEdges, true);
 		}
 
 		for (Integer ID : deadEnds.keySet()) {
-			Individual leaf = deadEnds.get(ID);
+			Person leaf = deadEnds.get(ID);
 			pumpUniqueEdges(leaf, uniqueDeadEdges, false);
 		}
 
@@ -180,11 +181,11 @@ public class AHICHILink extends Parameters {
 		chainsOutput.add(numChronicContinuous);
 	}
 
-	private void pumpUniqueEdges(Individual leaf, EnumMap<ACT_TYPE, Set<Edge>> map, boolean continuous) {		
+	private void pumpUniqueEdges(Person leaf, EnumMap<ACT_TYPE, Set<Edge>> map, boolean continuous) {		
 		boolean rootFound = false;
-		Individual vertex = leaf;
+		Person vertex = leaf;
 		while (rootFound == false) {
-			Individual parent = infectionForestReader.getParent(vertex);
+			Person parent = infectionForestReader.getParent(vertex);
 			if (infectionForestReader.isRoot(parent) || parent.getID() == -1) {
 				rootFound = true;
 			} else {
@@ -282,7 +283,7 @@ public class AHICHILink extends Parameters {
 	}
 
 	private void processChronicLinks(Integer vertexID, boolean continuous) {
-		Individual vertex = infectionForestReader.getIndividual(vertexID);
+		Person vertex = infectionForestReader.getPerson(vertexID);
 		boolean rootFound = false;
 		double countChronics = 0;
 		while (rootFound == false) {
@@ -292,7 +293,7 @@ public class AHICHILink extends Parameters {
 				rootFound = true;
 			} else {
 				Edge edge = infectionForestReader.getParentEdge(vertex);
-				Individual parent = infectionForestReader.getSource(edge);
+				Person parent = infectionForestReader.getSource(edge);
 				if (edge != null
 						&& edge.getTransmission().getActType().equals(ACT_TYPE.AHI)) {
 					break;
@@ -323,7 +324,7 @@ public class AHICHILink extends Parameters {
 
 	private void processAHITree(Integer ahiRootID, boolean continuous) {
 		try {
-			DelegateTree<Individual, Edge> tree = ahiClusterReader.getAHITree(ahiRootID);
+			DelegateTree<Person, Edge> tree = ahiClusterReader.getAHITree(ahiRootID);
 			if (tree == null) {
 				System.err.println("Tree is null. " + tree);
 			}
@@ -341,7 +342,7 @@ public class AHICHILink extends Parameters {
 			double height = tree.getHeight();
 			double size = tree.getVertexCount() - 1;
 
-			for (Individual vertex : tree.getVertices()) {
+			for (Person vertex : tree.getVertices()) {
 				if (tree.isInternal(vertex)) {
 					numInternals++;
 				} else if (tree.isLeaf(vertex)) {

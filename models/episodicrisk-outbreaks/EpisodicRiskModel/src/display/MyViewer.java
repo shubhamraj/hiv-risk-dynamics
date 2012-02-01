@@ -7,19 +7,19 @@ import java.awt.Image;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-import model.Individual;
 
 import cluster.Edge;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import episodicriskmodel.Person;
 
-public class MyViewer extends VisualizationViewer<Individual, Edge>{
+public class MyViewer extends VisualizationViewer<Person, Edge>{
 	private static final long serialVersionUID = 1L;
 	private Dimension dim; 
 
-	public MyViewer(Layout<Individual, Edge> layout, Dimension preferredSize) {
+	public MyViewer(Layout<Person, Edge> layout, Dimension preferredSize) {
 		super(layout, preferredSize);
 		dim = preferredSize; 
 	}

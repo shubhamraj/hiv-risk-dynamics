@@ -1,6 +1,6 @@
 package cluster;
 
-import model.Individual;
+import basemodel.AgentInteface;
 import edu.uci.ics.jung.graph.DelegateTree;
 
 /**
@@ -8,7 +8,7 @@ import edu.uci.ics.jung.graph.DelegateTree;
  * @author shah
  *
  */
-public class Outbreak extends DelegateTree<Individual, Edge>{
+public class Outbreak extends DelegateTree<AgentInteface, Edge>{
 	private static final long serialVersionUID = 1L;
 	private int obID;
 	

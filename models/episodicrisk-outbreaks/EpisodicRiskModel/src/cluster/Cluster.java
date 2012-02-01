@@ -2,7 +2,8 @@ package cluster;
 
 import java.util.ArrayList;
 
-import model.Individual;
+import basemodel.AgentInteface;
+
 
 /**
  * 
@@ -23,7 +24,7 @@ public class Cluster {
 		members = new ArrayList<Double>();
 	}
 	
-	public void addMember(Individual individual) {
+	public void addMember(AgentInteface individual) {
 		Double id = new Double(individual.getID());
 		if (members.contains(id) == false) {
 			members.add(id);
@@ -35,7 +36,7 @@ public class Cluster {
 		}
 	}
 	
-	public void removeMember(Individual individual) {
+	public void removeMember(AgentInteface individual) {
 		Double id = new Double(individual.getID());
 		if (members.contains(id) == true) {
 			members.remove(id);
@@ -51,7 +52,7 @@ public class Cluster {
 		}
 	}
 	
-	public void step(Integer time, Individual ... members) {
+	public void step(Integer time, AgentInteface ... members) {
 		for (int i=0; i<members.length; i++) {
 			addMember(members[i]);
 		}	

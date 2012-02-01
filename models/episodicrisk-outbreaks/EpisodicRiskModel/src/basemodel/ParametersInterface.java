@@ -1,22 +1,17 @@
-package model;
+package basemodel;
 
 import org.apache.commons.math.stat.descriptive.moment.Skewness;
 import org.apache.commons.math.stat.descriptive.rank.Percentile;
 
 import flanagan.math.PsRandom;
 
-/**
- * 
- * @author shah
- *
- */
-public class Parameters {
+public interface ParametersInterface {
+	/** */
+	public static Skewness skew = new Skewness();
 	/** */
 	public static PsRandom psr = new PsRandom();
 	/** */
 	public static Percentile percentile = new Percentile();
-	/** */
-	public static Skewness skew = new Skewness();
 	/** */
 	public static final boolean RecordOutbreak = true;
 	/** Maximum number of iterations */
@@ -39,6 +34,7 @@ public class Parameters {
 	public static final double durationCHI = 120*30d;
 	/** Base transmission probability from Vittinghoff et al. (1999) */
 	public static final double baseTransProb = 0.003d;
+
 	/** */
 	public static enum ChainsType {Continuous, DeadEnds, All}
 	/** */
@@ -49,9 +45,11 @@ public class Parameters {
 	public enum Outputs {Size, Duration, Height, IRatio, Nary, Children, Delta, Chronics};
 	/** */
 	public enum Statistics {Avg, Max, Var, IQR, p25, p50, p75, p90, p99}	
-	public static int[] sizeRanges = {1, 2, 5, 10};
-	public static int[] durationRanges = {30, 60, 150, 600};
-	public static int[] chronicRanges = { 1, 2, 5, 7 };
+
+	public static final int[] sizeRanges = {1, 2, 5, 10};
+	public static final int[] durationRanges = {30, 60, 150, 600};
+	public static final int[] chronicRanges = { 1, 2, 5, 7 };
+
 	/** */
 	public static enum AHIKey {
 		/*String header = "ObID, time, InfectorID, InfectorTick, InfectedID, ActType, TimeSinceLastInf, InfectorStg, " +
@@ -74,59 +72,36 @@ public class Parameters {
 	public static double fracLargestTrees = 0.1;
 	/** */
 	public static enum OUTBREAK_RECORD {TRANSIENT(1, 30), ENDEMIC(90000, 30);
-		public static final int TRANS_THRESHOLD = 300*12*30;		
-		private int startRecordTick;
-		private int endObserveTick;
-		private int recordYears;
-		
-		OUTBREAK_RECORD(int _startTime, int _recordYears) {
-			this.startRecordTick = _startTime;
-			this.recordYears = _recordYears;
-			this.endObserveTick = startRecordTick + (recordYears*12*30); 
-		}
-		public int getStartRecordTick() {
-			return this.startRecordTick;
-		}
-		public int getEndObserveTick() {
-			return this.endObserveTick;
-		}
-		public int getRecordYears() {
-			return recordYears;
-		}
+	public static final int TRANS_THRESHOLD = 300*12*30;		
+	private int startRecordTick;
+	private int endObserveTick;
+	private int recordYears;
+
+	OUTBREAK_RECORD(int _startTime, int _recordYears) {
+		this.startRecordTick = _startTime;
+		this.recordYears = _recordYears;
+		this.endObserveTick = startRecordTick + (recordYears*12*30); 
 	}
-	
+	public int getStartRecordTick() {
+		return this.startRecordTick;
+	}
+	public int getEndObserveTick() {
+		return this.endObserveTick;
+	}
+	public int getRecordYears() {
+		return recordYears;
+	}
+	}
+
 	public static final String inputPath = "./input/";
+	public static final String outputPath = "./output/";
 	public static final String inputFile = "Prevalence45-1000.csv";	
 	public static final String aggregatePath = "./data/aggregates/";
 	public static final String allRunsPath = "./data/allruns/";	
-	public static final String populationFilename = "./output/Population.csv";
-	public static final String incidenceFilename = "./output/Incidence.csv";
-	public static final String plfitFilename = "./output/Plfit.csv";
-	public static final String treeStatsFilename = "./output/AllAcuteAHIData.csv";	
-	public static final String outbreakDataFilename = "./output/OutbreakData.csv";
-		
-	public static String plfitExecutablePath = "./src/ext/cfg/plfit.exe";
-	
-	/** Returns the probability given the rate*/
-	public static double returnProbability(double rate) {
-		double dt = 0.028571428571;
-		double d =(1-Math.exp(-rate*dt)); 
-		return d;
-	}
-	/** */
-	public static double returnAHIDuration() {
-		return psr.nextErlang(2, 4); 
-	}
-	/** */
-	public static double returnCHIDuration() {
-		//KURT: 0.503767378
-		//SKEW: 0.561183659
-		//		return psr.nextErlang(1, 7); 
-		//		return psr.nextErlang(3, 25); cappa
-		return psr.nextErlang(3, 24);
-	}
-	
-	public void printStr(String str) {
-		System.out.println(str);
-	}
+	public static final String populationFilename = "Population.csv";
+	public static final String incidenceFilename = "Incidence.csv";
+	public static final String plfitFilename = "Plfit.csv";
+	public static final String treeStatsFilename = ".AllAcuteAHIData.csv";	
+	public static final String outbreakDataFilename = "OutbreakData.csv";		
+	public static final String plfitExecutablePath = "./src/ext/cfg/plfit.exe";
 }

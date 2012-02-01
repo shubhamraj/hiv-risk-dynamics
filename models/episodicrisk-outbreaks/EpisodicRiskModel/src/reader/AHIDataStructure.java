@@ -1,6 +1,6 @@
 package reader;
 
-import model.Parameters;
+import basemodel.Parameters;
 
 /**
  * 
