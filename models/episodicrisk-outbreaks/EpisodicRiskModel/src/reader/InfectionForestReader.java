@@ -136,7 +136,7 @@ public class InfectionForestReader implements ParametersInterface {
 				infected.setInfectedMixingSite(mixingSite);
 				infected.setInfectedRiskState(infectedState);
 				infected.setInfectorID(infectorID);
-				infected.setInfectorStatus(infectorStage);
+				infected.setInfectorStageOfInfection(infectorStage);
 				infected.setInfectedTick(time);
 				this.individualsMap.put(new Integer(infectedID), infected);
 				infecteds.put(infectedID, new Double(time));

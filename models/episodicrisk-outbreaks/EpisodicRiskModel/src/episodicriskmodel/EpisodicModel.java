@@ -255,7 +255,7 @@ public class EpisodicModel implements BaseModelInterface, ParametersInterface {
 			susceptible.setStageOfInfection(InfectionStage.Acute);
 			susceptible.setInfectedTick(currentTick);
 			susceptible.setInfectorID(infector.getID());
-			susceptible.setInfectorStatus(infector.getStageOfInfection());						
+			susceptible.setInfectorStageOfInfection(infector.getStageOfInfection());						
 			susceptible.setActType(actType);
 			susceptible.setInfectedMixingSite(mixingSite);
 			susceptible.setInfectedRiskState(susceptible.getRiskState());

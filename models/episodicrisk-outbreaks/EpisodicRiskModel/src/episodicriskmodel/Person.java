@@ -12,20 +12,20 @@ import cern.jet.random.Uniform;
  */
 public class Person implements EpisodicAgentInterface, ParametersInterface {
 	static int lastID = -1;
-	int ID = -1;
-	InfectionStage stageOfInfection = InfectionStage.Susceptible;
-	InfectionStage infectorStatus = InfectionStage.Susceptible;
-	ActType actType = ActType.None;
+	private int ID = -1;
+	private InfectionStage stageOfInfection = InfectionStage.Susceptible;
+	private InfectionStage infectorStageOfInfection = InfectionStage.Susceptible;
+	private ActType actType = ActType.None;
 
-	int infectedTick = -1;
-	int infectorID = -1;
-	int CHITick = -1;
+	private int infectedTick = -1;
+	private int infectorID = -1;
+	private int CHITick = -1;
 
 	/**AHI Cluster ID of the individual */
-	Integer ahiClusterID = -1;
-	int timeLastInfection = 0;
-	int timePenultimateInfection = 0;
-	int outbreakStartTime = -1;
+	private Integer ahiClusterID = -1;
+	private int timeLastInfection = 0;
+	private int timePenultimateInfection = 0;
+	private int outbreakStartTime = -1;
 
 	boolean removedAHICluster = false;	
 	boolean dead = false;	
@@ -70,12 +70,20 @@ public class Person implements EpisodicAgentInterface, ParametersInterface {
 		} 	
 	}
 	
+	/** This method is called to reset an agent's record of 
+	 * a membership in an early infection outbreak. 
+	 * An implementation of this method must call the following methods. 
+	 * 		setAHIClusterID(-1);
+			setRemovedAHICluster(false);
+			setOutbreakStartTime(-1);
+	 */
 	public void resetOutbreakRecord() {
 		setAHIClusterID(-1);
 		setRemovedAHICluster(false);
 		setOutbreakStartTime(-1);
 	}
-
+	
+	/** Returns if the agent is in acute stage of infection.*/
 	public boolean isAHI() {
 		return stageOfInfection.equals(InfectionStage.Acute);
 	}
@@ -105,7 +113,7 @@ public class Person implements EpisodicAgentInterface, ParametersInterface {
 	}
 
 	public boolean infectedByAHI() {
-		return infectorStatus.equals(InfectionStage.Acute) ? true : false;
+		return infectorStageOfInfection.equals(InfectionStage.Acute) ? true : false;
 	}
 
 	public boolean isDead() {
@@ -117,11 +125,11 @@ public class Person implements EpisodicAgentInterface, ParametersInterface {
 	}
 
 	public InfectionStage getInfectorInfectionStage() {
-		return infectorStatus;
+		return infectorStageOfInfection;
 	}
 
-	public void setInfectorStatus(InfectionStage infectorStatus) {
-		this.infectorStatus = infectorStatus;
+	public void setInfectorStageOfInfection(InfectionStage infectorStatus) {
+		this.infectorStageOfInfection = infectorStatus;
 	}
 
 	public Integer getAHIClusterID() {
@@ -263,5 +271,34 @@ public class Person implements EpisodicAgentInterface, ParametersInterface {
 	@Override
 	public void print() {
 		System.out.println("Person-" + this.ID);
+	}
+
+	public Integer getAhiClusterID() {
+		return ahiClusterID;
+	}
+
+	public void setAhiClusterID(Integer ahiClusterID) {
+		this.ahiClusterID = ahiClusterID;
+	}
+
+	public int getTimeLastInfection() {
+		return timeLastInfection;
+	}
+
+	public void setTimeLastInfection(int timeLastInfection) {
+		this.timeLastInfection = timeLastInfection;
+	}
+
+	public int getTimePenultimateInfection() {
+		return timePenultimateInfection;
+	}
+
+	public void setTimePenultimateInfection(int timePenultimateInfection) {
+		this.timePenultimateInfection = timePenultimateInfection;
+	}
+
+	@Override
+	public void setInfectorInfectionStage(InfectionStage infectorStatus) {
+		this.infectorStageOfInfection = infectorStatus;
 	}	
 }

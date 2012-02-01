@@ -139,7 +139,7 @@ public class SingleRootedTreeReader implements ParametersInterface {
 				infected.setInfectedMixingSite(mixingSite);
 				infected.setInfectedRiskState(infectedState);
 				infected.setInfectorID(infectorID);
-				infected.setInfectorStatus(infectorStage);
+				infected.setInfectorStageOfInfection(infectorStage);
 				infected.setInfectedTick(time);
 				individuals.put(new Integer(infectedID), infected);
 				infecteds.put(infectedID, new Double(time));
