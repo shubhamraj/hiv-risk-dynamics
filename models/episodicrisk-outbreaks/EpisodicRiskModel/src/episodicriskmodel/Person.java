@@ -61,12 +61,12 @@ public class Person implements EpisodicAgentInterface, ParametersInterface {
 		if (stageOfInfection.equals(InfectionStage.Acute)
 				&& rand <= ((double)1/DurationAHI)) {
 			stageOfInfection = InfectionStage.Chronic;
-			this.CHITick = currentTick;
+			setCHITick(currentTick);
 		}
 
 		else if (stageOfInfection.equals(InfectionStage.Chronic) 
 				&& rand <= ((double)1/DurationCHI)) {
-			dead = true;		
+			setDead(true);		
 		} 	
 	}
 	
@@ -116,7 +116,7 @@ public class Person implements EpisodicAgentInterface, ParametersInterface {
 		this.dead = exit;
 	}
 
-	public InfectionStage getInfectorStatus() {
+	public InfectionStage getInfectorInfectionStage() {
 		return infectorStatus;
 	}
 

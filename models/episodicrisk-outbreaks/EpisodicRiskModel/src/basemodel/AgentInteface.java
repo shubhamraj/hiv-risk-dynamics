@@ -4,8 +4,6 @@ import basemodel.ParametersInterface.ActType;
 import basemodel.ParametersInterface.InfectionStage;
 
 public interface AgentInteface {
-	public void step(int currentTick);
-	public void updateInfectionStatus(int currentTick);
 	public void resetOutbreakRecord(); 
 	public boolean isAHI();
 	public boolean isInfected();
@@ -15,7 +13,7 @@ public interface AgentInteface {
 	public boolean infectedByAHI();
 	public boolean isDead();
 	public void setDead(boolean dead);
-	public InfectionStage getInfectorStatus();
+	public InfectionStage getInfectorInfectionStage();
 	public void setInfectorStatus(InfectionStage infectorStatus);
 	public Integer getAHIClusterID();
 	public void setAHIClusterID(Integer ahiCluster);
@@ -23,8 +21,7 @@ public interface AgentInteface {
 	public boolean isRemovedAHICluster();
 	public void setRemovedAHICluster(boolean removedAHICluster);	
 	public int getOutbreakStartTime();
-	public void setOutbreakStartTime(int outbreakStartTime);
-	public boolean equals(AgentInteface agent); 
+	public void setOutbreakStartTime(int outbreakStartTime); 
 	public int getID();
 	public void setID(int id);
 	public int getInfectedTick(); 
@@ -38,5 +35,6 @@ public interface AgentInteface {
 	public InfectionStage getStageOfInfection();
 	public ActType getActType();
 	public void setActType(ActType actType);
+	public boolean equals(AgentInteface agent);
 	public void print();
 }

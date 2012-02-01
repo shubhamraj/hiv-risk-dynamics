@@ -281,10 +281,10 @@ public class ForestDisplay extends JFrame {
 				return color;
 			}
 
-			if (individual.getInfectorStatus().equals(InfectionStage.Acute)) {
+			if (individual.getInfectorInfectionStage().equals(InfectionStage.Acute)) {
 				color = Color.RED;
 			}
-			else if (individual.getInfectorStatus().equals(InfectionStage.Chronic)) {
+			else if (individual.getInfectorInfectionStage().equals(InfectionStage.Chronic)) {
 				color = Color.BLACK;
 			}
 			else {
