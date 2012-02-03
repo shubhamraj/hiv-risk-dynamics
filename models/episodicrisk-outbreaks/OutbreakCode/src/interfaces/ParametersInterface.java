@@ -41,6 +41,7 @@ public interface ParametersInterface {
 	public static enum OutbreakType {AHI, Six_Months, Two_Years}
 	/** Types of sex acts. May be extended depending upon the implemented transmission model. */
 	public static enum ActType {None, Acute_Susceptible, Chronic_Susceptible}	
+	
 	/** Types of early infection outbreaks that are to be recorded by mean of period. Currently, we have the Transient and the 
 	 * Endemic periods defined by the time in simulation ticks (1 tick == 1 day) in their respective constructors.
 	 * This can be extended by adding further in the enum class, e.g. Middle_Period (initTick, # of years) etc. 
@@ -48,6 +49,7 @@ public interface ParametersInterface {
 	 * the second argument in the constructor is the number of years for which early infection transmissions
 	 * from this outbreak should be recorded. */
 	public static enum OutbreakRecord {EarlyPeriod(1, 30), Endemic(90000, 30);
+	
 	/** This is the threshold that allows creating of entire new transmission chains during
 	 * the recording period. This means that if a person transmits infection after this threshold,
 	 * we consider the newly-infected person as starting a new chain as a new root of an infection tree
