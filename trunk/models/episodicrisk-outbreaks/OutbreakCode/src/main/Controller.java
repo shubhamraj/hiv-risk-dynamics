@@ -24,9 +24,9 @@ import episodicriskmodel.EpisodicModel;
 public class Controller implements ParametersInterface {
 	public static void main(String[] args) throws IOException {
 		OutbreakType outbreakType = OutbreakType.AHI;
-		int maxRuns = 3;		
+		int maxRuns = 1;		
 		int startParam = 2;
-		int endParam = 3;
+		int endParam = 2;
 		
 		for (int index=startParam; index<=endParam; index++) {
 			int lineNo = 1;
@@ -65,9 +65,11 @@ public class Controller implements ParametersInterface {
 			populationWriter = new PrintWriter(new File(aggregatePath + index+"-PopulationStats.csv"));			
 			for (int run=0; run<maxRuns; run++) {
 				String individualRunPath = allRunsPath + index+"-"+run;
+				//model instantiation and initialization
 				EpisodicModel model = new EpisodicModel(input, run, individualRunPath, outbreakType);
 				model.setup();
-				model.run();		
+				model.run();	
+				
 				for (String output : model.getOutput()) {
 					populationWriter.println(output);						
 				}				

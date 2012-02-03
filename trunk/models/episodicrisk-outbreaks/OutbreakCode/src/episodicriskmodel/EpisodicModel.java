@@ -302,6 +302,7 @@ public class EpisodicModel implements BaseModelInterface {
 				deads.add(individual);
 			}
 			/* Cluster Recorder update Episodic Agent record of outbreak clusters */
+			updateClusterRecord(individual);
 						
 		}
 		
