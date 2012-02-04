@@ -33,9 +33,9 @@ public class EpisodicModel implements BaseModelInterface {
 	String prefix;
 	int numHIV;
 	int maxIterations;
-	private ArrayList<Person> individuals;
+	private ArrayList<EpisodicRiskAgent> individuals;
 	
-	private EnumMap<RISK_STATE, ArrayList<Person>> riskStates;
+	private EnumMap<RISK_STATE, ArrayList<EpisodicRiskAgent>> riskStates;
 	private double probHighToLow;
 	private double probLowToHigh;
 	private double probHH;
@@ -80,7 +80,7 @@ public class EpisodicModel implements BaseModelInterface {
 		if (individuals != null) {
 			individuals = null;
 		}
-		individuals = new ArrayList<Person>();
+		individuals = new ArrayList<EpisodicRiskAgent>();
 		
 		this.maxIterations = MaxIterations;
 		
@@ -96,14 +96,14 @@ public class EpisodicModel implements BaseModelInterface {
 		if (riskStates != null) {
 			riskStates = null;
 		}		
-		riskStates = new EnumMap<RISK_STATE, ArrayList<Person>>(RISK_STATE.class);
+		riskStates = new EnumMap<RISK_STATE, ArrayList<EpisodicRiskAgent>>(RISK_STATE.class);
 		
 		countTot = 0; countHigh = 0; countLow = 0; countHL = 0; inlow=0; inhi=0; inlh=0; ;
 		
 		initializeProbabilities();
 
 		for (RISK_STATE riskState : RISK_STATE.values()) {
-			riskStates.put(riskState, new ArrayList<Person>());
+			riskStates.put(riskState, new ArrayList<EpisodicRiskAgent>());
 		}
 		for (int i=0; i<InitialPopulation; i++) {
 			createIndividual();
@@ -133,12 +133,12 @@ public class EpisodicModel implements BaseModelInterface {
 		int numHighRisk = riskStates.get(RISK_STATE.High).size();
 		int numLowRisk = riskStates.get(RISK_STATE.Low).size();
 
-		ArrayList<Person> hToh = new ArrayList<Person>();
-		ArrayList<Person> hTol = new ArrayList<Person>();
-		ArrayList<Person> lowRisks = new ArrayList<Person>();
+		ArrayList<EpisodicRiskAgent> hToh = new ArrayList<EpisodicRiskAgent>();
+		ArrayList<EpisodicRiskAgent> hTol = new ArrayList<EpisodicRiskAgent>();
+		ArrayList<EpisodicRiskAgent> lowRisks = new ArrayList<EpisodicRiskAgent>();
 		double p1 = fracHtoH;
 
-		for (Person individual : riskStates.get(RISK_STATE.High)) {
+		for (EpisodicRiskAgent individual : riskStates.get(RISK_STATE.High)) {
 			if (Uniform.staticNextDouble() <= probHH) {
 				if (Uniform.staticNextDouble() <= p1) {
 					hToh.add(individual);
@@ -149,24 +149,24 @@ public class EpisodicModel implements BaseModelInterface {
 			}
 		}
 
-		for(Person individual : riskStates.get(RISK_STATE.Low)) {
+		for(EpisodicRiskAgent individual : riskStates.get(RISK_STATE.Low)) {
 			if (Uniform.staticNextDouble() <= probLL) {
 				lowRisks.add(individual);
 			}
 		}		
-		Person ind2;		
+		EpisodicRiskAgent ind2;		
 		double numerator = (numHighRisk*(1-fracHtoH)*highCR);
 		double p2 = numerator/((numLowRisk*lowCR) + numerator);
 
-		Person low2;
-		for (Person low1 : lowRisks) {
+		EpisodicRiskAgent low2;
+		for (EpisodicRiskAgent low1 : lowRisks) {
 			if (Uniform.staticNextDouble() <= (p2)) {
-				low2 = (Person) riskStates.get(RISK_STATE.High).get(Uniform.staticNextIntFromTo(0, numHighRisk-1));
+				low2 = (EpisodicRiskAgent) riskStates.get(RISK_STATE.High).get(Uniform.staticNextIntFromTo(0, numHighRisk-1));
 			}
 			else {
 				do {
 					//low2 = (Individual) riskStates.get(RISK_STATE.LOW).get(Uniform.staticNextIntFromTo(0, numLowRisk-1));
-					low2 = (Person) lowRisks.get(Uniform.staticNextIntFromTo(0, lowRisks.size()-1));
+					low2 = (EpisodicRiskAgent) lowRisks.get(Uniform.staticNextIntFromTo(0, lowRisks.size()-1));
 				} while(low1.equals(low2));
 			}
 			countLow++;
@@ -178,16 +178,16 @@ public class EpisodicModel implements BaseModelInterface {
 
 		if (hTol.size() > 1) {
 			try {
-				for (Person ind1 : hTol) {
+				for (EpisodicRiskAgent ind1 : hTol) {
 					if (Uniform.staticNextDouble() <= (p2)) {
 						do {
 							//ind2 = (Individual) riskStates.get(RISK_STATE.HIGH).get(Uniform.staticNextIntFromTo(0, numHighRisk-1));
-							ind2 = (Person) hTol.get(Uniform.staticNextIntFromTo(0, hTol.size()-1));
+							ind2 = (EpisodicRiskAgent) hTol.get(Uniform.staticNextIntFromTo(0, hTol.size()-1));
 						} while (ind1.equals(ind2));
 					}
 					else {
 						//ind2 = (Individual) riskStates.get(RISK_STATE.LOW).get(Uniform.staticNextIntFromTo(0, numLowRisk-1));
-						ind2 = (Person) lowRisks.get(Uniform.staticNextIntFromTo(0, lowRisks.size()-1));
+						ind2 = (EpisodicRiskAgent) lowRisks.get(Uniform.staticNextIntFromTo(0, lowRisks.size()-1));
 					}
 					countHL++;
 					if (sexualTransmission(ind1, ind2, MIXING_SITE.Common) && currentTick >= 29990) {		
@@ -198,9 +198,9 @@ public class EpisodicModel implements BaseModelInterface {
 			} catch (Exception e) {}
 		}
 
-		for (Person ind1 : hToh) {
+		for (EpisodicRiskAgent ind1 : hToh) {
 			do {
-				ind2 = (Person) riskStates.get(RISK_STATE.High).get(Uniform.staticNextIntFromTo(0, numHighRisk-1));
+				ind2 = (EpisodicRiskAgent) riskStates.get(RISK_STATE.High).get(Uniform.staticNextIntFromTo(0, numHighRisk-1));
 				//ind2 = (Individual) hToh.get(Uniform.staticNextIntFromTo(0, hToh.size()-1));
 			} while (ind1.equals(ind2));
 			countHigh++;
@@ -211,7 +211,7 @@ public class EpisodicModel implements BaseModelInterface {
 		}
 	}
 
-	private boolean sexualTransmission(Person agent1, Person agent2, MIXING_SITE mixingSite) {
+	private boolean sexualTransmission(EpisodicRiskAgent agent1, EpisodicRiskAgent agent2, MIXING_SITE mixingSite) {
 		if (agent1.equals(agent2)) {
 			System.err.println("Error. ST. EpisodicAgent 1 and 2 are same.");
 			System.exit(1);
@@ -234,7 +234,7 @@ public class EpisodicModel implements BaseModelInterface {
 		return true;		
 	}
 
-	void infect(Person infector, Person susceptible, MIXING_SITE mixingSite) {
+	void infect(EpisodicRiskAgent infector, EpisodicRiskAgent susceptible, MIXING_SITE mixingSite) {
 		double prob = 0;
 		boolean infectorAHI = infector.isAHI();
 		if (infectorAHI == true) {
@@ -272,7 +272,7 @@ public class EpisodicModel implements BaseModelInterface {
 		RISK_STATE curState;
 		RISK_STATE newState;
 		double rand;
-		for (Person individual : individuals) {
+		for (EpisodicRiskAgent individual : individuals) {
 			curState = individual.getRiskState();
 			newState = curState;
 			rand = Uniform.staticNextDouble();
@@ -295,8 +295,8 @@ public class EpisodicModel implements BaseModelInterface {
 	}
 
 	public void updateIndividuals() {
-		ArrayList<Person> deads = new ArrayList<Person>();
-		for (Person individual : individuals) {
+		ArrayList<EpisodicRiskAgent> deads = new ArrayList<EpisodicRiskAgent>();
+		for (EpisodicRiskAgent individual : individuals) {
 			individual.step(currentTick);
 			if (individual.isDead()) {
 				deads.add(individual);
@@ -306,7 +306,7 @@ public class EpisodicModel implements BaseModelInterface {
 						
 		}
 		
-		for (Person individual : deads) {
+		for (EpisodicRiskAgent individual : deads) {
 			individual.setExitTick(currentTick);
 			riskStates.get(individual.getRiskState()).remove(individual);
 			individuals.remove(individual);			
@@ -344,7 +344,7 @@ public class EpisodicModel implements BaseModelInterface {
 	}
 
 	public void createIndividual() {
-		Person individual = (Person) new Person();
+		EpisodicRiskAgent individual = (EpisodicRiskAgent) new EpisodicRiskAgent();
 		individual.setEntryTick(currentTick);
 		double rand = Uniform.staticNextDouble();
 		RISK_STATE riskState = RISK_STATE.Low;
@@ -360,7 +360,7 @@ public class EpisodicModel implements BaseModelInterface {
 		int numInitInfection = (int) (individuals.size() * InitialInfection);
 		Collections.shuffle(individuals);
 		for (int i=0; i<numInitInfection; i++) {
-			Person individual = individuals.get(i);
+			EpisodicRiskAgent individual = individuals.get(i);
 			individual.setStageOfInfection(InfectionStage.Acute);
 			individual.setInfectedTick(0);
 		}
@@ -377,7 +377,7 @@ public class EpisodicModel implements BaseModelInterface {
 		double highHIV = 0;
 		double lowHIV = 0;
 		double phi = 0;
-		for (Person individual : individuals) {			
+		for (EpisodicRiskAgent individual : individuals) {			
 			if (individual.isInfected()) {
 				hiv++;
 				if (individual.getRiskState().equals(RISK_STATE.High)) {
@@ -408,16 +408,16 @@ public class EpisodicModel implements BaseModelInterface {
 	}
 
 	public void resetIndividualsOutbreakRecord() {
-		for (Person individual : this.individuals) {
+		for (EpisodicRiskAgent individual : this.individuals) {
 			individual.resetOutbreakRecord();
 		}		
 	}
 
-	public ArrayList<Person> getIndividuals() {
+	public ArrayList<EpisodicRiskAgent> getIndividuals() {
 		return individuals;
 	}
 
-	public void setIndividuals(ArrayList<Person> individuals) {
+	public void setIndividuals(ArrayList<EpisodicRiskAgent> individuals) {
 		this.individuals = individuals;
 	}
 

@@ -13,7 +13,7 @@ import java.util.Set;
 
 import cluster.Edge;
 import edu.uci.ics.jung.graph.DelegateTree;
-import episodicriskmodel.Person;
+import episodicriskmodel.EpisodicRiskAgent;
 
 /**
  * 
@@ -30,8 +30,8 @@ public class AHICHILink implements ParametersInterface {
 	private HashMap<Integer, AHIDataStructure> continuousClusterMap, deadClusterMap;
 	//
 	private Set<Integer> continuousAHIRoots, deadAHIRoots;
-	private HashMap<Integer, Person> deadEnds;
-	private HashMap<Integer, Person> continuousLeafs;
+	private HashMap<Integer, EpisodicRiskAgent> deadEnds;
+	private HashMap<Integer, EpisodicRiskAgent> continuousLeafs;
 	private EnumMap<ActType, Set<Edge>> uniqueContinuousEdges, uniqueDeadEdges;
 	private ArrayList<Double> dataCountChronics, ahiOutput, chainsOutput;
 
@@ -47,8 +47,8 @@ public class AHICHILink implements ParametersInterface {
 		
 		this.outputsMap = new EnumMap<Output, ArrayList<Double>>(Output.class);
 		
-		this.deadEnds = new HashMap<Integer, Person>();
-		this.continuousLeafs = new HashMap<Integer, Person>();
+		this.deadEnds = new HashMap<Integer, EpisodicRiskAgent>();
+		this.continuousLeafs = new HashMap<Integer, EpisodicRiskAgent>();
 		this.uniqueContinuousEdges = new EnumMap<ActType, Set<Edge>>(ActType.class);
 		this.uniqueDeadEdges = new EnumMap<ActType, Set<Edge>>(ActType.class);
 
@@ -119,7 +119,7 @@ public class AHICHILink implements ParametersInterface {
 		double deadLeafsAHI = 0, deadLeafsCHI = 0;
 		double contLeafsAHI = 0, contLeafsCHI = 0;
 		
-		for (Person vertex : infectionForestReader.getVertices()) {
+		for (EpisodicRiskAgent vertex : infectionForestReader.getVertices()) {
 			if (infectionForestReader.isLeaf(vertex)) {
 				if (vertex.getInfectedTick() <= threshold) {
 					deadEnds.put(new Integer(vertex.getID()), vertex);
@@ -131,7 +131,7 @@ public class AHICHILink implements ParametersInterface {
 			} else {
 				if (vertex.getInfectedTick() <= threshold
 						&& vertex.getActType() != ActType.None) {
-					for (Person successor : infectionForestReader.getSuccessors(vertex)) {
+					for (EpisodicRiskAgent successor : infectionForestReader.getSuccessors(vertex)) {
 						if (successor.getInfectedTick() > threshold) {
 							continuousLeafs.put(new Integer(vertex.getID()),
 									vertex);
@@ -147,12 +147,12 @@ public class AHICHILink implements ParametersInterface {
 		}
 
 		for (Integer ID : continuousLeafs.keySet()) {
-			Person leaf = continuousLeafs.get(ID);
+			EpisodicRiskAgent leaf = continuousLeafs.get(ID);
 			pumpUniqueEdges(leaf, uniqueContinuousEdges, true);
 		}
 
 		for (Integer ID : deadEnds.keySet()) {
-			Person leaf = deadEnds.get(ID);
+			EpisodicRiskAgent leaf = deadEnds.get(ID);
 			pumpUniqueEdges(leaf, uniqueDeadEdges, false);
 		}
 
@@ -181,11 +181,11 @@ public class AHICHILink implements ParametersInterface {
 		chainsOutput.add(numChronicContinuous);
 	}
 
-	private void pumpUniqueEdges(Person leaf, EnumMap<ActType, Set<Edge>> map, boolean continuous) {		
+	private void pumpUniqueEdges(EpisodicRiskAgent leaf, EnumMap<ActType, Set<Edge>> map, boolean continuous) {		
 		boolean rootFound = false;
-		Person vertex = leaf;
+		EpisodicRiskAgent vertex = leaf;
 		while (rootFound == false) {
-			Person parent = infectionForestReader.getParent(vertex);
+			EpisodicRiskAgent parent = infectionForestReader.getParent(vertex);
 			if (infectionForestReader.isRoot(parent) || parent.getID() == -1) {
 				rootFound = true;
 			} else {
@@ -283,7 +283,7 @@ public class AHICHILink implements ParametersInterface {
 	}
 
 	private void processChronicLinks(Integer vertexID, boolean continuous) {
-		Person vertex = infectionForestReader.getPerson(vertexID);
+		EpisodicRiskAgent vertex = infectionForestReader.getPerson(vertexID);
 		boolean rootFound = false;
 		double countChronics = 0;
 		while (rootFound == false) {
@@ -293,7 +293,7 @@ public class AHICHILink implements ParametersInterface {
 				rootFound = true;
 			} else {
 				Edge edge = infectionForestReader.getParentEdge(vertex);
-				Person parent = infectionForestReader.getSource(edge);
+				EpisodicRiskAgent parent = infectionForestReader.getSource(edge);
 				if (edge != null
 						&& edge.getTransmission().getActType().equals(ActType.Acute_Susceptible)) {
 					break;
@@ -324,7 +324,7 @@ public class AHICHILink implements ParametersInterface {
 
 	private void processAHITree(Integer ahiRootID, boolean continuous) {
 		try {
-			DelegateTree<Person, Edge> tree = ahiClusterReader.getAHITree(ahiRootID);
+			DelegateTree<EpisodicRiskAgent, Edge> tree = ahiClusterReader.getAHITree(ahiRootID);
 			if (tree == null) {
 				System.err.println("Tree is null. " + tree);
 			}
@@ -342,7 +342,7 @@ public class AHICHILink implements ParametersInterface {
 			double height = tree.getHeight();
 			double size = tree.getVertexCount() - 1;
 
-			for (Person vertex : tree.getVertices()) {
+			for (EpisodicRiskAgent vertex : tree.getVertices()) {
 				if (tree.isInternal(vertex)) {
 					numInternals++;
 				} else if (tree.isLeaf(vertex)) {

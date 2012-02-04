@@ -1,12 +1,9 @@
 package partnership;
 
-import interfaces.AgentInteface;
-import interfaces.ParametersInterface.ActType;
-import interfaces.ParametersInterface.InfectionStage;
-import interfaces.ParametersInterface.MIXING_SITE;
-import interfaces.ParametersInterface.RISK_STATE;
 
-public class JongHoonAgent implements JongHoonInterface {
+import interfaces.AgentInteface;
+
+public class PartnershipAgent implements PartnershipAgentInterface {
 	static int lastID = -1;
 	private int ID = -1;
 	private InfectionStage stageOfInfection = InfectionStage.Susceptible;
@@ -30,6 +27,16 @@ public class JongHoonAgent implements JongHoonInterface {
 	private int entryTick = -1;
 	private int exitTick = -1;
 
+	public PartnershipAgent() {
+		this.ID = ++lastID;
+	}
+	
+	public PartnershipAgent(int id) {
+		this.ID = id;
+	}
+	
+	
+	
 	@Override
 	public int getID() {
 		return this.ID;
@@ -140,128 +147,115 @@ public class JongHoonAgent implements JongHoonInterface {
 
 	@Override
 	public int getInfectedTick() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.infectedTick;
 	}
 
 	@Override
 	public void setInfectedTick(int infectedTick) {
-		// TODO Auto-generated method stub
-		
+		this.infectedTick = infectedTick;
 	}
 
 	@Override
 	public int getInfectorID() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.infectorID;
 	}
 
 	@Override
 	public void setInfectorID(int infectorID) {
-		// TODO Auto-generated method stub
-		
+		this.infectorID = infectorID;
 	}
 
 	@Override
 	public int getCHITick() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.CHITick;
 	}
 
 	@Override
 	public void setCHITick(int cHITick) {
-		// TODO Auto-generated method stub
-		
+		this.CHITick = cHITick;
 	}
 
 	@Override
 	public boolean isRoot() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.root;
 	}
 
 	@Override
 	public void setRoot(boolean root) {
-		// TODO Auto-generated method stub
-		
+		this.root = root;
 	}
 
 	@Override
 	public ActType getActType() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.actType;
 	}
 
 	@Override
 	public void setActType(ActType actType) {
-		// TODO Auto-generated method stub
-		
+		this.actType = actType;
 	}
 
 	@Override
 	public boolean equals(AgentInteface agent) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.ID == agent.getID() ? true : false;
 	}
 
 	@Override
 	public int getTimeLastInfection() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.timeLastInfection;
 	}
 
 	@Override
 	public void setTimeLastInfection(int timeLastInfection) {
-		// TODO Auto-generated method stub
-		
+		this.timeLastInfection = timeLastInfection;
 	}
 
 	@Override
-	public int getTimePenultimateInfection() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getTimePenultimateInfection() {	
+		return this.timePenultimateInfection;
 	}
 
 	@Override
 	public void setTimePenultimateInfection(int timePenultimateInfection) {
-		// TODO Auto-generated method stub
-		
+		this.timePenultimateInfection = timePenultimateInfection;
 	}
 
+	/** This method is called to reset an agent's record of 
+	 * a membership in an early infection outbreak. 
+	 * An implementation of this method must call the following methods. 
+	 * 		setAHIClusterID(-1);
+			setRemovedAHICluster(false);
+			setOutbreakStartTime(-1);
+	 */
 	@Override
 	public void resetOutbreakRecord() {
-		// TODO Auto-generated method stub
-		
+		setAHIClusterID(-1);
+		setRemovedAHICluster(false);
+		setOutbreakStartTime(-1);
 	}
 
 	@Override
 	public void print() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Person-" + this.ID);		
 	}
 
 	@Override
 	public int getExitTick() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.exitTick;
 	}
 
 	@Override
 	public void setExitTick(int exitTick) {
-		// TODO Auto-generated method stub
-		
+		this.exitTick = exitTick;
 	}
 
 	@Override
 	public int getEntryTick() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.entryTick;
 	}
 
 	@Override
 	public void setEntryTick(int entryTick) {
-		// TODO Auto-generated method stub
-		
+		this.entryTick = entryTick;
 	}
-
 }

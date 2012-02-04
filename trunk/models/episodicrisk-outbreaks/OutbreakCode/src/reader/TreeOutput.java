@@ -11,7 +11,7 @@ import java.util.EnumMap;
 import cluster.Edge;
 
 import edu.uci.ics.jung.graph.DelegateTree;
-import episodicriskmodel.Person;
+import episodicriskmodel.EpisodicRiskAgent;
 
 /**
  * 
@@ -102,7 +102,7 @@ public class TreeOutput implements ParametersInterface {
 		return statistics;
 	}
 
-	public static double returnDuration(DelegateTree<Person, Edge> tree) {
+	public static double returnDuration(DelegateTree<EpisodicRiskAgent, Edge> tree) {
 		double min = Double.MAX_VALUE;
 		double max = 0;
 		for (Edge edge : tree.getEdges()) {

@@ -16,7 +16,7 @@ import java.util.StringTokenizer;
 import cluster.Edge;
 import edu.uci.ics.jung.graph.DelegateTree;
 import episodicriskmodel.EpisodicRiskTransmission;
-import episodicriskmodel.Person;
+import episodicriskmodel.EpisodicRiskAgent;
 
 /**
  * 
@@ -28,18 +28,18 @@ public class InfectionForestReader implements ParametersInterface {
 	private int lineNo;
 	private LinkedHashMap<Integer, ArrayList<String>> inputMap;
 	private ArrayList<EpisodicRiskTransmission> transmissionsList;
-	private HashMap<Integer, Person> individualsMap;
-	private ArrayList<Person> roots;
-	private DelegateTree<Person, Edge> infectionForest;
+	private HashMap<Integer, EpisodicRiskAgent> individualsMap;
+	private ArrayList<EpisodicRiskAgent> roots;
+	private DelegateTree<EpisodicRiskAgent, Edge> infectionForest;
 	
 	public InfectionForestReader(String _fname) {
 		this.fname = _fname;
 		this.lineNo = 0;
 		this.inputMap = new LinkedHashMap<Integer, ArrayList<String>>();
 		this.transmissionsList = new ArrayList<EpisodicRiskTransmission>();
-		this.individualsMap = new LinkedHashMap<Integer, Person>();
-		this.roots = new ArrayList<Person>();
-		this.infectionForest = new DelegateTree<Person, Edge>();
+		this.individualsMap = new LinkedHashMap<Integer, EpisodicRiskAgent>();
+		this.roots = new ArrayList<EpisodicRiskAgent>();
+		this.infectionForest = new DelegateTree<EpisodicRiskAgent, Edge>();
 	}
 	
 	public void run() {
@@ -49,14 +49,14 @@ public class InfectionForestReader implements ParametersInterface {
 	}
 	
 	private void createForest() {
-		Person root = new Person(-1);
+		EpisodicRiskAgent root = new EpisodicRiskAgent(-1);
 		this.infectionForest.setRoot(root);
-		for (Person actualRoot : this.roots) {
+		for (EpisodicRiskAgent actualRoot : this.roots) {
 			this.infectionForest.addEdge(new Edge(new EpisodicRiskTransmission()), root, actualRoot);
 		}
 		for (EpisodicRiskTransmission transmission : this.transmissionsList) {
-			Person infector = individualsMap.get(new Integer(transmission.getInfectorID()));
-			Person infected = individualsMap.get(new Integer(transmission.getInfectedID()));
+			EpisodicRiskAgent infector = individualsMap.get(new Integer(transmission.getInfectorID()));
+			EpisodicRiskAgent infected = individualsMap.get(new Integer(transmission.getInfectedID()));
 			try {
 				this.infectionForest.addEdge(new Edge(transmission), infector, infected);
 			} catch (Exception e) {
@@ -127,12 +127,12 @@ public class InfectionForestReader implements ParametersInterface {
 			transmission.setBranchTime(branchTime);
 
 			if (this.individualsMap.containsKey(infectorID) == false) {
-				Person infector = new Person(infectorID);
+				EpisodicRiskAgent infector = new EpisodicRiskAgent(infectorID);
 				infector.setInfectedTick(infectorTick);
 				this.individualsMap.put(new Integer(infectorID), infector);
 			}
 			if (this.individualsMap.containsKey(infectedID) == false) {
-				Person infected = new Person(infectedID);
+				EpisodicRiskAgent infected = new EpisodicRiskAgent(infectedID);
 				infected.setActType(actType);
 				infected.setInfectedMixingSite(mixingSite);
 				infected.setInfectedRiskState(infectedState);
@@ -170,35 +170,35 @@ public class InfectionForestReader implements ParametersInterface {
 		}
 	}
 	
-	public Collection<Person> getVertices() {
+	public Collection<EpisodicRiskAgent> getVertices() {
 		return infectionForest.getVertices();
 	}
 	
-	public boolean isLeaf(Person individual) {
+	public boolean isLeaf(EpisodicRiskAgent individual) {
 		return infectionForest.isLeaf(individual);
 	}
 	
-	public Collection<Person> getSuccessors(Person individual) {
+	public Collection<EpisodicRiskAgent> getSuccessors(EpisodicRiskAgent individual) {
 		return infectionForest.getSuccessors(individual);
 	}
 		
-	public Person getParent(Person individual) {
+	public EpisodicRiskAgent getParent(EpisodicRiskAgent individual) {
 		return infectionForest.getParent(individual);
 	}
 	
-	public Edge getParentEdge(Person individual) {
+	public Edge getParentEdge(EpisodicRiskAgent individual) {
 		return infectionForest.getParentEdge(individual);
 	}
 	
-	public Person getPerson(Integer ID) {
+	public EpisodicRiskAgent getPerson(Integer ID) {
 		return individualsMap.get(ID);
 	}
 	
-	public boolean isRoot(Person individual) {
+	public boolean isRoot(EpisodicRiskAgent individual) {
 		return infectionForest.isRoot(individual); 
 	}
 	
-	public Person getSource(Edge edge) {
+	public EpisodicRiskAgent getSource(Edge edge) {
 		return infectionForest.getSource(edge);
 	}
 

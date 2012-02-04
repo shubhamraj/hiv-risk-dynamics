@@ -25,7 +25,7 @@ import cluster.InfectionForest;
 import edu.uci.ics.jung.graph.DelegateTree;
 import edu.uci.ics.jung.graph.Tree;
 import episodicriskmodel.EpisodicRiskTransmission;
-import episodicriskmodel.Person;
+import episodicriskmodel.EpisodicRiskAgent;
 
 /**
  * 
@@ -37,23 +37,23 @@ public class AcuteClusterReader implements ParametersInterface {
 	private int lineNo;
 	private LinkedHashMap<Integer, ArrayList<String>> inputMap;
 	private LinkedHashMap<Integer, ArrayList<EpisodicRiskTransmission>> obtrans;
-	private HashMap<Integer, Person> individuals;
-	private ArrayList<Person> roots;
+	private HashMap<Integer, EpisodicRiskAgent> individuals;
+	private ArrayList<EpisodicRiskAgent> roots;
 	private Set<Integer> rootIDs; 
 	private InfectionForest ahiForest;
-	private HashMap<Integer, DelegateTree<Person, Edge>> ahiTrees;
+	private HashMap<Integer, DelegateTree<EpisodicRiskAgent, Edge>> ahiTrees;
 	private OutbreakRecord outbreakRecord;
 
 	public AcuteClusterReader(String _fname) {
 		this.fname = _fname;
 		inputMap = new LinkedHashMap<Integer, ArrayList<String>>();
 		obtrans = new LinkedHashMap<Integer, ArrayList<EpisodicRiskTransmission>>();
-		individuals = new HashMap<Integer, Person>();
+		individuals = new HashMap<Integer, EpisodicRiskAgent>();
 		ahiForest = new InfectionForest(fname);
-		roots = new ArrayList<Person>();
+		roots = new ArrayList<EpisodicRiskAgent>();
 		rootIDs = new HashSet<Integer>(); 
 		lineNo = 0;
-		ahiTrees = new HashMap<Integer, DelegateTree<Person, Edge>>();
+		ahiTrees = new HashMap<Integer, DelegateTree<EpisodicRiskAgent, Edge>>();
 	
 		for (OutbreakRecord obr : OutbreakRecord.values()) {
 			if (fname.contains(obr.name())) {
@@ -138,7 +138,7 @@ public class AcuteClusterReader implements ParametersInterface {
 			transmission.setBranchTime(branchTime);
 
 			if (individuals.containsKey(infectorID) == false) {
-				Person infector = new Person(infectorID);
+				EpisodicRiskAgent infector = new EpisodicRiskAgent(infectorID);
 				infector.setInfectedTick(infectorTick);
 				infector.setAHIClusterID(obID);
 				individuals.put(new Integer(infectorID), infector);
@@ -150,7 +150,7 @@ public class AcuteClusterReader implements ParametersInterface {
 				} 
 			}
 			if (individuals.containsKey(infectedID) == false) {
-				Person infected = new Person(infectedID);
+				EpisodicRiskAgent infected = new EpisodicRiskAgent(infectedID);
 				infected.setActType(actType);
 				infected.setInfectedMixingSite(mixingSite);
 				infected.setInfectedRiskState(infectedState);
@@ -187,14 +187,14 @@ public class AcuteClusterReader implements ParametersInterface {
 				}
 			});
 			for (EpisodicRiskTransmission transmission : transList) {
-				Person infector = individuals.get(new Integer(transmission.getInfectorID()));
-				Person infected = individuals.get(new Integer(transmission.getInfectedID()));
+				EpisodicRiskAgent infector = individuals.get(new Integer(transmission.getInfectorID()));
+				EpisodicRiskAgent infected = individuals.get(new Integer(transmission.getInfectedID()));
 				ahiForest.addNode(new Integer(transmission.getTime()), transmission, infector, infected);
 			}
 		}
 
 		for (Tree tree : ahiForest.getTrees()) {
-			Person root = (Person) tree.getRoot();
+			EpisodicRiskAgent root = (EpisodicRiskAgent) tree.getRoot();
 			ahiTrees.put(root.getID(), (DelegateTree) tree);
 		}		
 	}
@@ -229,7 +229,7 @@ public class AcuteClusterReader implements ParametersInterface {
 	}
 
 	public void initializeRoots() {
-		for (Person root : roots) {
+		for (EpisodicRiskAgent root : roots) {
 			ahiForest.addRoot(root);
 			root.setRoot(true);
 		}
@@ -237,7 +237,7 @@ public class AcuteClusterReader implements ParametersInterface {
 
 	public int getOBID(Integer vertexID) {
 		if (individuals.containsKey(vertexID)) {
-			Person vertex = individuals.get(vertexID);
+			EpisodicRiskAgent vertex = individuals.get(vertexID);
 			return vertex.getAHIClusterID();					
 		}
 		return -1;
@@ -245,7 +245,7 @@ public class AcuteClusterReader implements ParametersInterface {
 
 	public boolean isRootID (Integer ID) {
 		if (individuals.containsKey(ID)) {
-			Person individual = individuals.get(ID);
+			EpisodicRiskAgent individual = individuals.get(ID);
 			return individual.isRoot();
 		}
 		else {
@@ -288,7 +288,7 @@ public class AcuteClusterReader implements ParametersInterface {
 		return rootIDs;
 	}
 	
-	public ArrayList<Person> getRoots() {
+	public ArrayList<EpisodicRiskAgent> getRoots() {
 		return roots;
 	}
 
@@ -296,11 +296,11 @@ public class AcuteClusterReader implements ParametersInterface {
 		return ahiForest;
 	}
 
-	public DelegateTree<Person, Edge> getAHITree(Integer rootID) {
+	public DelegateTree<EpisodicRiskAgent, Edge> getAHITree(Integer rootID) {
 		return getAhiTrees().get(rootID);	
 	}
 	
-	public HashMap<Integer, DelegateTree<Person, Edge>> getAhiTrees() {
+	public HashMap<Integer, DelegateTree<EpisodicRiskAgent, Edge>> getAhiTrees() {
 		return ahiTrees;
 	}
 }
