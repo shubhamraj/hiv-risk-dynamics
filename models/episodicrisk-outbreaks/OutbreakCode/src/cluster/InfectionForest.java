@@ -2,7 +2,7 @@ package cluster;
 
 import edu.uci.ics.jung.graph.util.EdgeType;
 import episodicriskmodel.EpisodicRiskTransmission;
-import episodicriskmodel.Person;
+import episodicriskmodel.EpisodicRiskAgent;
 
 /**
  * 
@@ -20,13 +20,13 @@ public class InfectionForest extends BaseForest {
 		super(prefix);
 	}
 	
-	public void addRoot(Person subtreeRoot) {
+	public void addRoot(EpisodicRiskAgent subtreeRoot) {
 		Outbreak tree = new Outbreak();
 		tree.addVertex(subtreeRoot);
 		addTree(tree);
 	}
 
-	public void addNode(Integer time, EpisodicRiskTransmission transRec, Person infector, Person infected) {
+	public void addNode(Integer time, EpisodicRiskTransmission transRec, EpisodicRiskAgent infector, EpisodicRiskAgent infected) {
 		if (transRec.getTimeSinceLastInfection() >= OutbreakRecord.NewChainThreshold) {
 			addRoot(infected);
 			newRoots++;

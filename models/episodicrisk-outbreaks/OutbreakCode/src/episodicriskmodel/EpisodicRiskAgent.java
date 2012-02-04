@@ -10,7 +10,7 @@ import cern.jet.random.Uniform;
  * @author shah
  *
  */
-public class Person implements EpisodicAgentInterface {
+public class EpisodicRiskAgent implements EpisodicAgentInterface {
 	static int lastID = -1;
 	private int ID = -1;
 	private InfectionStage stageOfInfection = InfectionStage.Susceptible;
@@ -38,11 +38,11 @@ public class Person implements EpisodicAgentInterface {
 	private RISK_STATE infectedRiskState = RISK_STATE.None;
 	private MIXING_SITE infectedMixingSite = MIXING_SITE.None;
 
-	public Person() {		
+	public EpisodicRiskAgent() {		
 		this.ID = ++lastID;
 	}
 
-	public Person(int id) {
+	public EpisodicRiskAgent(int id) {
 		this.ID = id;
 	}
 
@@ -165,7 +165,7 @@ public class Person implements EpisodicAgentInterface {
 		this.outbreakStartTime = outbreakStartTime;
 	}
 
-	public boolean equals(Person person) {
+	public boolean equals(EpisodicRiskAgent person) {
 		return this.ID == person.getID() ? true : false;
 	}
 

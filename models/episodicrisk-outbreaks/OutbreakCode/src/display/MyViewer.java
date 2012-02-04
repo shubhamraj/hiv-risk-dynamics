@@ -13,13 +13,13 @@ import cluster.Edge;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import episodicriskmodel.Person;
+import episodicriskmodel.EpisodicRiskAgent;
 
-public class MyViewer extends VisualizationViewer<Person, Edge>{
+public class MyViewer extends VisualizationViewer<EpisodicRiskAgent, Edge>{
 	private static final long serialVersionUID = 1L;
 	private Dimension dim; 
 
-	public MyViewer(Layout<Person, Edge> layout, Dimension preferredSize) {
+	public MyViewer(Layout<EpisodicRiskAgent, Edge> layout, Dimension preferredSize) {
 		super(layout, preferredSize);
 		dim = preferredSize; 
 	}

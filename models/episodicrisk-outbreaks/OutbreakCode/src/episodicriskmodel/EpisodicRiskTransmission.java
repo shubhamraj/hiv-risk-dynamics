@@ -22,9 +22,9 @@ public class EpisodicRiskTransmission extends BaseTransmission {
 	public EpisodicRiskTransmission(Integer _time, AgentInteface infector, AgentInteface infected) {
 		super(_time, infector, infected);
 		/** Here typecastnig to allow more features to be recorded in the transmissions output. */
-		infectorRiskState = ((Person) infector).getRiskState();
-		infectedRiskState = ((Person) infected).getRiskState();
-		mixingSite = ((Person) infected).getInfectedMixingSite();
+		infectorRiskState = ((EpisodicRiskAgent) infector).getRiskState();
+		infectedRiskState = ((EpisodicRiskAgent) infected).getRiskState();
+		mixingSite = ((EpisodicRiskAgent) infected).getInfectedMixingSite();
 	}
 	
 	/** add further data to be written. */

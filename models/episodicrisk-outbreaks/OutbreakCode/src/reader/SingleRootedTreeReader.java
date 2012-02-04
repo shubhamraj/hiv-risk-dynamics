@@ -22,7 +22,7 @@ import java.util.StringTokenizer;
 import cluster.Edge;
 import edu.uci.ics.jung.graph.DelegateTree;
 import episodicriskmodel.EpisodicRiskTransmission;
-import episodicriskmodel.Person;
+import episodicriskmodel.EpisodicRiskAgent;
 
 /**
  * 
@@ -33,9 +33,9 @@ public class SingleRootedTreeReader implements ParametersInterface {
 	private String fname;
 	private int lineNo;
 	private LinkedHashMap<Integer, ArrayList<String>> inputMap;
-	private LinkedHashMap<Integer, Person> individuals;
-	private ArrayList<Person> roots;
-	DelegateTree<Person, Edge> infectionForest;
+	private LinkedHashMap<Integer, EpisodicRiskAgent> individuals;
+	private ArrayList<EpisodicRiskAgent> roots;
+	DelegateTree<EpisodicRiskAgent, Edge> infectionForest;
 	ArrayList<EpisodicRiskTransmission> transmissionsList;
 
 	public static final int threshold = 92000;
@@ -47,9 +47,9 @@ public class SingleRootedTreeReader implements ParametersInterface {
 	public SingleRootedTreeReader(String _fname) {
 		this.fname = _fname;
 		this.inputMap = new LinkedHashMap<Integer, ArrayList<String>>();
-		this.individuals = new LinkedHashMap<Integer, Person>();
-		this.roots = new ArrayList<Person>();
-		this.infectionForest = new DelegateTree<Person, Edge>();
+		this.individuals = new LinkedHashMap<Integer, EpisodicRiskAgent>();
+		this.roots = new ArrayList<EpisodicRiskAgent>();
+		this.infectionForest = new DelegateTree<EpisodicRiskAgent, Edge>();
 		this.transmissionsList = new ArrayList<EpisodicRiskTransmission>();
 		this.lineNo = 0;
 		this.deadEnds = new ArrayList<ChainsDataStructure>();
@@ -130,12 +130,12 @@ public class SingleRootedTreeReader implements ParametersInterface {
 			transmission.setBranchTime(branchTime);
 
 			if (individuals.containsKey(infectorID) == false) {
-				Person infector = new Person(infectorID);
+				EpisodicRiskAgent infector = new EpisodicRiskAgent(infectorID);
 				infector.setInfectedTick(infectorTick);
 				individuals.put(new Integer(infectorID), infector);										
 			}
 			if (individuals.containsKey(infectedID) == false) {
-				Person infected = new Person(infectedID);
+				EpisodicRiskAgent infected = new EpisodicRiskAgent(infectedID);
 				infected.setActType(actType);
 				infected.setInfectedMixingSite(mixingSite);
 				infected.setInfectedRiskState(infectedState);
@@ -161,14 +161,14 @@ public class SingleRootedTreeReader implements ParametersInterface {
 	}
 
 	public void generateForest() {
-		Person root = new Person(-1);
+		EpisodicRiskAgent root = new EpisodicRiskAgent(-1);
 		infectionForest.setRoot(root);		
-		for (Person actualRoot : roots) {
+		for (EpisodicRiskAgent actualRoot : roots) {
 			infectionForest.addEdge(new Edge(new EpisodicRiskTransmission()), root, actualRoot); 
 		}
 		for (EpisodicRiskTransmission transmission : transmissionsList) {
-			Person infector = individuals.get(new Integer(transmission.getInfectorID()));
-			Person infected = individuals.get(new Integer(transmission.getInfectedID()));
+			EpisodicRiskAgent infector = individuals.get(new Integer(transmission.getInfectorID()));
+			EpisodicRiskAgent infected = individuals.get(new Integer(transmission.getInfectedID()));
 			try {
 				infectionForest.addEdge(new Edge(transmission), infector, infected);
 			} catch (Exception e) {	
@@ -181,7 +181,7 @@ public class SingleRootedTreeReader implements ParametersInterface {
 		int deadLeafsAHI = 0, deadLeafsCHI = 0;
 		int contLeafsAHI = 0, contLeafsCHI = 0;
 		
-		for (Person vertex : infectionForest.getVertices()) {
+		for (EpisodicRiskAgent vertex : infectionForest.getVertices()) {
 			if (infectionForest.isLeaf(vertex)) {
 				if (vertex.getInfectedTick() <= threshold) {
 					deadEnds.add(returnTreeStat(vertex));
@@ -191,7 +191,7 @@ public class SingleRootedTreeReader implements ParametersInterface {
 			}
 			else {
 				if (vertex.getInfectedTick() <= threshold) {
-					for (Person successor : infectionForest.getSuccessors(vertex)) {
+					for (EpisodicRiskAgent successor : infectionForest.getSuccessors(vertex)) {
 						if (successor.getInfectedTick() > threshold) {
 							continuous.add(returnTreeStat(vertex));
 							if (vertex.getActType().equals(ActType.Acute_Susceptible)) contLeafsAHI++;
@@ -207,12 +207,12 @@ public class SingleRootedTreeReader implements ParametersInterface {
 		System.out.println(deadLeafsAHI + " " + deadLeafsCHI + " " + contLeafsAHI + " " + contLeafsCHI);
 				
 		for (ChainsDataStructure treeStat: continuous) {
-			Person leaf = treeStat.getLeaf();
+			EpisodicRiskAgent leaf = treeStat.getLeaf();
 			pumpUniqueEdges(leaf, uniqueContinuousEdges);
 		}
 
 		for (ChainsDataStructure treeStat: deadEnds) {
-			Person leaf = treeStat.getLeaf();
+			EpisodicRiskAgent leaf = treeStat.getLeaf();
 			pumpUniqueEdges(leaf, uniqueDeadEdges);
 		}
 
@@ -231,12 +231,12 @@ public class SingleRootedTreeReader implements ParametersInterface {
 				+ " " + numChronicCont + " " + numAcuteCont + " " + contFrac);		
 	}
 
-	private void pumpUniqueEdges(Person leaf, EnumMap<ActType, Set<Edge>> map) {
+	private void pumpUniqueEdges(EpisodicRiskAgent leaf, EnumMap<ActType, Set<Edge>> map) {
 		boolean rootFound = false;
-		Person vertex = leaf;
+		EpisodicRiskAgent vertex = leaf;
 		while (rootFound == false) {
 			Edge edge = infectionForest.getParentEdge(vertex);
-			Person parent = infectionForest.getSource(edge);
+			EpisodicRiskAgent parent = infectionForest.getSource(edge);
 			if (infectionForest.isRoot(parent)
 					|| parent.getID() == -1
 			) {
@@ -251,7 +251,7 @@ public class SingleRootedTreeReader implements ParametersInterface {
 	}
 
 
-	private ChainsDataStructure returnTreeStat(Person vertex) {
+	private ChainsDataStructure returnTreeStat(EpisodicRiskAgent vertex) {
 		Edge edge = infectionForest.getParentEdge(vertex);
 		ChainsDataStructure treeStat = new ChainsDataStructure(vertex, edge);
 

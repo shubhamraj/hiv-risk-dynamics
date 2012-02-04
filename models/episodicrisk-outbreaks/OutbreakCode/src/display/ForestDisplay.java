@@ -65,7 +65,7 @@ import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.subLayout.TreeCollapser;
-import episodicriskmodel.Person;
+import episodicriskmodel.EpisodicRiskAgent;
 
 /**
  * Modified version of Jung Library's class file "TreeCollapseDemo"
@@ -76,26 +76,26 @@ import episodicriskmodel.Person;
 @SuppressWarnings("serial")
 public class ForestDisplay extends JFrame {	
 	/** The graph */
-	Forest<Person,Edge> graph;
+	Forest<EpisodicRiskAgent,Edge> graph;
 	/** The visual component and renderer for the graph */
 	MyViewer vv;
 	VisualizationServer.Paintable rings;
 	String root;
 
-	TreeLayoutExt<Person, Edge> layout;
+	TreeLayoutExt<EpisodicRiskAgent, Edge> layout;
 	@SuppressWarnings("rawtypes")
 	FRLayout frLayout;
 	TreeCollapser collapser;
-	RadialTreeLayout<Person, Edge> radialLayout;
+	RadialTreeLayout<EpisodicRiskAgent, Edge> radialLayout;
 
 	@SuppressWarnings({ "unchecked", "rawtypes"})
-	public ForestDisplay(Forest<Person, Edge> forest, ArrayList<Person> sortedRoots) {
+	public ForestDisplay(Forest<EpisodicRiskAgent, Edge> forest, ArrayList<EpisodicRiskAgent> sortedRoots) {
 		graph = forest;
-		layout = new TreeLayoutExt<Person, Edge>(graph, sortedRoots);
+		layout = new TreeLayoutExt<EpisodicRiskAgent, Edge>(graph, sortedRoots);
 		collapser = new TreeCollapser();
-		radialLayout = new RadialTreeLayout<Person, Edge>(graph);
+		radialLayout = new RadialTreeLayout<EpisodicRiskAgent, Edge>(graph);
 		radialLayout.setSize(new Dimension(600,600));
-		frLayout = new FRLayout<Person, Edge>(graph);
+		frLayout = new FRLayout<EpisodicRiskAgent, Edge>(graph);
 
 		// set default layout for display
 		//vv = new MyViewer(layout, new Dimension(1200,4800));
@@ -274,8 +274,8 @@ public class ForestDisplay extends JFrame {
 		}
 	};
 
-	Transformer<Person,Paint> vertexPaint = new Transformer<Person,Paint>() {
-		public Paint transform(Person individual) {
+	Transformer<EpisodicRiskAgent,Paint> vertexPaint = new Transformer<EpisodicRiskAgent,Paint>() {
+		public Paint transform(EpisodicRiskAgent individual) {
 			Color color;
 			if (individual.getID() == -1) {
 				color = Color.YELLOW;
@@ -316,8 +316,8 @@ public class ForestDisplay extends JFrame {
 
 		private Collection<Double> getDepths() {
 			Set<Double> depths = new HashSet<Double>();
-			Map<Person, PolarPoint> polarLocations = radialLayout.getPolarLocations();
-			for(Person v : graph.getVertices()) {
+			Map<EpisodicRiskAgent, PolarPoint> polarLocations = radialLayout.getPolarLocations();
+			for(EpisodicRiskAgent v : graph.getVertices()) {
 				PolarPoint pp = polarLocations.get(v);
 				depths.add(pp.getRadius());
 			}
