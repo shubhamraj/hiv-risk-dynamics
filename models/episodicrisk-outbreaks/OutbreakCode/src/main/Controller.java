@@ -24,9 +24,9 @@ import episodicriskmodel.EpisodicModel;
 public class Controller implements ParametersInterface {
 	public static void main(String[] args) throws IOException {
 		OutbreakType outbreakType = OutbreakType.AHI;
-		int maxRuns = 1;		
+		int maxRuns = 3;		
 		int startParam = 2;
-		int endParam = 2;
+		int endParam = 3;
 		
 		for (int index=startParam; index<=endParam; index++) {
 			int lineNo = 1;
