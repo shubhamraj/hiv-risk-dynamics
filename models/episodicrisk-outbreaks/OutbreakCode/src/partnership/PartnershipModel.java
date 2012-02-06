@@ -11,6 +11,12 @@ import cluster.Edge;
 import interfaces.AgentInterface;
 import interfaces.BaseModelInterface;
 
+/**
+ * 
+ * Jong-Hoon Kim's model integrated with outbreaks library
+ *
+ */
+
 public class PartnershipModel implements BaseModelInterface, PartnershipParametersInterface {
 	private double ahiTransPotential = AcuteTransPotential;
 	private int maxIterations;
