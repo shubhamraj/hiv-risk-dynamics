@@ -1,6 +1,7 @@
 package interfaces;
 
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
@@ -12,7 +13,8 @@ public interface BaseModelInterface extends ParametersInterface {
 	/** Method to be called from the implemented class' constructor
 	 * or a setup function to create the member instance of the 
 	 * {@link ClusterRecorder} class. */
-	public void createClusterRecorder();
+	@SuppressWarnings("rawtypes")
+	public void createClusterRecorder(String _prefix, OutbreakType _outbreakType, Class transmissionClass);
 	/** This method must be called in a function (e.g. run) or 
 	 * called separately such that it is scheduled at every
 	 * time step. The body of this function must call the 
@@ -21,10 +23,16 @@ public interface BaseModelInterface extends ParametersInterface {
 	/** This function must be called at the time of a transmission event. 
 	 * The body of this method must call the ClusterRecorder's method
 	 * clusterRecorder.recordTransmission(infector, susceptible), passing 
-	 * the infector and susceptible agents as arguments */
-	public void addTransmissionToClusterRecord(AgentInteface infector, AgentInteface susceptible);
+	 * the infector and susceptible agents as arguments 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws SecurityException 
+	 * @throws IllegalArgumentException */
+	public void addTransmissionToClusterRecord(AgentInterface infector, AgentInterface susceptible);
 	/** Updates agents early infection outbreak record, when the agent is dead. */
-	public void updateClusterRecord(AgentInteface agent);
+	public void updateClusterRecord(AgentInterface agent);
 	/** This function must return the current size of agent's population. */
 	public int returnPopulationSize();
 	/** This body of this function must iterate over all agents

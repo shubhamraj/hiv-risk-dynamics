@@ -20,7 +20,9 @@ public interface ParametersInterface {
 	/** Initial population of agents/individuals in the model. */
 	public static int InitialPopulation = 10000;
 	/** Initial proportion of infection in the population. */
-	public static final double InitialInfection = 0.1d;	
+	public static double InitialInfection = 0.1d;
+	/**  infection starts when partnership dynamics reaches steady state */
+	public static final int InfectionStart = 1;
 	/** Duration of sexually active life of a susceptible individual in the model. */
 	public static final double DurationLife = 40*12*30d;	
 	/** Types of infection stages. */
@@ -40,16 +42,14 @@ public interface ParametersInterface {
 	 * */
 	public static enum OutbreakType {AHI, Six_Months, Two_Years}
 	/** Types of sex acts. May be extended depending upon the implemented transmission model. */
-	public static enum ActType {None, Acute_Susceptible, Chronic_Susceptible}	
-	
+	public static enum ActType {None, Acute_Susceptible, Chronic_Susceptible}		
 	/** Types of early infection outbreaks that are to be recorded by mean of period. Currently, we have the Transient and the 
 	 * Endemic periods defined by the time in simulation ticks (1 tick == 1 day) in their respective constructors.
 	 * This can be extended by adding further in the enum class, e.g. Middle_Period (initTick, # of years) etc. 
 	 * The first argument in the constructor is the start tick from which to record this type of outbreak; 
 	 * the second argument in the constructor is the number of years for which early infection transmissions
 	 * from this outbreak should be recorded. */
-	public static enum OutbreakRecord {EarlyPeriod(1, 30), Endemic(90000, 30);
-	
+	public static enum OutbreakRecord {EarlyPeriod(InfectionStart+1, 30), Endemic(90000, 30);
 	/** This is the threshold that allows creating of entire new transmission chains during
 	 * the recording period. This means that if a person transmits infection after this threshold,
 	 * we consider the newly-infected person as starting a new chain as a new root of an infection tree
@@ -113,8 +113,11 @@ public interface ParametersInterface {
 	public static final String inputPath = "./input/";
 	/** Path for the output directory. */
 	public static final String outputPath = "./output/";
+	
 	/** Name of the parameters input file. Must be located in the input path. */
-	public static final String inputFile = "Prevalence45-1000.csv";	
+	public static final String inputFile = "EpisodicRiskModelParams.csv";
+//	public static final String inputFile = "PartnershipModelParams.csv";
+	
 	/** Path to save the aggregate data files for the corresponding parameter set' index for multiple runs. */
 	public static final String aggregatePath = "./data/aggregates/";
 	/** Path to save the individual data files for the corresponding parameter set' index for multiple runs. 

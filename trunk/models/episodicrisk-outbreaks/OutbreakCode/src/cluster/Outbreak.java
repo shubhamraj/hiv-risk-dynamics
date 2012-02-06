@@ -1,6 +1,6 @@
 package cluster;
 
-import interfaces.AgentInteface;
+import interfaces.AgentInterface;
 import edu.uci.ics.jung.graph.DelegateTree;
 
 /**
@@ -8,7 +8,7 @@ import edu.uci.ics.jung.graph.DelegateTree;
  * @author shah
  *
  */
-public class Outbreak extends DelegateTree<AgentInteface, Edge>{
+public class Outbreak extends DelegateTree<AgentInterface, Edge>{
 	private static final long serialVersionUID = 1L;
 	private int obID;
 	

@@ -2,7 +2,7 @@ package cluster;
 
 
 
-import interfaces.AgentInteface;
+import interfaces.AgentInterface;
 import interfaces.TransmissionInterface;
 
 /**
@@ -36,7 +36,7 @@ public class BaseTransmission implements TransmissionInterface {
 		currentClusterAge = 0;		
 	}
 	
-	public BaseTransmission(Integer _time, AgentInteface infector, AgentInteface infected) {
+	public BaseTransmission(Integer _time, AgentInterface infector, AgentInterface infected) {
 		obID = -1;
 		time = _time;
 		infectorID = infector.getID();
@@ -134,4 +134,9 @@ public class BaseTransmission implements TransmissionInterface {
 	public void setObID(int obID) {
 		this.obID = obID;
 	}
+
+	@Override
+	public void print() {
+		System.out.println(toString());
+	}	
 }

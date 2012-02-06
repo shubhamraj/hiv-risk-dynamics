@@ -6,7 +6,7 @@ package interfaces;
  * @author shah 
  *
  */
-public interface AgentInteface extends ParametersInterface {
+public interface AgentInterface extends ParametersInterface {
 	/** Returns this agent's ID*/
 	public int getID();
 	/** Sets this agent's ID*/
@@ -69,7 +69,7 @@ public interface AgentInteface extends ParametersInterface {
 	/** Sets the ActType for which this agent got infected. */
 	public void setActType(ActType actType);
 	/** Returns <code>true</code> if the agent in the argument is same; <code>false</code> otherwise. */
-	public boolean equals(AgentInteface agent);
+	public boolean equals(AgentInterface agent);
 	/** Returns the time of last infection transmission event by this agent. */
 	public int getTimeLastInfection();
 	/** Sets the time of last infection transmission event by this agent. */

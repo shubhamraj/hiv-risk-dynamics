@@ -1,9 +1,16 @@
 package partnership;
 
 
-import interfaces.AgentInteface;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-public class PartnershipAgent implements PartnershipAgentInterface {
+import cluster.Edge;
+import uchicago.src.sim.network.DefaultDrawableNode;
+
+import cern.jet.random.Uniform;
+import interfaces.AgentInterface;
+
+public class PartnershipAgent extends DefaultDrawableNode implements PartnershipAgentInterface {
 	static int lastID = -1;
 	private int ID = -1;
 	private InfectionStage stageOfInfection = InfectionStage.Susceptible;
@@ -26,17 +33,58 @@ public class PartnershipAgent implements PartnershipAgentInterface {
 
 	private int entryTick = -1;
 	private int exitTick = -1;
+	
+	private int lifeTimePartners = 0;
 
 	public PartnershipAgent() {
 		this.ID = ++lastID;
 	}
-	
+
 	public PartnershipAgent(int id) {
 		this.ID = id;
 	}
-	
-	
-	
+
+	public void step(int currentTick) {
+		if (Uniform.staticNextDouble() <= ((double)1/DurationLife)) {
+			dead = true;
+			return;
+		}
+		if (stageOfInfection != InfectionStage.Susceptible) {
+			updateInfectionStatus(currentTick);
+		}
+	}
+
+	public void updateInfectionStatus(int currentTick) {
+		double rand = Uniform.staticNextDouble();
+		if (stageOfInfection.equals(InfectionStage.Acute)
+				&& rand <= ((double)1/DurationAHI)) {
+			stageOfInfection = InfectionStage.Chronic;
+			setCHITick(currentTick);
+		}
+
+		else if (stageOfInfection.equals(InfectionStage.Chronic) 
+				&& rand <= ((double)1/DurationCHI)) {
+			setDead(true);		
+		} 	
+	}
+
+	public void makeContactToFrom(PartnershipAgent toNode, ArrayList<Edge> list) {
+		if (!hasEdgeTo(toNode)) {
+			Edge e0 = new Edge(this, toNode);
+			this.addOutEdge(e0);
+			toNode.addInEdge(e0);
+			Edge e1 = new Edge(toNode, this);
+			toNode.addOutEdge(e1);
+			this.addInEdge(e1);
+
+			list.add(e0);
+			
+			// increase the number of life-time partners
+			this.setLifeTimePartners( this.getLifeTimePartners() + 1 );
+			toNode.setLifeTimePartners( toNode.getLifeTimePartners() + 1 );
+		}
+	}
+
 	@Override
 	public int getID() {
 		return this.ID;
@@ -196,7 +244,7 @@ public class PartnershipAgent implements PartnershipAgentInterface {
 	}
 
 	@Override
-	public boolean equals(AgentInteface agent) {
+	public boolean equals(AgentInterface agent) {
 		return this.ID == agent.getID() ? true : false;
 	}
 
@@ -257,5 +305,67 @@ public class PartnershipAgent implements PartnershipAgentInterface {
 	@Override
 	public void setEntryTick(int entryTick) {
 		this.entryTick = entryTick;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void removeEdgesFromList(ArrayList<Edge> edgelist) {
+		ArrayList<Edge> inEdges = getInEdges();
+		for (int i=0; i<inEdges.size(); i++){
+			Edge e = inEdges.get( i );
+			for (Iterator<Edge> eiter = edgelist.iterator(); eiter.hasNext();) {
+				Edge ee = eiter.next();
+				if (e == ee) {
+					eiter.remove();
+				}
+			}
+		}
+
+		ArrayList<Edge> outEdges = getOutEdges();
+		for (int i=0; i<outEdges.size(); i++) {
+			Edge e = outEdges.get( i );
+			for (Iterator<Edge> eiter = edgelist.iterator(); eiter.hasNext();) {
+				Edge ee = eiter.next();
+				if (e == ee) {
+					eiter.remove();
+				}
+			}
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void dissolveEdges() {
+		ArrayList<PartnershipAgent> inNodes = getInNodes();
+		for (int i=0; i<inNodes.size(); i++) {
+			PartnershipAgent node = inNodes.get( i );
+			this.removeEdgesFrom( node );
+			node.removeEdgesTo( this );
+			this.removeEdgesTo( node );
+			node.removeEdgesFrom( this );
+		}			
+	}
+
+	@Override
+	public int getLifeTimePartners() {
+		return this.lifeTimePartners;
+	}
+
+	@Override
+	public void setLifeTimePartners(int lifeTimePartners) {
+		this.lifeTimePartners =  lifeTimePartners;
+	}
+
+	@Override
+	public int getNumInfectee() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setNumInfectee(int numInfectee) {
+		// TODO Auto-generated method stub
+		
 	}
 }

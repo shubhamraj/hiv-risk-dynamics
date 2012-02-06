@@ -1,7 +1,6 @@
 package main;
 
 
-
 import interfaces.ParametersInterface;
 
 import java.io.BufferedReader;
@@ -21,7 +20,7 @@ import episodicriskmodel.EpisodicModel;
  * @author shah
  *
  */
-public class Controller implements ParametersInterface {
+public class EpisodicRiskController implements ParametersInterface {
 	public static void main(String[] args) throws IOException {
 		OutbreakType outbreakType = OutbreakType.AHI;
 		int maxRuns = 3;		

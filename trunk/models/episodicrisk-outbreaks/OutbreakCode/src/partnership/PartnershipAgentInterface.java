@@ -1,11 +1,19 @@
 package partnership;
 
-import interfaces.AgentInteface;
-import interfaces.ParametersInterface;
+import java.util.ArrayList;
+import cluster.Edge;
 
-public interface PartnershipAgentInterface extends AgentInteface, PartnershipParametersInterface {
+import interfaces.AgentInterface;
+
+public interface PartnershipAgentInterface extends AgentInterface, PartnershipParametersInterface {
 	public int getExitTick();
 	public void setExitTick(int exitTick);
 	public int getEntryTick();
 	public void setEntryTick(int entryTick);
+	public void removeEdgesFromList(ArrayList<Edge> edgelist);
+	public void dissolveEdges();
+	public int getLifeTimePartners();
+	public void setLifeTimePartners(int lifeTimePartners);
+	public int getNumInfectee();
+	public void setNumInfectee(int numInfectee);
 }

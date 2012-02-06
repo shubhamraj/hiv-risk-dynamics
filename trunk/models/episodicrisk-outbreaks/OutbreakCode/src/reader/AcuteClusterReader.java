@@ -24,8 +24,8 @@ import cluster.Edge;
 import cluster.InfectionForest;
 import edu.uci.ics.jung.graph.DelegateTree;
 import edu.uci.ics.jung.graph.Tree;
-import episodicriskmodel.EpisodicRiskTransmission;
 import episodicriskmodel.EpisodicRiskAgent;
+import episodicriskmodel.EpisodicRiskTransmission;
 
 /**
  * 

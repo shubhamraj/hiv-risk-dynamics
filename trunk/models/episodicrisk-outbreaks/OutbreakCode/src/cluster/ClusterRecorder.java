@@ -1,7 +1,6 @@
 package cluster;
 
-
-import interfaces.AgentInteface;
+import interfaces.AgentInterface;
 import interfaces.BaseModelInterface;
 import interfaces.ParametersInterface;
 
@@ -16,13 +15,16 @@ public class ClusterRecorder implements ParametersInterface {
 	private BaseModelInterface model;
 	private ClusterEngine[] clusterEngine;
 
-	public ClusterRecorder(BaseModelInterface _model, String prefix, OutbreakType outbreakType) {
+	@SuppressWarnings("rawtypes")
+	public ClusterRecorder(BaseModelInterface _model, String prefix, OutbreakType outbreakType, Class transmissionClass) {
+		String transmissionClassName = transmissionClass.getCanonicalName();
 		this.model = _model; 
 		int numEngines = OutbreakRecord.values().length;
 		clusterEngine = new ClusterEngine[numEngines];		
 		clusterEngine = new ClusterEngine[OutbreakRecord.values().length];		
 		for (OutbreakRecord outbreakRecord : OutbreakRecord.values()) {
-			clusterEngine[outbreakRecord.ordinal()] = new ClusterEngine(prefix, outbreakType, outbreakRecord, model.getMaximumIterations());
+			clusterEngine[outbreakRecord.ordinal()] = new ClusterEngine(prefix, outbreakType, 
+					outbreakRecord, model.getMaximumIterations(), transmissionClassName);
 		}			
 	}
 
@@ -47,7 +49,7 @@ public class ClusterRecorder implements ParametersInterface {
 		}
 	}
 
-	public void updateEpisodicEpisodicAgentClusterRecord(AgentInteface agent) {
+	public void updateEpisodicEpisodicAgentClusterRecord(AgentInterface agent) {
 		if (RecordOutbreak) {
 			int currentTick = model.getCurrentTick();
 			for (OutbreakRecord outbreakRecord : OutbreakRecord.values()) {
@@ -65,9 +67,9 @@ public class ClusterRecorder implements ParametersInterface {
 		}	
 	}
 
-	public void recordTransmission(AgentInteface infector, AgentInteface susceptible) {
+	public void recordTransmission(AgentInterface infector, AgentInterface susceptible) {
 		if (RecordOutbreak) {
-			int currentTick = model.getCurrentTick();
+			int currentTick = model.getCurrentTick();			
 			for (OutbreakRecord outbreakRecord : OutbreakRecord.values()) {
 				ClusterEngine engine = clusterEngine[outbreakRecord.ordinal()];
 				if (engine.shouldRecordTransmission(currentTick)) {
@@ -82,7 +84,7 @@ public class ClusterRecorder implements ParametersInterface {
 		if (RecordOutbreak) {
 			for (OutbreakRecord outbreakRecord : OutbreakRecord.values()) {
 				ClusterEngine engine = clusterEngine[outbreakRecord.ordinal()];
-				if (engine.isStopped() == false) {
+				if (engine.isStopped() == false) {			
 					engine.shouldBeginRecording(model.getCurrentTick());
 				}
 			}

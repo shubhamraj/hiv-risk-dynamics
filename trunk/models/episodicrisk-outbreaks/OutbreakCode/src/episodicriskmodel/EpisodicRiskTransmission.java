@@ -1,7 +1,7 @@
 package episodicriskmodel;
 
-import interfaces.AgentInteface;
 import cluster.BaseTransmission;
+import interfaces.AgentInterface;
 
 /**
  * 
@@ -18,10 +18,10 @@ public class EpisodicRiskTransmission extends BaseTransmission {
 		infectedRiskState = RISK_STATE.None;
 		mixingSite = MIXING_SITE.None;
 	}
-	
-	public EpisodicRiskTransmission(Integer _time, AgentInteface infector, AgentInteface infected) {
+
+	public EpisodicRiskTransmission(Integer _time, AgentInterface infector, AgentInterface infected) {
 		super(_time, infector, infected);
-		/** Here typecastnig to allow more features to be recorded in the transmissions output. */
+		/** Here type-casting to allow more features to be recorded in the transmissions output. */
 		infectorRiskState = ((EpisodicRiskAgent) infector).getRiskState();
 		infectedRiskState = ((EpisodicRiskAgent) infected).getRiskState();
 		mixingSite = ((EpisodicRiskAgent) infected).getInfectedMixingSite();
