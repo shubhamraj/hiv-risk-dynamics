@@ -2,6 +2,12 @@ package partnership;
 
 import interfaces.ParametersInterface;
 
+/**
+ * 
+ * Jong-Hoon Kim's model integrated with outbreaks library
+ *
+ */
+
 public interface PartnershipParametersInterface extends ParametersInterface {
 	public static boolean debug = false; 	
 	/** Default PHI transmission potential*/	

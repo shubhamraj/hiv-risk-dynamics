@@ -10,6 +10,11 @@ import uchicago.src.sim.network.DefaultDrawableNode;
 import cern.jet.random.Uniform;
 import interfaces.AgentInterface;
 
+/**
+ * 
+ * Jong-Hoon Kim's model integrated with outbreaks library
+ *
+ */
 public class PartnershipAgent extends DefaultDrawableNode implements PartnershipAgentInterface {
 	static int lastID = -1;
 	private int ID = -1;

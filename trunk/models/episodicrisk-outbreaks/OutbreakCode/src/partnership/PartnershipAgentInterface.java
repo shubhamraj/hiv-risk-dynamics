@@ -5,6 +5,12 @@ import cluster.Edge;
 
 import interfaces.AgentInterface;
 
+/**
+ * 
+ * Jong-Hoon Kim's model integrated with outbreaks library
+ *
+ */
+
 public interface PartnershipAgentInterface extends AgentInterface, PartnershipParametersInterface {
 	public int getExitTick();
 	public void setExitTick(int exitTick);
