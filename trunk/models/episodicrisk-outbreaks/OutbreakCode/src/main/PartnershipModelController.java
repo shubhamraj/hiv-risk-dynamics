@@ -7,8 +7,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import partnership.PartnershipModel;
-import partnership.PartnershipParametersInterface;
+import partnershipmodel.PartnershipModel;
+import partnershipmodel.PartnershipParametersInterface;
 
 public class PartnershipModelController implements PartnershipParametersInterface {
 	public static void main(String[] args) throws IOException {
