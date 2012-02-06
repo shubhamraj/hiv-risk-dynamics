@@ -3,7 +3,7 @@ package cluster;
 
 
 
-import interfaces.AgentInteface;
+import interfaces.AgentInterface;
 import interfaces.ParametersInterface;
 
 import java.io.IOException;
@@ -11,15 +11,15 @@ import java.util.ArrayList;
 
 
 import edu.uci.ics.jung.graph.DelegateForest;
-import episodicriskmodel.EpisodicRiskTransmission;
 import episodicriskmodel.EpisodicRiskAgent;
+import episodicriskmodel.EpisodicRiskTransmission;
 
 /**
  * This is the forest/tree of the entire infections recorded during the observed period.
  * @author shah
  *
  */
-public class BaseForest extends DelegateForest<AgentInteface, Edge> implements ParametersInterface {
+public class BaseForest extends DelegateForest<AgentInterface, Edge> implements ParametersInterface {
 	protected static final long serialVersionUID = 1L;
 	protected static EpisodicRiskAgent root;
 	protected ArrayList<EpisodicRiskAgent> sortedRoots;

@@ -4,28 +4,35 @@
  */
 
 package cluster;
-
 import java.awt.Color;
+
 import episodicriskmodel.EpisodicRiskTransmission;
+import uchicago.src.sim.network.DefaultEdge;
+import uchicago.src.sim.network.Node;
 
 /**
  * 
  * @author shah
  *
  */
-public class Edge {
+public class Edge extends DefaultEdge {
 	public static int nextID = 0;
 	public Color color;
 	private int ID;
-	private EpisodicRiskTransmission transmission;
+	private BaseTransmission transmission;
 
 	public Edge() {
 		this.ID = nextID++;
 	}
 	
-	public Edge(EpisodicRiskTransmission _transmission) {
+	public Edge(BaseTransmission _transmission) {
 		this.ID = nextID++;
 		this.transmission = _transmission;
+	}
+
+	public Edge(Node toAgent, Node fromAgent) {
+		super(toAgent, fromAgent);
+		this.ID = nextID++;		
 	}
 
 	public void print() {
@@ -40,7 +47,7 @@ public class Edge {
 		return ID;
 	}
 	
-	public EpisodicRiskTransmission getTransmission() {
+	public BaseTransmission getTransmission() {
 		return transmission;
 	}
 	
@@ -54,5 +61,5 @@ public class Edge {
 	
 	public String toString() {
 		return transmission.toString();
-	}
+	}	
 }

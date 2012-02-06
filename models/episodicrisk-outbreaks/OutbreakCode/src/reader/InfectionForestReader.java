@@ -15,8 +15,8 @@ import java.util.StringTokenizer;
 
 import cluster.Edge;
 import edu.uci.ics.jung.graph.DelegateTree;
-import episodicriskmodel.EpisodicRiskTransmission;
 import episodicriskmodel.EpisodicRiskAgent;
+import episodicriskmodel.EpisodicRiskTransmission;
 
 /**
  * 

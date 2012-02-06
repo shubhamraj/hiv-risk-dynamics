@@ -1,8 +1,8 @@
 package episodicriskmodel;
 
-import interfaces.AgentInteface;
-import interfaces.BaseModelInterface;
 
+import interfaces.AgentInterface;
+import interfaces.BaseModelInterface;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -91,7 +91,7 @@ public class EpisodicModel implements BaseModelInterface {
 		output = new ArrayList<String>();
 		
 		/* Cluster Recorder */
-		createClusterRecorder(); 
+		createClusterRecorder(this.prefix, this.outbreakType, EpisodicRiskTransmission.class); 
 		
 		if (riskStates != null) {
 			riskStates = null;
@@ -117,7 +117,9 @@ public class EpisodicModel implements BaseModelInterface {
 			refreshVariables();
 			
 			/* Cluster Recorder step */
-			callClusterRecorderStep();
+			if (RecordOutbreak) {
+				callClusterRecorderStep();
+			}
 			
 			updateIndividuals();
 			mixing();
@@ -260,7 +262,7 @@ public class EpisodicModel implements BaseModelInterface {
 			susceptible.setInfectedRiskState(susceptible.getRiskState());
 			infector.setInfectionTimes(currentTick);
 
-			/** Add transmission to the cluser recorder*/
+			/** Add transmission to the cluster recorder*/
 			addTransmissionToClusterRecord(infector, susceptible);
 		}
 	}
@@ -302,10 +304,8 @@ public class EpisodicModel implements BaseModelInterface {
 				deads.add(individual);
 			}
 			/* Cluster Recorder update Episodic Agent record of outbreak clusters */
-			updateClusterRecord(individual);
-						
-		}
-		
+			updateClusterRecord(individual);						
+		}		
 		for (EpisodicRiskAgent individual : deads) {
 			individual.setExitTick(currentTick);
 			riskStates.get(individual.getRiskState()).remove(individual);
@@ -451,16 +451,19 @@ public class EpisodicModel implements BaseModelInterface {
 	}
 
 	@Override
-	public void addTransmissionToClusterRecord(AgentInteface infector, AgentInteface susceptible) {
-		clusterRecorder.recordTransmission(infector, susceptible);
+	public void addTransmissionToClusterRecord(AgentInterface infector, AgentInterface susceptible) {
+		try {
+			clusterRecorder.recordTransmission(infector, susceptible);
+		} catch (Exception e) {e.printStackTrace();}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public void createClusterRecorder() {
+	public void createClusterRecorder(String _prefix, OutbreakType _outbreakOutbreakType, Class transmissionClass) {
 		if (clusterRecorder != null) {
 			clusterRecorder = null;
 		}		
-		clusterRecorder = new ClusterRecorder(this, this.prefix, this.outbreakType);		
+		clusterRecorder = new ClusterRecorder(this, _prefix, _outbreakOutbreakType, transmissionClass);		
 	}
 
 	@Override
@@ -479,7 +482,7 @@ public class EpisodicModel implements BaseModelInterface {
 	}
 
 	@Override
-	public void updateClusterRecord(AgentInteface agent) {
+	public void updateClusterRecord(AgentInterface agent) {
 		clusterRecorder.updateEpisodicEpisodicAgentClusterRecord(agent);
 	}
 }

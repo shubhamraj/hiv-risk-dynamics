@@ -1,6 +1,6 @@
 package cluster;
 
-import interfaces.AgentInteface;
+import interfaces.AgentInterface;
 
 import java.util.ArrayList;
 
@@ -25,7 +25,7 @@ public class Cluster {
 		members = new ArrayList<Double>();
 	}
 	
-	public void addMember(AgentInteface individual) {
+	public void addMember(AgentInterface individual) {
 		Double id = new Double(individual.getID());
 		if (members.contains(id) == false) {
 			members.add(id);
@@ -37,7 +37,7 @@ public class Cluster {
 		}
 	}
 	
-	public void removeMember(AgentInteface individual) {
+	public void removeMember(AgentInterface individual) {
 		Double id = new Double(individual.getID());
 		if (members.contains(id) == true) {
 			members.remove(id);
@@ -53,7 +53,7 @@ public class Cluster {
 		}
 	}
 	
-	public void step(Integer time, AgentInteface ... members) {
+	public void step(Integer time, AgentInterface ... members) {
 		for (int i=0; i<members.length; i++) {
 			addMember(members[i]);
 		}	

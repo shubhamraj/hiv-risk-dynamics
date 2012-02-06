@@ -2,7 +2,7 @@ package episodicriskmodel;
 
 
 
-import interfaces.AgentInteface;
+import interfaces.AgentInterface;
 import cern.jet.random.Uniform;
 
 /**
@@ -214,7 +214,7 @@ public class EpisodicRiskAgent implements EpisodicAgentInterface {
 	}
 
 	@Override
-	public boolean equals(AgentInteface agent) {
+	public boolean equals(AgentInterface agent) {
 		return this.ID == agent.getID() ? true : false;
 	}
 

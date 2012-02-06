@@ -49,4 +49,5 @@ public interface TransmissionInterface extends ParametersInterface {
 	public void setObID(int obID);
 	/** Outputs all the properties of the transmission in a comma separated {@link String} */
 	public String toString();
+	public void print();
 }

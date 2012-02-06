@@ -2,7 +2,7 @@ package cluster;
 
 
 
-import interfaces.AgentInteface;
+import interfaces.AgentInterface;
 import interfaces.ParametersInterface;
 
 import java.io.BufferedWriter;
@@ -397,7 +397,7 @@ public class ForestWriter implements ParametersInterface {
 		//		System.out.println("singletons: " + singletons);
 		//		System.out.println("new roots: " + newRoots);
 
-		for (AgentInteface individual : forest.getVertices()) {
+		for (AgentInterface individual : forest.getVertices()) {
 			if ( true
 					//(!(forest.isRoot(individual) && forest.isLeaf(individual)))
 					//forest.getChildCount(individual) >= 1
@@ -441,11 +441,8 @@ public class ForestWriter implements ParametersInterface {
 			if (verticesP.containsKey((e.getTransmission().getInfectorID()))
 					&& verticesP.containsKey((e.getTransmission().getInfectedID()))) {
 				int source_id = verticesP.get(e.getTransmission().getInfectorID());
-				int target_id = verticesP.get(e.getTransmission().getInfectedID());
-				float weight = e.getTransmission().getTimeSinceLastInfection(); 
-				transWriter.write(source_id + "," + target_id + "," + weight + "," + e.getTransmission().getActType() 
-						+ "," + e.getTransmission().getInfectorRiskState() + "," + e.getTransmission().getInfectorStage()
-						+ "," + e.getTransmission().getTime());
+				int target_id = verticesP.get(e.getTransmission().getInfectedID()); 
+				transWriter.write(source_id + "," + target_id + "," + e.getTransmission().toString());
 				transWriter.newLine();
 				writer.write(source_id + " " + target_id);
 				writer.newLine();				
@@ -533,10 +530,7 @@ public class ForestWriter implements ParametersInterface {
 					&& verticesP.containsKey((e.getTransmission().getInfectedID()))) {
 				int source_id = verticesP.get(e.getTransmission().getInfectorID());
 				int target_id = verticesP.get(e.getTransmission().getInfectedID());
-				float weight = e.getTransmission().getTimeSinceLastInfection(); 
-				transWriter.write(source_id + "," + target_id + "," + weight + "," + e.getTransmission().getActType() 
-						+ "," + e.getTransmission().getInfectorRiskState() + "," + e.getTransmission().getInfectorStage()
-						+ "," + e.getTransmission().getTime());
+				transWriter.write(source_id + "," + target_id + "," + e.getTransmission().toString());
 				transWriter.newLine();
 				writer.write(source_id + " " + target_id);
 				writer.newLine();				

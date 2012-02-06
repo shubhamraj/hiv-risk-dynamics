@@ -1,13 +1,13 @@
 package episodicriskmodel;
 
-import interfaces.AgentInteface;
+import interfaces.AgentInterface;
 
 /**
  * 
  * @author shah
  *
  */
-public interface EpisodicAgentInterface extends AgentInteface {
+public interface EpisodicAgentInterface extends AgentInterface {
 	public RISK_STATE getRiskState();
 	public void setRiskState(RISK_STATE riskState);
 	public RISK_STATE getInfectedRiskState();
