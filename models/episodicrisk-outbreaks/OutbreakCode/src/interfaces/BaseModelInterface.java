@@ -1,11 +1,10 @@
 package interfaces;
 
+
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-
-import javax.media.Controller;
 
 import cluster.ClusterRecorder;
 
@@ -43,7 +42,7 @@ public interface BaseModelInterface extends ParametersInterface {
 	 * endemic prevalence, fraction of transmissions from HIV etc.*/
 	public void addToOutput(String strOutput);
 	/** This method sends the output ArrayList<String> to the {@link PrintWriter} 
-	 * in the {@link Controller} class to output PopulationStats.csv */	
+	 * in the respective controller class to output PopulationStats.csv */	
 	public ArrayList<String> getOutput();
 	/** Returns the member instance {@link ClusterRecorder} */
 	public ClusterRecorder getClusterRecorder();

@@ -40,6 +40,7 @@ public class PartnershipAgent extends DefaultDrawableNode implements Partnership
 	private int exitTick = -1;
 	
 	private int lifeTimePartners = 0;
+	private int numInfectee = 0;
 
 	public PartnershipAgent() {
 		this.ID = ++lastID;
@@ -364,13 +365,11 @@ public class PartnershipAgent extends DefaultDrawableNode implements Partnership
 
 	@Override
 	public int getNumInfectee() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.numInfectee;
 	}
 
 	@Override
 	public void setNumInfectee(int numInfectee) {
-		// TODO Auto-generated method stub
-		
+		this.numInfectee = numInfectee;
 	}
 }
