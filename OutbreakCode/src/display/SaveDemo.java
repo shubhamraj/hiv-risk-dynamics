@@ -36,7 +36,7 @@ import edu.uci.ics.jung.visualization.renderers.BasicVertexLabelRenderer.InsideP
 
 /**
  * Demonstrates VisualizationImageServer.
- * @author Tom Nelson
+ * @author Tom Nelson; modified by S.J. Alam
  * 
  */
 public class SaveDemo {

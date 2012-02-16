@@ -13,8 +13,8 @@ import uchicago.src.sim.network.DefaultEdge;
 import uchicago.src.sim.network.Node;
 
 /**
- * 
- * @author shah
+ * Edge of an infection tree (not a lineage tree)
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  *
  */
 public class Edge extends DefaultEdge {

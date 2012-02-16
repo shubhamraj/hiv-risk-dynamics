@@ -5,7 +5,9 @@ import cern.jet.random.Normal;
 
 /**
  * Contains static functions for various statistics used for outbreak distributions.
- * Uses MathCommons, Colt and Flanagan libraries.
+ *  Uses the MathCommons, Colt and Flanagan Java libraries.
+ *  
+ *  @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  *
  */
 public class Stats implements ParametersInterface {	

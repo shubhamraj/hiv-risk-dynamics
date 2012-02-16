@@ -4,33 +4,29 @@ import interfaces.AgentInterface;
 
 import java.util.LinkedHashMap;
 
-
-
-
-
 import edu.uci.ics.jung.graph.util.EdgeType;
 
 /**
  * 
- * @author shah
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  *
  */
 public class OutbreakForest extends BaseForest {
 	private static final long serialVersionUID = 1L;
-	private LinkedHashMap<Integer, Double> obDur;
+	private LinkedHashMap<Integer, Double> outbreakDurationMap;
 
 	public OutbreakForest(String prefix) {
 		super(prefix);
-		if (obDur != null) {
-			obDur.clear();
-			obDur = null;
+		if (outbreakDurationMap != null) {
+			outbreakDurationMap.clear();
+			outbreakDurationMap = null;
 		}
-		obDur = new LinkedHashMap<Integer, Double>();
+		outbreakDurationMap = new LinkedHashMap<Integer, Double>();
 	}
 
 	public void addObDur(int id, double duration) {
-		if (!obDur.containsKey(id)) {
-			obDur.put(new Integer(id), new Double(duration));
+		if (!outbreakDurationMap.containsKey(id)) {
+			outbreakDurationMap.put(new Integer(id), new Double(duration));
 		}
 	}
 
@@ -44,14 +40,14 @@ public class OutbreakForest extends BaseForest {
 		addEdge(new Edge(transRec), infector, infected, EdgeType.DIRECTED);	
 	}
 
-	public LinkedHashMap<Integer, Double> getObDur() {
-		return obDur;
+	public LinkedHashMap<Integer, Double> getOutbreakDurationMap() {
+		return outbreakDurationMap;
 	}
 
 	public double getDuration(int ID) {
 		double duration = -1;
-		if (obDur.containsKey(ID)) {
-			duration = obDur.get(ID).doubleValue();
+		if (outbreakDurationMap.containsKey(ID)) {
+			duration = outbreakDurationMap.get(ID).doubleValue();
 		}
 		return duration;
 	}

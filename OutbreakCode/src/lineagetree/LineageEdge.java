@@ -1,9 +1,8 @@
 package lineagetree;
 
 /**
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  * 
- * @author shah
- *
  */
 public class LineageEdge {
 	private static int lastID = 0;	

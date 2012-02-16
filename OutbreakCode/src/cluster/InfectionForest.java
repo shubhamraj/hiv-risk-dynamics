@@ -7,7 +7,7 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 
 /**
  * 
- * @author shah
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  *
  */
 public class InfectionForest extends BaseForest {

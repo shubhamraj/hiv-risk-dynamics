@@ -1,7 +1,6 @@
 package cluster;
 
 
-
 import interfaces.AgentInterface;
 import interfaces.ParametersInterface;
 
@@ -20,18 +19,15 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-
-
-
 import edu.uci.ics.jung.graph.DelegateForest;
 import edu.uci.ics.jung.graph.DelegateTree;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Tree;
-import episodicriskmodel.EpisodicRiskAgent;
+import episodicriskmodel.EpisodicAgentInterface;
 
 /**
  * 
- * @author shah
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  *
  */
 public class ForestWriter implements ParametersInterface {
@@ -96,7 +92,7 @@ public class ForestWriter implements ParametersInterface {
 		double duration = 0;
 		
 		for (Tree tree : forest.getTrees()) {
-			obID = ((EpisodicRiskAgent)tree.getRoot()).getAHIClusterID();
+			obID = ((AgentInterface)tree.getRoot()).getAHIClusterID();
 			double[] balanceStatistics = returnNodesStats((DelegateTree)tree);
 			String str = "";
 			if (forest instanceof OutbreakForest) {				
@@ -168,18 +164,20 @@ public class ForestWriter implements ParametersInterface {
 		numLowRiskLeaves=0;
 		numLowRiskInternals=0;
 
-		ArrayList<EpisodicRiskAgent> leaves = new ArrayList<EpisodicRiskAgent>();
-		ArrayList<EpisodicRiskAgent> internals = new ArrayList<EpisodicRiskAgent>();
-		HashMap<EpisodicRiskAgent, ArrayList<EpisodicRiskAgent>> leafMap = new LinkedHashMap<EpisodicRiskAgent, ArrayList<EpisodicRiskAgent>>();
+		ArrayList<AgentInterface> leaves = new ArrayList<AgentInterface>();
+		ArrayList<AgentInterface> internals = new ArrayList<AgentInterface>();
+		HashMap<AgentInterface, ArrayList<AgentInterface>> leafMap = new LinkedHashMap<AgentInterface, ArrayList<AgentInterface>>();
 		double[] stats = new double[BalanceStatistics.values().length];
-		EpisodicRiskAgent root = (EpisodicRiskAgent) tree.getRoot();		
-		Iterator<EpisodicRiskAgent> itr = tree.getVertices().iterator();
-		while (itr.hasNext()) {			
-			EpisodicRiskAgent vertex = (EpisodicRiskAgent) itr.next();
+		AgentInterface root = (AgentInterface) tree.getRoot();		
+		Iterator<AgentInterface> itr = tree.getVertices().iterator();
+		
+		while (itr.hasNext()) {					
+			/* Here using the EpisodicAgentInterface instead of the AgentInterface*/
+			EpisodicAgentInterface vertex = (EpisodicAgentInterface) itr.next();
 			if (forest.isLeaf(vertex)) {
 				numLeaves++;
 				leaves.add(vertex);
-				leafMap.put(vertex, (ArrayList<EpisodicRiskAgent>)tree.getPath(vertex));
+				leafMap.put(vertex, (ArrayList<AgentInterface>)tree.getPath(vertex));
 				if (vertex.getInfectedRiskState().equals(RiskState.High)) {
 					numHighRiskLeaves++;
 				}
@@ -204,7 +202,7 @@ public class ForestWriter implements ParametersInterface {
 		int i=0;
 		double nbar = 0;
 		double beta2 = 0;
-		for (EpisodicRiskAgent leaf : leaves) {
+		for (AgentInterface leaf : leaves) {
 			if (tree.getVertexCount() == 2) {
 				ni[i] = 0;
 			}
@@ -234,26 +232,26 @@ public class ForestWriter implements ParametersInterface {
 		int ipsize = 0;
 
 		//System.out.println("Root: " + ((Person)tree.getRoot()).getID());
-		for (EpisodicRiskAgent internal : internals) {
-			ArrayList<EpisodicRiskAgent> internalPath = (ArrayList<EpisodicRiskAgent>)tree.getPath(internal);
+		for (AgentInterface internal : internals) {
+			ArrayList<AgentInterface> internalPath = (ArrayList<AgentInterface>)tree.getPath(internal);
 			//System.out.println("Internal node: " + internal.getID());
 			/*printList(internalPath);*/
 			ipsize = internalPath.size();
 			max = 0; 
 			dist = 0;
-			for (EpisodicRiskAgent leaf : leaves) {
+			for (AgentInterface leaf : leaves) {
 				//System.out.println("Leaf node: " + leaf.getID());
 				//lfsize = leafMap.get(leaf).size();
 				/*printList(leafMap.get(leaf));*/
 				d2 = 0;
-				EpisodicRiskAgent parent = (EpisodicRiskAgent) tree.getParent(leaf);
+				AgentInterface parent = (AgentInterface) tree.getParent(leaf);
 				if (parent.getID() == internal.getID()) {
 					//System.out.println("InternalID:" + internal.getID() + " parentID: " + parent.getID());
 					dist = 1;
 				}
 				else {						
 					for (int index=0; index<ipsize; index++) {
-						EpisodicRiskAgent p1 = internalPath.get(index);
+						AgentInterface p1 = internalPath.get(index);
 						if (leafMap.get(leaf).contains(p1)) {					
 							d2 = leafMap.get(leaf).indexOf(p1);
 							dist = d2 + index;
@@ -288,13 +286,13 @@ public class ForestWriter implements ParametersInterface {
 		data[0] = tree.getVertexCount();
 		Iterator itr = tree.getVertices().iterator();		
 		while (itr.hasNext()) {
-			EpisodicRiskAgent vertex = (EpisodicRiskAgent) itr.next();
+			AgentInterface vertex = (AgentInterface) itr.next();
 			Iterator itrChld = tree.getChildren(vertex).iterator();
 			if (vertex.getActType().equals(ActType.Acute_Susceptible)
 					//&& vertex.getInfectedTick() >= Parameters.startRecordTick
 			) {
 				while (itrChld.hasNext()) {
-					EpisodicRiskAgent child = (EpisodicRiskAgent) itrChld.next();
+					AgentInterface child = (AgentInterface) itrChld.next();
 					if (child.getActType().equals(ActType.Acute_Susceptible)) {
 						data[1]++;
 					}
@@ -304,9 +302,9 @@ public class ForestWriter implements ParametersInterface {
 		return data;
 	}
 
-	protected void printList(ArrayList<EpisodicRiskAgent> list) {
+	protected void printList(ArrayList<AgentInterface> list) {
 		String str = "";
-		for (EpisodicRiskAgent individual : list) {
+		for (AgentInterface individual : list) {
 			str += individual.getID() + "-> ";
 		}
 		System.out.println(str);
@@ -322,15 +320,15 @@ public class ForestWriter implements ParametersInterface {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void onlyLargestTrees(int rank) {		
-		ArrayList<Tree<EpisodicRiskAgent, Edge>> trees = new ArrayList<Tree<EpisodicRiskAgent,Edge>>(forest.getTrees().size()+10);
+		ArrayList<Tree<AgentInterface, Edge>> trees = new ArrayList<Tree<AgentInterface,Edge>>(forest.getTrees().size()+10);
 		Iterator itr = forest.getTrees().iterator();
 		while (itr.hasNext()) {
-			Tree<EpisodicRiskAgent, Edge> tree = (Tree<EpisodicRiskAgent, Edge>) itr.next();
+			Tree<AgentInterface, Edge> tree = (Tree<AgentInterface, Edge>) itr.next();
 			trees.add(tree);
 		}
 		//sort in descending order
-		Collections.sort(trees, new Comparator<Tree<EpisodicRiskAgent, Edge>>() {
-			public int compare(Tree<EpisodicRiskAgent, Edge> t1, Tree<EpisodicRiskAgent, Edge> t2) {
+		Collections.sort(trees, new Comparator<Tree<AgentInterface, Edge>>() {
+			public int compare(Tree<AgentInterface, Edge> t1, Tree<AgentInterface, Edge> t2) {
 				return t1.getVertexCount() < t2.getVertexCount() ? +1 
 						: (t1.getVertexCount() == t2.getVertexCount()) ? 0 : -1;
 			}
@@ -341,30 +339,34 @@ public class ForestWriter implements ParametersInterface {
 				//System.out.println("i: " + index + " tree size: " + trees.get(index).getVertexCount());
 			}
 			else {
-				forest.removeVertex((EpisodicRiskAgent)trees.get(index).getRoot(), true);				
+				forest.removeVertex((AgentInterface)trees.get(index).getRoot(), true);				
 			}
 		}			
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void removeSubTrees(int minSize) {
-		ArrayList<Tree<EpisodicRiskAgent, Edge>> trees = new ArrayList<Tree<EpisodicRiskAgent,Edge>>();				
+		ArrayList<Tree<AgentInterface, Edge>> trees = new ArrayList<Tree<AgentInterface,Edge>>();				
 		for (Tree tree : forest.getTrees()) {
 //			System.out.println("Tree root: " + tree.getRoot().getID() + " and depth "+ tree.getHeight());
 			if (tree.getHeight() <= minSize) {
 				trees.add(tree);
 			}			
 		}
-		for (Tree<EpisodicRiskAgent, Edge> tree : trees) {
-			forest.removeVertex((EpisodicRiskAgent)tree.getRoot(), true);
+		for (Tree<AgentInterface, Edge> tree : trees) {
+			forest.removeVertex((AgentInterface)tree.getRoot(), true);
 		}	
 	}
 
+	/**
+	 * Courtesy F. Krebs and R. Taylor 
+	 * @throws IOException
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void savePajekTrans() throws IOException {
 		String fname = prefix+"-pajek.net";
 		int singletons = 0;
-		ArrayList<Tree<EpisodicRiskAgent, Edge>> trees = new ArrayList<Tree<EpisodicRiskAgent, Edge>>();		
+		ArrayList<Tree<AgentInterface, Edge>> trees = new ArrayList<Tree<AgentInterface, Edge>>();		
 		maxDepth = 0;
 		for (Tree tree : forest.getTrees()) {
 			if (tree.getVertexCount() <= 1) {
@@ -386,7 +388,7 @@ public class ForestWriter implements ParametersInterface {
 		}
 
 		for (Tree tree : trees) {
-			forest.removeVertex((EpisodicRiskAgent)tree.getRoot(), true);
+			forest.removeVertex((AgentInterface)tree.getRoot(), true);
 		}
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(fname)));		
@@ -454,9 +456,9 @@ public class ForestWriter implements ParametersInterface {
 		writer.close();		
 	}
 
-	public void saveSingleTree(DelegateForest<EpisodicRiskAgent,Edge> graph, String fname) throws IOException {
-		ArrayList<EpisodicRiskAgent> singletons = new ArrayList<EpisodicRiskAgent>();	
-		for (EpisodicRiskAgent vertex : graph.getVertices()) {
+	public void saveSingleTree(DelegateForest<AgentInterface,Edge> graph, String fname) throws IOException {
+		ArrayList<AgentInterface> singletons = new ArrayList<AgentInterface>();	
+		for (AgentInterface vertex : graph.getVertices()) {
 			if (graph.isRoot(graph.getParent(vertex)) &&
 					(graph.getChildCount(vertex) == 0 || graph.getSuccessorCount(vertex) == 0
 							|| graph.getOutEdges(vertex).isEmpty())) {
@@ -464,7 +466,7 @@ public class ForestWriter implements ParametersInterface {
 			}
 		}
 
-		for (EpisodicRiskAgent vertex : singletons) {
+		for (AgentInterface vertex : singletons) {
 			graph.removeVertex(vertex);			
 		}
 		/*		for (Tree<Person, Edge> tree : graph.getTrees()) {
@@ -485,7 +487,7 @@ public class ForestWriter implements ParametersInterface {
 		//		System.out.println("singletons: " + singletons);
 		//		System.out.println("new roots: " + newRoots);
 
-		for (EpisodicRiskAgent individual : graph.getVertices()) {
+		for (AgentInterface individual : graph.getVertices()) {
 			if ( true
 					//(!(forest.isRoot(individual) && forest.isLeaf(individual)))
 					//forest.getChildCount(individual) >= 1

@@ -13,9 +13,9 @@ import episodicriskmodel.EpisodicRiskAgent;
 
 /**
  * This is the forest/tree of the entire infections recorded during the observed period.
- * @author shah
- *
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  */
+
 public class BaseForest extends DelegateForest<AgentInterface, Edge> implements ParametersInterface {
 	protected static final long serialVersionUID = 1L;
 	protected static EpisodicRiskAgent root;

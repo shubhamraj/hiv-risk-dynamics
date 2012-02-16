@@ -20,7 +20,7 @@ import reader.ReaderPopulation;
 
 /**
  * 
- * @author shah
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  *
  */
 public class Summarizer implements ParametersInterface {	

@@ -1,6 +1,5 @@
 package main;
 
-
 import interfaces.ParametersInterface;
 
 import java.io.BufferedReader;
@@ -14,10 +13,9 @@ import java.util.StringTokenizer;
 
 import episodicriskmodel.EpisodicModel;
 
-
 /**
- * 
- * @author shah
+ * Test controller class to run the individual-based Episodic Risk Model (c.f. Zhang et al. in press)
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  *
  */
 public class EpisodicRiskController implements ParametersInterface {

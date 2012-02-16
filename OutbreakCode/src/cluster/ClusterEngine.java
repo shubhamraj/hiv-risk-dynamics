@@ -3,6 +3,7 @@ package cluster;
 
 import interfaces.AgentInterface;
 import interfaces.ParametersInterface;
+import interfaces.TransmissionInterface;
 
 import java.io.FileWriter;
 
@@ -25,7 +26,7 @@ import reader.Stats;
 
 /**
  * 
- * @author shah
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  *
  */
 public class ClusterEngine implements ParametersInterface {
@@ -33,8 +34,8 @@ public class ClusterEngine implements ParametersInterface {
 	private int startRecordTick;
 	private int endObserveTick;	
 	private Map<Integer, ArrayList<Cluster>> outbreakRecMap;
-	private Map<Integer, ArrayList<BaseTransmission>> earlyTransmissions;
-	private Map<Integer, ArrayList<BaseTransmission>> allTransmissions;
+	private Map<Integer, ArrayList<TransmissionInterface>> earlyTransmissions;
+	private Map<Integer, ArrayList<TransmissionInterface>> allTransmissions;
 	private OutbreakForest outbreakForest;
 	private ExtStats extStats;
 	
@@ -76,8 +77,8 @@ public class ClusterEngine implements ParametersInterface {
 		this.stopped = false;		
 		this.outbreakForest = new OutbreakForest(prefix);		
 		this.extStats = new ExtStats();		
-		this.earlyTransmissions = Collections.synchronizedMap(new TreeMap<Integer, ArrayList<BaseTransmission>>());
-		this.allTransmissions = Collections.synchronizedMap(new TreeMap<Integer, ArrayList<BaseTransmission>>());		
+		this.earlyTransmissions = Collections.synchronizedMap(new TreeMap<Integer, ArrayList<TransmissionInterface>>());
+		this.allTransmissions = Collections.synchronizedMap(new TreeMap<Integer, ArrayList<TransmissionInterface>>());		
 		this.outbreakRecMap = Collections.synchronizedMap(new HashMap<Integer, ArrayList<Cluster>>());		
 		this.maxRecords = maxIterations + 1;				
 		this.numInfected = new int[maxRecords];
@@ -110,7 +111,7 @@ public class ClusterEngine implements ParametersInterface {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void addTransmission(Integer time, AgentInterface infector, AgentInterface infected) {
 		Object[] args = new Object[] {time, infector, infected}; 
-		BaseTransmission transmission = null;
+		TransmissionInterface transmission = null;
 		try {
 			Class cls = EpisodicRiskTransmission.class;
 			cls = Class.forName(transmissionClassName);
@@ -119,7 +120,7 @@ public class ClusterEngine implements ParametersInterface {
 			parTypes[1] = AgentInterface.class;
 			parTypes[2] = AgentInterface.class;					
 			Constructor ct = cls.getConstructor(parTypes);
-			transmission = (BaseTransmission) ct.newInstance(args);
+			transmission = (TransmissionInterface) ct.newInstance(args);
 		} catch (Exception e) {
 			System.err.println("Transmission class: " + transmissionClassName + " not found.");
 			e.printStackTrace();
@@ -138,14 +139,14 @@ public class ClusterEngine implements ParametersInterface {
 		}
 		if (RecordInfectionTree) {
 			if (allTransmissions.containsKey(transmission.getTime()) == false) {
-				allTransmissions.put(transmission.getTime(), new ArrayList<BaseTransmission>());
+				allTransmissions.put(transmission.getTime(), new ArrayList<TransmissionInterface>());
 			}
 			allTransmissions.get(transmission.getTime()).add(transmission);
 		}
 		newCases++;
 	}
 
-	private boolean addToOutbreak(BaseTransmission transmission, AgentInterface infector, AgentInterface infected) {
+	private boolean addToOutbreak(TransmissionInterface transmission, AgentInterface infector, AgentInterface infected) {
 		boolean addedTranmission = false;
 		Integer time = transmission.getTime();
 		Cluster cluster;
@@ -178,7 +179,7 @@ public class ClusterEngine implements ParametersInterface {
 				}
 			}
 		}
-		ArrayList<BaseTransmission> transList = new ArrayList<BaseTransmission>();
+		ArrayList<TransmissionInterface> transList = new ArrayList<TransmissionInterface>();
 		if (addedTranmission) {
 			if (earlyTransmissions.containsKey(key) == false) {
 				earlyTransmissions.put(key, transList);
@@ -287,7 +288,7 @@ public class ClusterEngine implements ParametersInterface {
 		PrintWriter transwriter = new PrintWriter(new FileWriter(prefix+"-" + outbreakRecord.name() + "-AllTransmissions.csv"));
 		int obIDDummy = -1;
 		for (Integer time : allTransmissions.keySet()) {
-			for (BaseTransmission transRec : allTransmissions.get(time)) {
+			for (TransmissionInterface transRec : allTransmissions.get(time)) {
 				transwriter.println(obIDDummy + "," + transRec.toString());
 			}
 			transwriter.flush();
@@ -315,7 +316,7 @@ public class ClusterEngine implements ParametersInterface {
 		double minSize = Double.MAX_VALUE;
 		double totalOutbreaks = 0;
 		
-		ArrayList<BaseTransmission> transmissionsList = new ArrayList<BaseTransmission>();
+		ArrayList<TransmissionInterface> transmissionsList = new ArrayList<TransmissionInterface>();
 		int numOutbreaks = earlyTransmissions.keySet().size();
 
 		for (int outbreakIndex=0; outbreakIndex<numOutbreaks; outbreakIndex++) {
@@ -335,13 +336,13 @@ public class ClusterEngine implements ParametersInterface {
 				lastOB = (short) outbreakIndex;
 				totalTrans = 0;
 			}
-			transmissionsList = (ArrayList<BaseTransmission>)earlyTransmissions.get(outbreakIndex);
+			transmissionsList = (ArrayList<TransmissionInterface>)earlyTransmissions.get(outbreakIndex);
 			if (transmissionsList != null) {
 				totalTrans = transmissionsList.size();
 				startTime = transmissionsList.get(0).getTime();
 				endTime = transmissionsList.get(totalTrans-1).getTime();
 				duration = endTime - startTime;				
-				for (BaseTransmission transRec : transmissionsList) {
+				for (TransmissionInterface transRec : transmissionsList) {
 					rec = outbreakIndex + "," + transRec.toString();
 					acuteTransmissionsWriter.println(rec);
 					if (outbreakIndex%100 == 0) {

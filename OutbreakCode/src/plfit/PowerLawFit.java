@@ -1,6 +1,5 @@
 package plfit;
 
-
 import interfaces.ParametersInterface;
 
 import java.io.BufferedReader;
@@ -14,6 +13,11 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+/**
+ * 
+ * Calling C library for power law fit by Abramson et al. (2009)
+ *
+ */
 public class PowerLawFit implements ParametersInterface {
 	private ArrayList<String> command;
 	private String fname = "./src/ext/cfg/temp.txt";

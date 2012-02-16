@@ -70,7 +70,7 @@ import episodicriskmodel.EpisodicRiskAgent;
 /**
  * Modified version of Jung Library's class file "TreeCollapseDemo"
  * Demonstrates "collapsing"/"expanding" of a tree's subtrees.
- * @author Tom Nelson
+ * @author Tom Nelson; modified by S.J. Alam
  * 
  */
 @SuppressWarnings("serial")

@@ -14,7 +14,7 @@ import cern.jet.random.Uniform;
 
 /**
  * 
- * @author shah
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  *
  */
 public class EpisodicModel implements BaseModelInterface {

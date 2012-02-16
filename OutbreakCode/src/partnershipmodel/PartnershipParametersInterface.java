@@ -4,7 +4,9 @@ import interfaces.ParametersInterface;
 
 /**
  * 
- * Jong-Hoon Kim's model integrated with outbreaks library
+ * Jong-Hoon Kim's model integrated with outbreaks library (c.f. Kim et al. 2010)
+ * @author Jong-Hoon Kim (original)
+ * @author Modified by: Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  *
  */
 

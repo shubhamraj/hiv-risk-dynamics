@@ -18,7 +18,7 @@ import cluster.Edge;
 import edu.uci.ics.jung.graph.DelegateTree;
 /**
  * 
- * @author shah
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  *
  */
 public class AHICHILink implements ParametersInterface {

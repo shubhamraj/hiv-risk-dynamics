@@ -10,7 +10,7 @@ import java.io.FilenameFilter;
 
 /**
  * Main Reader Engine Class
- * @author shah
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  *
  */
 public class ReaderEngine implements ParametersInterface {

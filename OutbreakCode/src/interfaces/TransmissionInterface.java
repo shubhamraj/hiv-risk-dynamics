@@ -1,5 +1,10 @@
 package interfaces;
 
+/**
+ * 
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
+ *
+ */
 public interface TransmissionInterface extends ParametersInterface {
 	/** Returns the time of this transmission event. */
 	public int getTime();

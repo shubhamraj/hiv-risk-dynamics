@@ -5,6 +5,11 @@ import org.apache.commons.math.stat.descriptive.rank.Percentile;
 
 import flanagan.math.PsRandom;
 
+/**
+ * 
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
+ *
+ */
 public interface ParametersInterface {
 	/** Skewness class used to calculate skewness of a given data. 
 	 * It is used by the Stats class in the reader package. */

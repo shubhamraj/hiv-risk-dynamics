@@ -4,7 +4,7 @@ import interfaces.AgentInterface;
 
 /**
  * 
- * @author shah
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  *
  */
 public interface EpisodicAgentInterface extends AgentInterface {

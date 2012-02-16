@@ -10,6 +10,11 @@ import java.util.StringTokenizer;
 import partnershipmodel.PartnershipModel;
 import partnershipmodel.PartnershipParametersInterface;
 
+/**
+ * Controller class to run Jong-Hoon Kim et al. partnership model (c.f Kim et al. 2010)
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
+ *
+ */
 public class PartnershipModelController implements PartnershipParametersInterface {
 	public static void main(String[] args) throws IOException {
 		OutbreakType outbreakType = OutbreakType.AHI;

@@ -1,8 +1,5 @@
 package reader;
 
-
-
-
 import interfaces.AgentInterface;
 import interfaces.ParametersInterface;
 
@@ -16,7 +13,7 @@ import edu.uci.ics.jung.graph.DelegateTree;
 
 /**
  * 
- * @author shah
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  *
  */
 public class TreeOutput implements ParametersInterface {

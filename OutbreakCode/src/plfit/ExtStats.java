@@ -7,6 +7,7 @@ import java.util.ArrayList;
 	N: total number of groups
 	kmax: the number of elements in the largest group
 	k0: the number of elements in the smallest group in your data set
+	Using the code by Baek et al. (2011)
  */
 public class ExtStats {	
 	private double M; 

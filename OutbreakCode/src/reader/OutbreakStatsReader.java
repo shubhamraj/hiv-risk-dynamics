@@ -11,7 +11,7 @@ import java.util.StringTokenizer;
 
 /**
  * 
- * @author shah
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  *
  */
 public class OutbreakStatsReader extends TreeOutput{

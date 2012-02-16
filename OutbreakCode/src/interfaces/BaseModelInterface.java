@@ -1,6 +1,5 @@
 package interfaces;
 
-
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -8,6 +7,11 @@ import java.util.ArrayList;
 
 import cluster.ClusterRecorder;
 
+/**
+ * 
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
+ *
+ */
 public interface BaseModelInterface extends ParametersInterface {
 	/** Method to be called from the implemented class' constructor
 	 * or a setup function to create the member instance of the 

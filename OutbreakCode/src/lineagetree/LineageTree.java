@@ -15,7 +15,7 @@ import edu.uci.ics.jung.graph.Tree;
 /**
  *
  * Actually, a lineage tree. 
- * @author shah
+ * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
  *
  */
 public class LineageTree {
