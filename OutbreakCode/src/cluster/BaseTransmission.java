@@ -11,17 +11,17 @@ import interfaces.TransmissionInterface;
  *
  */
 public class BaseTransmission implements TransmissionInterface {
-	int obID; 
-	int time;
-	int infectorID;
-	int infectedID;
+	private int obID; 
+	private int time;
+	private int infectorID;
+	private int infectedID;
 	/** For the infector */
-	int timeSinceLastInfection;
-	ActType actType = ActType.None;
-	InfectionStage infectorStage = InfectionStage.Susceptible;	
-	int currentClusterTransmissions;
-	int branchTime;
-	int currentClusterAge;
+	private int timeSinceLastInfection;
+	private ActType actType = ActType.None;
+	private InfectionStage infectorStage = InfectionStage.Susceptible;	
+	private int currentClusterTransmissions;
+	private int branchTime;
+	private int currentClusterAge;
 	
 	public BaseTransmission() {
 		obID = -1; 
