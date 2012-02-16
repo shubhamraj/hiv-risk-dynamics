@@ -1,10 +1,8 @@
 package cluster;
 
-
-
-
 import interfaces.AgentInterface;
 import interfaces.ParametersInterface;
+import interfaces.TransmissionInterface;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,7 +10,6 @@ import java.util.ArrayList;
 
 import edu.uci.ics.jung.graph.DelegateForest;
 import episodicriskmodel.EpisodicRiskAgent;
-import episodicriskmodel.EpisodicRiskTransmission;
 
 /**
  * This is the forest/tree of the entire infections recorded during the observed period.
@@ -22,17 +19,18 @@ import episodicriskmodel.EpisodicRiskTransmission;
 public class BaseForest extends DelegateForest<AgentInterface, Edge> implements ParametersInterface {
 	protected static final long serialVersionUID = 1L;
 	protected static EpisodicRiskAgent root;
-	protected ArrayList<EpisodicRiskAgent> sortedRoots;
+	protected ArrayList<AgentInterface> sortedRoots;
 	protected int newRoots;
 	protected String prefix;
 	protected int maxDepth;
 
 	public BaseForest() {
+		/* Here an instance of the EpisodicRiskAgent class is created and not the interface. */
 		root = new EpisodicRiskAgent(-1);
 		newRoots = 0;
 		prefix = "";
 		maxDepth = 0;
-		sortedRoots = new ArrayList<EpisodicRiskAgent>();
+		sortedRoots = new ArrayList<AgentInterface>();
 		if (SingleTreeMode) {
 			setRoot(root);
 		}
@@ -44,7 +42,7 @@ public class BaseForest extends DelegateForest<AgentInterface, Edge> implements 
 		newRoots = 0;
 		prefix = "";
 		maxDepth = 0;
-		sortedRoots = new ArrayList<EpisodicRiskAgent>();
+		sortedRoots = new ArrayList<AgentInterface>();
 		if (SingleTreeMode) {
 			setRoot(root);
 		}
@@ -59,18 +57,18 @@ public class BaseForest extends DelegateForest<AgentInterface, Edge> implements 
 		return getTrees().size();
 	}
 
-	public ArrayList<EpisodicRiskAgent> getSortedRoots() {
+	public ArrayList<AgentInterface> getSortedRoots() {
 		return sortedRoots;
 	}
 
-	public void setSortedRoots(ArrayList<EpisodicRiskAgent> sortedRoots) {
+	public void setSortedRoots(ArrayList<AgentInterface> sortedRoots) {
 		this.sortedRoots = sortedRoots;
 	}
 	
-	public void addRoot(EpisodicRiskAgent subtreeRoot) {		
+	public void addRoot(AgentInterface subtreeRoot) {		
 	}
 
-	public void addNode(Integer time, EpisodicRiskTransmission transmission,
-			EpisodicRiskAgent infector, EpisodicRiskAgent infected) {	
+	public void addNode(Integer time, TransmissionInterface transmission,
+			AgentInterface infector, AgentInterface infected) {	
 	}
 }
