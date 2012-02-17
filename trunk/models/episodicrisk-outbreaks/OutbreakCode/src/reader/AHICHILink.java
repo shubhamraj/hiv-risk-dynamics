@@ -99,7 +99,7 @@ public class AHICHILink implements ParametersInterface {
 		
 		/*Build the lineage tree */
 		LineageTree lineageTree = new LineageTree(infectionForestReader.getInfectionForest());
-		lineageTree.buildEventForest();
+		lineageTree.returnLineageTree();
 	}
 	
 	private void generateAHITree() { 
