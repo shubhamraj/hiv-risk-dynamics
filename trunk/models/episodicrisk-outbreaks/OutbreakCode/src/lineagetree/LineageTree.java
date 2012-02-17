@@ -58,29 +58,12 @@ public class LineageTree {
 			}
 		}	
 		
-		if (debug == true) {
-			System.out.println("Num individuals: " + individualsMap.values().size());
-			System.out.println("Num event trees: " + eventTreesMap.values().size());
-			System.out.println("Num event forest roots: " + eventForest.getRoots().size());
-			System.out.println("Num trees in forest: " + eventForest.getTrees().size());			
-		}
-		
 		Tree<LineageVertex, LineageEdge> rootTree = null; 
 		for (Tree<LineageVertex, LineageEdge> tree : this.eventForest.getTrees()) {
 			if (tree.getRoot().getInfector().getID() == -1) {
 				rootTree = tree;
 				break;
 			}
-		}
-
-		if (debug == true) {
-			System.out.println("-----------------------");
-			System.out.println("total events: " + totalEvents);
-			System.out.println("size of root tree: " + rootTree.getVertexCount());
-			System.out.println("Num individuals: " + individualsMap.values().size());
-			System.out.println("Num event trees: " + eventTreesMap.values().size());
-			System.out.println("Num event forest roots: " + eventForest.getRoots().size());
-			System.out.println("Num trees in forest: " + eventForest.getTrees().size());	
 		}
 	}
 	
