@@ -7,12 +7,12 @@ package lineagetree;
 public class LineageEdge {
 	private static int lastID = 0;	
 	private int ID;
-	private double timeOfInfection;
+	private double branchLength;
 	private double length;
 
-	public LineageEdge(double timeOfInfection) {
+	public LineageEdge(double branchLength) {
 		ID = ++lastID;		
-		this.timeOfInfection = timeOfInfection;
+		this.branchLength = branchLength;
 	}
 
 	public int getID() {
@@ -23,12 +23,12 @@ public class LineageEdge {
 		ID = iD;
 	}
 
-	public double getTimeOfInfection() {
-		return timeOfInfection;
+	public double getBranchLength() {
+		return branchLength;
 	}
 
-	public void setTimeOfInfection(double timeOfInfection) {
-		this.timeOfInfection = timeOfInfection;
+	public void setBranchLength(double timeOfInfection) {
+		this.branchLength = timeOfInfection;
 	}
 
 	public double getLength() {

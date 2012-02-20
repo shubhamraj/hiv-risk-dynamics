@@ -1,6 +1,5 @@
 package reader;
 
-
 import interfaces.AgentInterface;
 import interfaces.ParametersInterface;
 
@@ -11,11 +10,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import lineagetree.LineageTree;
 import main.Summarizer;
 
 import cluster.Edge;
 import edu.uci.ics.jung.graph.DelegateTree;
+
 /**
  * 
  * @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
@@ -97,9 +96,9 @@ public class AHICHILink implements ParametersInterface {
 		/* */
 		writeChronicsCountStats();
 		
-		/*Build the lineage tree */
+		/*Build the lineage tree 
 		LineageTree lineageTree = new LineageTree(infectionForestReader.getInfectionForest());
-		lineageTree.returnLineageTree();
+		lineageTree.returnLineageTree();*/
 	}
 	
 	private void generateAHITree() { 
