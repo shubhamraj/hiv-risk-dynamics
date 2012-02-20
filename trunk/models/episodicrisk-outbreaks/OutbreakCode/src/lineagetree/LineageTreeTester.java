@@ -4,9 +4,13 @@ import edu.uci.ics.jung.graph.DelegateTree;
 import reader.InfectionForestReader;
 
 /**
- * 
+ * Added LineageTreeTester in the lineagetree package. 
+ * Shows how to generate a lineage/transmission tree from an infection tree. 
+ * The input file name must point to a file that contains all transmissions during the observed period 
+ * from which an infection tree is first built and then transformed to a lineage tree.
+ * This does not yet work for early infection outbreaks since the early infection outbreaks are loaded as forest 
+ * (and are subtrees extracted from the infection tree containing both the acute and chronic transmissions).   
  *  @author Shah Jamal Alam, Koopman Lab (Dynamic Causal Systems in Epidemiologic Analysis), University of Michigan 2011.
- *
  */
 public class LineageTreeTester {
 	String fname;
