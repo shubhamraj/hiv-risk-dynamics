@@ -105,13 +105,23 @@ public class LineageTree {
 
 		DelegateTree<LineageVertex, LineageEdge> rootEventTree = new DelegateTree<LineageVertex, LineageEdge>();
 		rootEventTree.setRoot(rootEventsList.get(0));
-		LineageVertex parent = rootEventTree.getRoot();
+		LineageVertex parentEvent = rootEventTree.getRoot();
+		/* This is a way around - because, in the original infection tree, the root is a dummy node
+		 * since we start with the <I>n</I> number of infected individuals as initiators of the the 
+		 * transmission chains - hence, the infection forest. So the timestep is just random step b/w 0 and 1
+		 * so initialize the dummy infection events of the baseRoots with a positive value for the time of the event.
+		 * 
+		 */
+		/* essentially the branch length giving the time since the last infection */
+		double branchLength = 0;
 		try {
 			for (int i=1; i<rootEventsList.size(); i++) {
-				LineageVertex event = rootEventsList.get(i) ;
-				LineageEdge eventEdge = new LineageEdge(event.getEventTime());
-				rootEventTree.addEdge(eventEdge, parent, event);
-				parent = event;
+				LineageVertex infectionEvent = rootEventsList.get(i) ;
+				//time = event.getEventTime();
+				branchLength = infectionEvent.getEventTime() - parentEvent.getEventTime();
+				LineageEdge eventEdge = new LineageEdge(branchLength);
+				rootEventTree.addEdge(eventEdge, parentEvent, infectionEvent);
+				parentEvent = infectionEvent;
 			}				
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -140,13 +150,17 @@ public class LineageTree {
 
 				eventTree = new DelegateTree<LineageVertex, LineageEdge>();
 				eventTree.setRoot(eventsList.get(0));
-				LineageVertex parent = eventTree.getRoot();				
+				LineageVertex parentEvent = eventTree.getRoot();
+				double branchLength = 0;
 				try {
 					for (int i=1; i<eventsList.size(); i++) {
-						LineageVertex myEvent = eventsList.get(i) ;
-						LineageEdge timeEdge = new LineageEdge(myEvent.getEventTime());
-						eventTree.addEdge(timeEdge, parent, myEvent);
-						parent = myEvent;
+						LineageVertex infectionEvent = eventsList.get(i);
+						//time = infectionEvent.getEventTime();
+						/* essentially the branch length giving the time since the last infection */
+						branchLength = infectionEvent.getEventTime() - parentEvent.getEventTime();
+						LineageEdge timeEdge = new LineageEdge(branchLength);
+						eventTree.addEdge(timeEdge, parentEvent, infectionEvent);
+						parentEvent = infectionEvent;
 					}				
 				} catch (Exception e) {
 					e.printStackTrace();
